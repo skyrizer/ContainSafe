@@ -1,3 +1,5 @@
+import 'package:containsafe/bloc/container/performance/performance_state.dart';
+import 'package:containsafe/repository/performance_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,8 @@ import 'package:containsafe/pages/splashScreen.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
+
+import 'bloc/container/performance/performance_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +36,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(LoginInitState(), AuthRepository()),
+        ),
+        BlocProvider<PerformanceBloc>(
+          create: (context) => PerformanceBloc(),
         ),
       ],
       child: MaterialApp(
