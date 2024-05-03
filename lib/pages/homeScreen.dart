@@ -170,18 +170,18 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Column(
                 //   children: [
-                    if (title == 'Disk Usage')
-                      _buildDiskUsageContainer(latestData),
-                    if (title == 'CPU Usage')
-                      _buildCpuUsageContainer(latestData),
+                if (title == 'Disk Usage')
+                  _buildDiskUsageContainer(latestData),
+                if (title == 'CPU Usage')
+                  _buildCpuUsageContainer(latestData),
                 //   ],
                 // ),
                 // Column(
                 //   children: [
-                    if (title == 'Network Usage')
-                      _buildNetworkUsageContainer(latestData),
-                    if (title == 'Memory Usage')
-                      _buildMemoryUsageContainer(latestData),
+                if (title == 'Network Usage')
+                  _buildNetworkUsageContainer(latestData),
+                if (title == 'Memory Usage')
+                  _buildMemoryUsageContainer(latestData),
                 //   ],
                 // ),
               ],
@@ -206,8 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             'Memory Usage',
             style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold
             ),
           ),
           SizedBox(height: 5.0),

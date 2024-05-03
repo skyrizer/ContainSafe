@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'homeScreen.dart';
+
 class RoutePage extends StatefulWidget {
   const RoutePage({super.key});
 
@@ -12,7 +14,7 @@ class _RoutePageState extends State<RoutePage> {
   int _currentIndex = 0;
 
   final List<Widget> _tablist = [
-    // HomePage(),
+     HomeScreen(),
     // SearchUserView(),
     // NewPost(),
     // OwnReport(),
