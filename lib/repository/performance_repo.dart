@@ -10,6 +10,7 @@ class PerformanceRepository {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
+      print(token);
       var url = Uri.parse(APIConstant.PerformanceURL);
       var header = {
         "Content-Type": "application/json",

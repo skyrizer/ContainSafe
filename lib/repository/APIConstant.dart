@@ -11,8 +11,10 @@ class APIConstant {
   // performance
   static String get PerformanceURL => "${APIConstant.URL}allPerformance";
 
+  // refresh
+  static String get RefreshURL => "${APIConstant.URL}refreshToken";
 
-  static String get RefreshURL => "${APIConstant.URL}auth/refresh";
+
   static String get RegisterURL => "${APIConstant.URL}auth/register";
   static String get ForgotPasswordURL =>
       "${APIConstant.URL}auth/forgot-password";

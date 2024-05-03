@@ -46,20 +46,24 @@ class AuthRepository{
     try{
       var url = Uri.parse(APIConstant.RefreshURL);
       String? email = pref.getString('email');
+      String? token = pref.getString('token');
 
       if (email != null){
         var header = {
           "Content-Type": "application/json",
-          'email' : email
+          "email" : email,
+          'Authorization': "Bearer ${token}",
         };
 
         var response = await http.put(url, headers: header,);
 
         if (response.statusCode == 200) {
-          print('new token');
-          String data =  response.body;
-          print(data);
-          pref.setString("token", data);
+          print('New token received');
+          String data = response.body;
+          Map<String, dynamic> jsonData = json.decode(data);
+          String token = jsonData['token']; // Extracting the token value
+          print('Token: $token');
+          pref.setString("token", token); // Saving the token to preferences
           return true;
         } else {
           return false;
