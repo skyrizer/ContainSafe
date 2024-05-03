@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../bloc/container/performance/performance_event.dart';
 import '../bloc/container/performance/performance_state.dart';
+import 'dart:async';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,11 +16,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PerformanceBloc _performanceBloc = PerformanceBloc();
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _performanceBloc.add(GetAllPerformanceList()); // Dispatch the event here
+
+    // Start a timer to fetch data every 5 seconds
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      _performanceBloc.add(GetAllPerformanceList());
+    });
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Cancel the timer when the widget is disposed to prevent memory leaks
+    _timer!.cancel();
   }
 
   @override
