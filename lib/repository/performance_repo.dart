@@ -6,7 +6,7 @@ import '../model/performance/performance_model.dart';
 
 class PerformanceRepository {
 
-  Future<List<Performance>> getAllPerformances() async {
+  Future<List<Performance>> getAllPerformances({int? nodeId}) async {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
@@ -16,25 +16,68 @@ class PerformanceRepository {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
       };
-      var response = await http.get(url, headers: header);
+
+      var body = json.encode({
+        'nodeId': nodeId
+      });
+
+      var response = await http.post(
+          url,
+          headers: header,
+          body: body
+      );
+
+
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = jsonDecode(response.body);
 
         List<Performance> performances = [];
 
-        jsonData.forEach((containerName, data) {
+        if (jsonData.isEmpty) {
+          // Handle empty list case
+          print("Response body is empty.");
+          // Return an empty list of performances
+          return performances;
+        }
+
+        List<Map<String, dynamic>> _convertToUsageList(dynamic usageData) {
+          if (usageData is Map<String, dynamic>) {
+            // If usage data is a map, convert it to a list with a single entry
+            return [usageData];
+          } else if (usageData is List<Map<String, dynamic>>) {
+            // If usage data is already a list, return it as is
+            return usageData;
+          } else {
+            // Handle unexpected types gracefully
+            return [];
+          }
+        }
+
+        jsonData.keys.forEach((containerName) {
+          Map<String, dynamic> data = jsonData[containerName];
+
+          // Convert map to list if necessary
+          List<Map<String, dynamic>> diskUsage = _convertToUsageList(data['diskUsage']);
+          List<Map<String, dynamic>> cpuUsage = _convertToUsageList(data['cpuUsage']);
+          List<Map<String, dynamic>> memoryUsage = _convertToUsageList(data['memoryUsage']);
+          List<Map<String, dynamic>> networkUsage = _convertToUsageList(data['networkUsage']);
+
           performances.add(Performance(
             containerName: containerName,
-            diskUsage: List<Map<String, dynamic>>.from(data['diskUsage'] ?? []),
-            cpuUsage: List<Map<String, dynamic>>.from(data['cpuUsage'] ?? []),
-            memoryUsage: List<Map<String, dynamic>>.from(data['memoryUsage'] ?? []),
-            networkUsage: List<Map<String, dynamic>>.from(data['networkUsage'] ?? []),
+            diskUsage: diskUsage,
+            cpuUsage: cpuUsage,
+            memoryUsage: memoryUsage,
+            networkUsage: networkUsage,
             error: "",
           ));
         });
 
         return performances;
-      } else {
+      } else if (response.statusCode == 404) {
+        List<Performance> performances = [];
+        return performances;
+      } else{
         print("Failed to load performances. Status code: ${response.statusCode}");
         return [];
       }
@@ -43,5 +86,6 @@ class PerformanceRepository {
       return [];
     }
   }
+
 
 }

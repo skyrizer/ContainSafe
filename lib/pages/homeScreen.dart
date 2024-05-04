@@ -1,10 +1,14 @@
 import 'package:containsafe/bloc/container/performance/performance_bloc.dart';
+import 'package:containsafe/bloc/node/getAll/getAllNode_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../bloc/container/performance/performance_event.dart';
 import '../bloc/container/performance/performance_state.dart';
 import 'dart:async';
+import '../bloc/node/getAll/getAllNode_bloc.dart';
+import '../bloc/node/getAll/getAllNode_state.dart';
+import '../model/node/node.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +20,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PerformanceBloc _performanceBloc = PerformanceBloc();
+  final GetAllNodeBloc _allNodeBloc = GetAllNodeBloc();
   Timer? _timer;
+  Node? _selectedNode; // Selected node
+
 
   @override
   void initState() {
     super.initState();
+    _allNodeBloc.add(GetAllNodeList());
     _performanceBloc.add(GetAllPerformanceList()); // Dispatch the event here
 
     // Start a timer to fetch data every 5 seconds
@@ -43,25 +51,75 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => _performanceBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              SizedBox(
-                width: 8.0,
-              ),
-              Text('ContainSafe', style: Theme.of(context).textTheme.bodyLarge)
-            ],
-          ),
+          title: Text('ContainSafe'),
           backgroundColor: HexColor("#ecd9c9"),
           bottomOpacity: 0.0,
           elevation: 0.0,
           automaticallyImplyLeading: false,
         ),
-        body: _buildListPerformance(),
+        body: BlocBuilder<PerformanceBloc, PerformanceState>(
+          builder: (context, state) {
+            return _buildContent(state);
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildListPerformance() {
+  Widget _buildContent(PerformanceState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildDropdown(), // Dropdown to select nodes
+        SizedBox(height: 16),
+        Expanded(
+          child: _buildListPerformance(state), // List of container performances
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown() {
+    return BlocProvider<GetAllNodeBloc>(
+      create: (context) => _allNodeBloc, // Provide the instance of GetAllNodeBloc
+      child: BlocBuilder<GetAllNodeBloc, GetAllNodeState>(
+        builder: (context, state) {
+          if (state is GetAllNodeLoaded) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: DropdownButton<Node>(
+                hint: Text('Select Node'),
+                value: _selectedNode,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedNode = newValue; // Update selected node
+                    _performanceBloc.add(GetAllPerformanceList(nodeId: newValue?.id)); // Pass the id of the selected node
+                  });
+                },
+                items: _getDropdownItems(state.nodeList),
+                // Display the hostname for each item
+                // value will be the Node object itself
+              ),
+            );
+          } else {
+            // Handle loading or error state
+            return CircularProgressIndicator(); // Or display an error message
+          }
+        },
+      ),
+    );
+  }
+
+  List<DropdownMenuItem<Node>> _getDropdownItems(List<Node> nodes) {
+    return nodes.map((node) {
+      return DropdownMenuItem<Node>(
+        value: node,
+        child: Text(node.hostname),
+      );
+    }).toList();
+  }
+
+  Widget _buildListPerformance(PerformanceState state) {
     return Container(
       color: HexColor("#ecd9c9"),
       child: BlocProvider(
@@ -78,6 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircularProgressIndicator(color: HexColor("#3c1e08")),
               );
             } else if (state is GetAllPerformanceLoaded) {
+              if (state.allPerformanceList.isEmpty) {
+                return Center(
+                  child: Text("No Container Available"),
+                );
+              }
               return Theme(
                 data: Theme.of(context).copyWith(
                   colorScheme: Theme.of(context)

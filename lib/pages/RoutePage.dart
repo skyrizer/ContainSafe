@@ -1,6 +1,6 @@
 
+import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:flutter/material.dart';
-
 import 'homeScreen.dart';
 
 class RoutePage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _RoutePageState extends State<RoutePage> {
      HomeScreen(),
     // SearchUserView(),
     // NewPost(),
-    // OwnReport(),
+     ViewNodesScreen(),
     // ProfileView(),
   ];
   @override
@@ -41,6 +41,11 @@ class _RoutePageState extends State<RoutePage> {
             backgroundColor: Colors.brown,
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'Node',
+            backgroundColor: Colors.brown,
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Explore',
             backgroundColor: Colors.brown,
@@ -48,11 +53,6 @@ class _RoutePageState extends State<RoutePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Post',
-            backgroundColor: Colors.brown,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
-            label: 'Report',
             backgroundColor: Colors.brown,
           ),
           BottomNavigationBarItem(

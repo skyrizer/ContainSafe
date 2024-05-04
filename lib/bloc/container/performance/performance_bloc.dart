@@ -15,7 +15,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       try {
         emit(GetAllPerformanceLoading());
         final List<Performance> allPerformanceList = await performanceRepository
-            .getAllPerformances();
+            .getAllPerformances(nodeId: event.nodeId);
         emit(GetAllPerformanceLoaded(allPerformanceList: allPerformanceList));
 
         if (allPerformanceList[0].error != "") {

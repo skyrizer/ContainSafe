@@ -11,6 +11,7 @@ import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
 
 import 'bloc/container/performance/performance_bloc.dart';
+import 'bloc/node/getAll/getAllNode_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PerformanceBloc>(
           create: (context) => PerformanceBloc(),
+        ),
+        BlocProvider<GetAllNodeBloc>(
+          create: (context) => GetAllNodeBloc(),
         ),
       ],
       child: MaterialApp(
