@@ -1,4 +1,6 @@
 import 'package:containsafe/bloc/container/performance/performance_state.dart';
+import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
+import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/performance_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
 
 import 'bloc/container/performance/performance_bloc.dart';
+import 'bloc/node/addNode/addNode_state.dart';
 import 'bloc/node/getAll/getAllNode_bloc.dart';
 
 void main() {
@@ -43,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GetAllNodeBloc>(
           create: (context) => GetAllNodeBloc(),
+        ),
+        BlocProvider<AddNodeBloc>(
+          create: (context) => AddNodeBloc(AddNodeState(), NodeRepository()),
         ),
       ],
       child: MaterialApp(

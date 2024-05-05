@@ -34,4 +34,40 @@ class NodeRepository {
     }
   }
 
+  Future<int> addNode(String hostname, String ipAddress) async{
+    var pref = await SharedPreferences.getInstance();
+    try{
+
+      String? token = pref.getString("token");
+
+      var url = Uri.parse(APIConstant.AddNodeURL);
+
+      var body = json.encode({
+        "hostname": hostname,
+        "ip_address": ipAddress
+      });
+
+      print(body.toString());
+      var response = await http.post(url,
+          headers: {"Content-Type": "application/json","Authorization": "Bearer ${token}"},
+          body: body
+      );
+
+      if (response.statusCode == 200){
+        // String data =  response.body;
+        // pref.setString("token", data);
+        return 0;
+      }
+      else {
+        return 3;
+      }
+
+
+    } catch (e) {
+      print('error in add node');
+      print(e.toString());
+      return 3;
+    }
+  }
+
 }

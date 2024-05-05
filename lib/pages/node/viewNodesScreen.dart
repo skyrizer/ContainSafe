@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -6,27 +5,29 @@ import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
-
+import 'addNodeScreen.dart';
 
 class ViewNodesScreen extends StatefulWidget {
-  const ViewNodesScreen({super.key});
+  const ViewNodesScreen({Key? key}) : super(key: key);
 
   @override
   State<ViewNodesScreen> createState() => _ViewNodesScreenState();
 }
 
 class _ViewNodesScreenState extends State<ViewNodesScreen> {
-
   final GetAllNodeBloc _nodeListBloc = GetAllNodeBloc();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nodeListBloc.add(GetAllNodeList()); // Dispatch the event here
-
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _nodeListBloc.add(GetAllNodeList());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
               SizedBox(
                 width: 8.0,
               ),
-              Text('Nodes', style: Theme.of(context).textTheme.bodyLarge)
+              Text('Nodes', style: Theme.of(context).textTheme.bodyText1)
             ],
           ),
           backgroundColor: HexColor("#ecd9c9"),
@@ -48,6 +49,17 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
           automaticallyImplyLeading: false,
         ),
         body: _buildListNode(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigate to the page where you can add a new node
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddNodeScreen()),
+            );
+          },
+          backgroundColor: HexColor("#3c1e08"),
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -122,5 +134,4 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
       ),
     );
   }
-
 }

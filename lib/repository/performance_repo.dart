@@ -9,7 +9,14 @@ class PerformanceRepository {
   Future<List<Performance>> getAllPerformances({int? nodeId}) async {
     try {
       var pref = await SharedPreferences.getInstance();
+
+      if(nodeId != null) {
+        pref.setInt("selectedNode", nodeId!);
+      }
+
       String? token = pref.getString("token");
+      int? selectedNode = pref.getInt("selectedNode");
+
       print(token);
       var url = Uri.parse(APIConstant.PerformanceURL);
       var header = {
@@ -18,7 +25,7 @@ class PerformanceRepository {
       };
 
       var body = json.encode({
-        'nodeId': nodeId
+        'nodeId': selectedNode
       });
 
       var response = await http.post(
@@ -26,8 +33,6 @@ class PerformanceRepository {
           headers: header,
           body: body
       );
-
-
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = jsonDecode(response.body);

@@ -17,10 +17,15 @@ class APIConstant {
   static String get PerformanceURL => "${APIConstant.URL}allPerformance";
 
   // refresh
-  static String get RefreshURL => "${APIConstant.URL}//refreshToken";
+  static String get RefreshURL => "${APIConstant.URL}refreshToken";
 
   // node
   static String get GetNodeListURL => "${APIConstant.URL}getNodes";   // a list of nodes
+  static String get AddNodeURL => "${APIConstant.URL}addNode";   // add a node
+
+  // container
+  static String get GetOneContainerURL => "${APIConstant.URL}getOneContainer";    // must append with id
+  static String get UpdateContainerURL => "${APIConstant.URL}updateContainer";    // must append with id
 
 
 

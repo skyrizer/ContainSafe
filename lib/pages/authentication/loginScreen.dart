@@ -50,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
     );
-
     return Scaffold(
       body:
       BlocListener<AuthBloc, AuthState>(
