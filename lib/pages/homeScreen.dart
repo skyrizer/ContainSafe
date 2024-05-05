@@ -9,6 +9,7 @@ import 'dart:async';
 import '../bloc/node/getAll/getAllNode_bloc.dart';
 import '../bloc/node/getAll/getAllNode_state.dart';
 import '../model/node/node.dart';
+import 'container/updateContainerScreen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -151,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: state.allPerformanceList.length,
                   itemBuilder: (context, index) {
                     final performance = state.allPerformanceList[index];
+
                     return Container(
                       margin: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
@@ -177,6 +179,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          SizedBox(width: 10.0),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateContainerScreen(containerId: performance.diskUsage),
+                                ),
+                              );
+                            },
+                          ),
+
                           SizedBox(height: 10.0),
 
                           _buildPerformanceDataList(

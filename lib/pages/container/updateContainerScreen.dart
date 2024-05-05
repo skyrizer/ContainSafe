@@ -11,10 +11,14 @@ import '../../bloc/container/get/getContainer_state.dart';
 import '../SnackBarDesign.dart';
 
 class UpdateContainerScreen extends StatefulWidget {
-  const UpdateContainerScreen({super.key});
+
+  final List<Map<String, dynamic>> containerId; // Add containerId parameter
+
+  const UpdateContainerScreen({Key? key, required this.containerId}) : super(key: key);
 
   @override
   State<UpdateContainerScreen> createState() => UpdateContainerState();
+
 }
 
 class UpdateContainerState extends State<UpdateContainerScreen> {
@@ -36,7 +40,8 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
   void initState() {
     // TODO: implement initState
     updateContainerBloc = BlocProvider.of<GetContainerBloc>(context);
-    updateContainerBloc.add(StartLoadContainer(containerId: ""));
+    updateContainerBloc.add(StartLoadContainer(containerId: "${widget.containerId[0]['container_id']}"));
+    // print('Container ID: ${widget.containerId[0]['container_id']}');
     super.initState();
   }
 
@@ -84,16 +89,16 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
                 containNameController.text = container.name!;
               }
               if (cpuLimitController.text == ""){
-                cpuLimitController.text = container.cpuLimit!;
+                cpuLimitController.text = container.cpuLimit!.toString();
               }
               if (memLimitController.text == "") {
-                memLimitController.text = container.memLimit!;
+                memLimitController.text = container.memLimit!.toString();
               }
               if (diskLimitController.text == ""){
-                diskLimitController.text = container.diskLimit!;
+                diskLimitController.text = container.diskLimit!.toString();
               }
               if (netLimitController.text == "") {
-                netLimitController.text = container.netLimit!;
+                netLimitController.text = container.netLimit!.toString();
               }
 
 
@@ -130,6 +135,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
+        readOnly: true,
         validator: (value) {
           if (value == null || value.isEmpty){
             return 'Please enter full name';
@@ -157,12 +163,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
-        readOnly: true,
         controller: diskLimitController,
-        maxLines: 3,
         decoration:  InputDecoration(
           prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
-          labelText: 'Address',
+          labelText: 'Disk Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
           enabledBorder: UnderlineInputBorder(
@@ -170,21 +174,6 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color:  HexColor("#3c1e08")),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.add_location),
-            onPressed: (){
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => MapScreen())
-              // ).then((value) => {
-              //   if (value != null)
-              //     {
-              //       lat = value['lat'],
-              //       long = value['lng'],
-              //       addressController.text = value['address']
-              //     }
-              // });
-            },
           ),
         ),
       ),
@@ -195,12 +184,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
-        readOnly: true,
         controller: memLimitController,
-        maxLines: 3,
         decoration:  InputDecoration(
           prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
-          labelText: 'Address',
+          labelText: 'Memory Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
           enabledBorder: UnderlineInputBorder(
@@ -208,21 +195,6 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color:  HexColor("#3c1e08")),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.add_location),
-            onPressed: (){
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => MapScreen())
-              // ).then((value) => {
-              //   if (value != null)
-              //     {
-              //       lat = value['lat'],
-              //       long = value['lng'],
-              //       addressController.text = value['address']
-              //     }
-              // });
-            },
           ),
         ),
       ),
@@ -233,12 +205,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
-        readOnly: true,
         controller: netLimitController,
-        maxLines: 3,
         decoration:  InputDecoration(
           prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
-          labelText: 'Address',
+          labelText: 'Network Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
           enabledBorder: UnderlineInputBorder(
@@ -246,21 +216,6 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color:  HexColor("#3c1e08")),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.add_location),
-            onPressed: (){
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => MapScreen())
-              // ).then((value) => {
-              //   if (value != null)
-              //     {
-              //       lat = value['lat'],
-              //       long = value['lng'],
-              //       addressController.text = value['address']
-              //     }
-              // });
-            },
           ),
         ),
       ),
@@ -271,12 +226,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
-        readOnly: true,
         controller: cpuLimitController,
-        maxLines: 3,
         decoration:  InputDecoration(
           prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
-          labelText: 'Address',
+          labelText: 'CPU Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
           enabledBorder: UnderlineInputBorder(
@@ -284,21 +237,6 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color:  HexColor("#3c1e08")),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.add_location),
-            onPressed: (){
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => MapScreen())
-              // ).then((value) => {
-              //   if (value != null)
-              //     {
-              //       lat = value['lat'],
-              //       long = value['lng'],
-              //       addressController.text = value['address']
-              //     }
-              // });
-            },
           ),
         ),
       ),
@@ -319,10 +257,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
             if(_formKey.currentState!.validate()){
               // success validation
               String name = container.name!;
-              String diskLimit = container.diskLimit!;
-              String netLimit = container.netLimit!;
-              String memLimit = container.memLimit!;
-              String cpuLimit = container.cpuLimit!;
+              int diskLimit = container.diskLimit!;
+              int netLimit = container.netLimit!;
+              int memLimit = container.memLimit!;
+              int cpuLimit = container.cpuLimit!;
 
 
               ContainerModel containerUpdate = ContainerModel.edit(

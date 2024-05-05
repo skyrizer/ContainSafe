@@ -8,24 +8,25 @@ import '../model/container/container.dart';
 
 class ContainerRepository {
 
-  Future<ContainerModel?> getContainer(String container) async {
+  Future<ContainerModel?> getContainer(String containerId) async {
     try {
-      dynamic container;
+      dynamic containerResponse;
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       if (token!.isNotEmpty) {
-        var url = Uri.parse(APIConstant.GetOneContainerURL+"/${container.id}");   // ubah
+        var url = Uri.parse(APIConstant.GetOneContainerURL + "/$containerId");
+        print(url);
         var header = {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${token}",
         };
         var response = await http.get(url, headers: header);
-
+        print(response.body);
         if (response.statusCode == 200) {
           var value = response.body;
           var jsonValue = json.decode(value);
-          container = ContainerModel.fromJson(jsonValue);
-          return container;
+          containerResponse = ContainerModel.fromJson(jsonValue);
+          return containerResponse;
         } else {
           print(response.statusCode);
         }
