@@ -19,7 +19,8 @@ class GetContainerBloc extends Bloc<GetContainerEvent, GetContainerState>{
       ContainerModel? isFound = await containerRepo.getContainer(event.containerId);
 
       if (isFound != null){
-        emit(GetContainerLoadedState(container: isFound));
+        print(isFound);
+        emit(GetContainerLoadedState(containerData: isFound));
       } else{
         GetContainerErrorState(message: "Fail to load user profile");
       }

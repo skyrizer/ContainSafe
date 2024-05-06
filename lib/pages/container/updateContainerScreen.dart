@@ -41,7 +41,20 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
     // TODO: implement initState
     updateContainerBloc = BlocProvider.of<GetContainerBloc>(context);
     updateContainerBloc.add(StartLoadContainer(containerId: "${widget.containerId[0]['container_id']}"));
-    // print('Container ID: ${widget.containerId[0]['container_id']}');
+
+    // Listen to state changes in the bloc
+    updateContainerBloc.stream.listen((state) {
+      if (state is GetContainerLoadedState) {
+        // Access container data from the state and update text controllers
+        container = state.containerData;
+        containNameController.text = container.name ?? '';
+        cpuLimitController.text = container.cpuLimit?.toString() ?? '';
+        memLimitController.text = container.memLimit?.toString() ?? '';
+        diskLimitController.text = container.diskLimit?.toString() ?? '';
+        netLimitController.text = container.netLimit?.toString() ?? '';
+      }
+    });
+
     super.initState();
   }
 
@@ -60,7 +73,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
         listener: (context, state){
           if (state is GetContainerUpdated){
             Navigator.pop(context, true);
-            final snackBar = SnackBarDesign.customSnackBar('User profile has been updated');
+            final snackBar = SnackBarDesign.customSnackBar('Container has been updated');
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
@@ -83,7 +96,8 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
               );
             }
             else if (state is GetContainerLoadedState){
-              container = state.container;
+              print(state.containerData.name);
+              container = state.containerData;
               //   define the text controller
               if (containNameController.text == ""){
                 containNameController.text = container.name!;
@@ -100,8 +114,6 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
               if (netLimitController.text == "") {
                 netLimitController.text = container.netLimit!.toString();
               }
-
-
               return Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: SingleChildScrollView(
@@ -136,12 +148,12 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
         readOnly: true,
-        validator: (value) {
-          if (value == null || value.isEmpty){
-            return 'Please enter full name';
-          }
-          return null;
-        },
+        // validator: (value) {
+        //   if (value == null || value.isEmpty){
+        //     return 'Please enter full name';
+        //   }
+        //   return null;
+        // },
         controller: containNameController,
         decoration:  InputDecoration(
           prefixIcon: Icon(Icons.account_box_rounded, color: HexColor("#3c1e08"),),
@@ -257,14 +269,14 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
             if(_formKey.currentState!.validate()){
               // success validation
               String name = container.name!;
-              int diskLimit = container.diskLimit!;
-              int netLimit = container.netLimit!;
-              int memLimit = container.memLimit!;
-              int cpuLimit = container.cpuLimit!;
+              int diskLimit = int.parse(diskLimitController.text);
+              int netLimit = int.parse(netLimitController.text);
+              int memLimit = int.parse(memLimitController.text);
+              int cpuLimit = int.parse(cpuLimitController.text);
 
 
               ContainerModel containerUpdate = ContainerModel.edit(
-                id: container.id,
+                id: widget.containerId[0]['container_id'],
                 diskLimit: diskLimit,
                 netLimit: netLimit,
                 memLimit: memLimit,
@@ -275,7 +287,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
               updateContainerBloc.add(UpdateButtonPressed(container: containerUpdate));
             }
             else {
-              final snackBar = SnackBarDesign.customSnackBar('Having problem in updating user');
+              final snackBar = SnackBarDesign.customSnackBar('Having problem in updating container');
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
 

@@ -45,6 +45,7 @@ class ContainerRepository {
 
       if (token!.isNotEmpty) {
         var url = Uri.parse(APIConstant.UpdateContainerURL+"/${container.id}");  // take note
+        print(url);
         var header = {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${token}",

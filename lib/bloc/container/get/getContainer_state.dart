@@ -8,8 +8,8 @@ class GetContainerState extends Equatable{
 class GetContainerInitState extends GetContainerState {}
 
 class GetContainerLoadedState extends GetContainerState {
-  final ContainerModel container;
-  GetContainerLoadedState({required this.container});
+  final ContainerModel containerData;
+  GetContainerLoadedState({required this.containerData});
 }
 
 
