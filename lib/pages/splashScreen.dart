@@ -74,7 +74,7 @@ class _SplashState extends State<Splash> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'CatViP',
+                'ContainSafe',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               SizedBox(height: 10.0),
@@ -83,7 +83,7 @@ class _SplashState extends State<Splash> {
               //   alignment: Alignment.center,
               // ),
               SizedBox(height: 10.0),
-              Text('Angles with whiskers',
+              Text('Stay safe with us',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               SizedBox(height: 5.0),

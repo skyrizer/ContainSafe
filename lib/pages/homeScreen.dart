@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => _performanceBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ContainSafe'),
+          title: Text('ContainSafe', style: Theme.of(context).textTheme.bodyText1),
           backgroundColor: HexColor("#ecd9c9"),
           bottomOpacity: 0.0,
           elevation: 0.0,
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, state) {
           if (state is GetAllNodeLoaded) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: DropdownButton<Node>(
                 hint: Text('Select Node'),
                 value: _selectedNode,
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             // Handle loading or error state
-            return CircularProgressIndicator(); // Or display an error message
+            return SizedBox.shrink(); // Or display an error message
           }
         },
       ),
@@ -169,39 +169,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Text(
-                            performance.containerName,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      performance.containerName,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => UpdateContainerScreen(containerId: performance.diskUsage),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10.0),
+                                _buildPerformanceDataList(
+                                    performance.diskUsage, "Disk Usage"),
+                                _buildPerformanceDataList(
+                                    performance.cpuUsage, "CPU Usage"),
+                                _buildPerformanceDataList(
+                                    performance.memoryUsage, "Memory Usage"),
+                                _buildPerformanceDataList(
+                                    performance.networkUsage, "Network Usage"),
+                              ],
                             ),
                           ),
-                          SizedBox(width: 10.0),
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UpdateContainerScreen(containerId: performance.diskUsage),
-                                ),
-                              );
-                            },
-                          ),
-
-                          SizedBox(height: 10.0),
-
-                          _buildPerformanceDataList(
-                              performance.diskUsage, "Disk Usage"),
-                          _buildPerformanceDataList(
-                              performance.cpuUsage, "CPU Usage"),
-                          _buildPerformanceDataList(
-                              performance.memoryUsage, "Memory Usage"),
-                          _buildPerformanceDataList(
-                              performance.networkUsage, "Network Usage"),
                         ],
                       ),
                     );
@@ -216,6 +224,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+
 
   Widget _buildPerformanceDataList(
       List<Map<String, dynamic>> data, String title) {

@@ -70,4 +70,28 @@ class NodeRepository {
     }
   }
 
+  // delete node
+  Future<bool> deleteNode(int nodeId) async{
+    try{
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      var url = Uri.parse(APIConstant.DeleteNodeURL + "/${nodeId.toString()}");
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.delete(url, headers: header);
+      if (response.statusCode == 200){
+
+        return true;
+      }else{
+        return false;
+      }
+
+    } catch (e){
+      print("error to delete post ${e.toString()}");
+      return false;
+    }
+  }
+
 }

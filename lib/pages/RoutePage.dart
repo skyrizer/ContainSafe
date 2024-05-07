@@ -1,4 +1,5 @@
 
+import 'package:containsafe/pages/httpResponse/viewHttpResponsesScreen.dart';
 import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:flutter/material.dart';
 import 'homeScreen.dart';
@@ -18,7 +19,7 @@ class _RoutePageState extends State<RoutePage> {
     // SearchUserView(),
     // NewPost(),
      ViewNodesScreen(),
-    // ProfileView(),
+     ViewHttpResponsesScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -38,28 +39,28 @@ class _RoutePageState extends State<RoutePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.brown,
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt),
             label: 'Node',
-            backgroundColor: Colors.brown,
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Explore',
-            backgroundColor: Colors.brown,
+            icon: Icon(Icons.list),
+            label: 'Log',
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Post',
-            backgroundColor: Colors.brown,
+            backgroundColor: Colors.black,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-            backgroundColor: Colors.brown,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: 'Profile',
+          //   backgroundColor: Colors.brown,
+          // ),
         ],
       ),
     );

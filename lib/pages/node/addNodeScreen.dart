@@ -109,6 +109,9 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
                 ipAddress: ipAddrController.text,
               ));
             },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.brown, // Change the background color here
+            ),
             child: Text('Add Node'),
           ),
         ],

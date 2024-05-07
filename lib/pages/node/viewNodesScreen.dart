@@ -1,7 +1,8 @@
+import 'package:containsafe/bloc/node/deleteNode/deleteNode_bloc.dart';
+import 'package:containsafe/bloc/node/deleteNode/deleteNode_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
@@ -15,12 +16,15 @@ class ViewNodesScreen extends StatefulWidget {
 }
 
 class _ViewNodesScreenState extends State<ViewNodesScreen> {
+
   final GetAllNodeBloc _nodeListBloc = GetAllNodeBloc();
+  late DeleteNodeBloc _deleteNodeBloc;
 
   @override
   void initState() {
     super.initState();
     _nodeListBloc.add(GetAllNodeList()); // Dispatch the event here
+    _deleteNodeBloc = BlocProvider.of<DeleteNodeBloc>(context);
   }
 
   @override
@@ -73,8 +77,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
             return Center(
               child: Text(state.error ?? "Error loading data"),
             );
-          } else if (state is GetAllNodeInitial ||
-              state is GetAllNodeLoading) {
+          } else if (state is GetAllNodeInitial || state is GetAllNodeLoading) {
             return Center(
               child: CircularProgressIndicator(color: HexColor("#3c1e08")),
             );
@@ -90,8 +93,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                 itemBuilder: (context, index) {
                   final nodes = state.nodeList[index];
                   return Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20.0),
+                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -105,22 +107,41 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                         ),
                       ],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          nodes.hostname,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              nodes.hostname,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10.0),
+                            Text(
+                              nodes.ipAddress,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10.0),
-                        Text(
-                          nodes.ipAddress,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                          ),
+                        IconButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            // Handle delete functionality here
+                            _deleteNodeBloc.add(DeleteButtonPressed(nodeId: nodes.id));
+
+                            setState(() {
+                              BlocProvider.of<GetAllNodeBloc>(context).add(GetAllNodeList());
+
+                            });
+
+                          },
+                          icon: Icon(Icons.delete, color: Colors.red),
                         ),
                       ],
                     ),
@@ -134,4 +155,6 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
       ),
     );
   }
+
+
 }
