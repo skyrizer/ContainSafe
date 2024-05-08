@@ -3,14 +3,13 @@ import 'dart:core';
 import 'package:http/http.dart' as http;
 import 'package:containsafe/repository/APIConstant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../model/container/container.dart';
 
 class ContainerRepository {
 
   Future<ContainerModel?> getContainer(String containerId) async {
     try {
-      dynamic containerResponse;
+      ContainerModel containerResponse;
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       if (token!.isNotEmpty) {
@@ -23,9 +22,10 @@ class ContainerRepository {
         var response = await http.get(url, headers: header);
         print(response.body);
         if (response.statusCode == 200) {
-          var value = response.body;
-          var jsonValue = json.decode(value);
-          containerResponse = ContainerModel.fromJson(jsonValue);
+          Map<String, dynamic> responseData = jsonDecode(response.body);
+          Map<String, dynamic> jsonData = responseData['container']; // Accessing the 'container' key
+
+          containerResponse = ContainerModel.fromJson(jsonData);
           return containerResponse;
         } else {
           print(response.statusCode);

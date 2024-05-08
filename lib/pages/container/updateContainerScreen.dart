@@ -148,16 +148,10 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       padding: const EdgeInsets.only(top: 5.0),
       child: TextFormField(
         readOnly: true,
-        // validator: (value) {
-        //   if (value == null || value.isEmpty){
-        //     return 'Please enter full name';
-        //   }
-        //   return null;
-        // },
         controller: containNameController,
         decoration:  InputDecoration(
-          prefixIcon: Icon(Icons.account_box_rounded, color: HexColor("#3c1e08"),),
-          labelText: 'Full name',
+          // prefixIcon: Icon(Icons.account_box_rounded, color: HexColor("#3c1e08"),),
+          labelText: 'Container name',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
           enabledBorder: UnderlineInputBorder(
@@ -177,7 +171,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       child: TextFormField(
         controller: diskLimitController,
         decoration:  InputDecoration(
-          prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
+          // prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
           labelText: 'Disk Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
@@ -198,7 +192,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       child: TextFormField(
         controller: memLimitController,
         decoration:  InputDecoration(
-          prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
+          // prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
           labelText: 'Memory Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
@@ -219,7 +213,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       child: TextFormField(
         controller: netLimitController,
         decoration:  InputDecoration(
-          prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
+          // prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
           labelText: 'Network Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
@@ -240,7 +234,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
       child: TextFormField(
         controller: cpuLimitController,
         decoration:  InputDecoration(
-          prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
+          // prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
           labelText: 'CPU Limit',
           labelStyle: TextStyle(color: HexColor("#3c1e08")),
           focusColor: HexColor("#3c1e08"),
