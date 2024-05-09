@@ -27,6 +27,7 @@ import 'bloc/node/getAll/getAllNode_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_state.dart';
 import 'bloc/nodeConfig/get/getNodeConfig_bloc.dart';
+import 'bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GetAllConfigBloc>(
           create: (context) => GetAllConfigBloc(),
+        ),
+        BlocProvider<GetConfigByNodeBloc>(
+          create: (context) => GetConfigByNodeBloc(),
         ),
         BlocProvider<GetHttpResponsesBloc>(
           create: (context) => GetHttpResponsesBloc(),

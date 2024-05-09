@@ -20,7 +20,7 @@ class _RoutePageState extends State<RoutePage> {
     // NewPost(),
     ViewNodesScreen(),
     ViewHttpResponsesScreen(),
-    ViewNodeConfigsScreen(),
+    //ViewNodeConfigsScreen(),
   ];
   @override
   Widget build(BuildContext context) {

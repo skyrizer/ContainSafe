@@ -1,19 +1,16 @@
-import 'package:containsafe/bloc/node/deleteNode/deleteNode_bloc.dart';
-import 'package:containsafe/bloc/node/deleteNode/deleteNode_event.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../bloc/node/getAll/getAllNode_bloc.dart';
-import '../../bloc/node/getAll/getAllNode_event.dart';
-import '../../bloc/node/getAll/getAllNode_state.dart';
-import '../../bloc/nodeConfig/get/getNodeConfig_bloc.dart';
-import '../../bloc/nodeConfig/get/getNodeConfig_event.dart';
-import '../../bloc/nodeConfig/get/getNodeConfig_state.dart';
-import '../node/addNodeScreen.dart';
+import '../../bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
+import '../../bloc/nodeConfig/getByNode/getConfigByNode_event.dart';
+import '../../bloc/nodeConfig/getByNode/getConfigByNode_state.dart';
 import 'AddNodeConfigScreen.dart';
 
 class ViewNodeConfigsScreen extends StatefulWidget {
-  const ViewNodeConfigsScreen({Key? key}) : super(key: key);
+  final int nodeId;
+
+  const ViewNodeConfigsScreen({Key? key, required this.nodeId}) : super(key: key);
 
   @override
   State<ViewNodeConfigsScreen> createState() => _ViewNodeConfigsScreenState();
@@ -21,13 +18,13 @@ class ViewNodeConfigsScreen extends StatefulWidget {
 
 class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
 
-  final GetAllNodeConfigBloc _nodeConfigListBloc = GetAllNodeConfigBloc();
+  final GetConfigByNodeBloc _nodeConfigListBloc = GetConfigByNodeBloc();
 
 
   @override
   void initState() {
     super.initState();
-    _nodeConfigListBloc.add(GetAllNodeConfigList()); // Dispatch the event here
+    _nodeConfigListBloc.add(GetConfigByNodeList(nodeId: widget.nodeId)); // Dispatch the event here
   }
 
 
@@ -39,16 +36,13 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
         appBar: AppBar(
           title: Row(
             children: [
-              SizedBox(
-                width: 8.0,
-              ),
-              Text('Nodes', style: Theme.of(context).textTheme.bodyText1)
+              Text('Configuration', style: Theme.of(context).textTheme.bodyText1)
             ],
           ),
           backgroundColor: HexColor("#ecd9c9"),
           bottomOpacity: 0.0,
           elevation: 0.0,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
         ),
         body: _buildListNode(),
         floatingActionButton: FloatingActionButton(
@@ -69,17 +63,17 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
   Widget _buildListNode() {
     return Container(
       color: HexColor("#ecd9c9"),
-      child: BlocBuilder<GetAllNodeConfigBloc, GetAllNodeConfigState>(
+      child: BlocBuilder<GetConfigByNodeBloc, GetConfigByNodeState>(
         builder: (context, state) {
-          if (state is GetAllNodeConfigError) {
+          if (state is GetConfigByNodeError) {
             return Center(
               child: Text(state.error ?? "Error loading data"),
             );
-          } else if (state is GetAllNodeConfigInitial || state is GetAllNodeConfigLoading) {
+          } else if (state is GetConfigByNodeInitial || state is GetConfigByNodeLoading) {
             return Center(
               child: CircularProgressIndicator(color: HexColor("#3c1e08")),
             );
-          } else if (state is GetAllNodeConfigLoaded) {
+          } else if (state is GetConfigByNodeLoaded) {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: Theme.of(context)
@@ -111,18 +105,19 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              nodeConfigs.node.hostname,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // Text(
+                            //   nodeConfigs.node.hostname,
+                            //   style: TextStyle(
+                            //     fontSize: 18.0,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             SizedBox(height: 10.0),
                             Text(
                               nodeConfigs.config.name,
                               style: TextStyle(
                                 fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10.0),

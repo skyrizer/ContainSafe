@@ -1,5 +1,6 @@
 import 'package:containsafe/bloc/node/deleteNode/deleteNode_bloc.dart';
 import 'package:containsafe/bloc/node/deleteNode/deleteNode_event.dart';
+import 'package:containsafe/pages/nodeConfig/ViewNodeConfigScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -129,20 +130,47 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          color: Colors.black,
-                          onPressed: () {
-                            // Handle delete functionality here
-                            _deleteNodeBloc.add(DeleteButtonPressed(nodeId: nodes.id));
+                        PopupMenuButton<int>(
+                          onSelected: (value) {
+                            if (value == 1) {
+                              // Handle delete functionality here
+                              _deleteNodeBloc.add(DeleteButtonPressed(nodeId: nodes.id));
 
-                            setState(() {
-                              BlocProvider.of<GetAllNodeBloc>(context).add(GetAllNodeList());
-
-                            });
-
+                              setState(() {
+                                BlocProvider.of<GetAllNodeBloc>(context).add(GetAllNodeList());
+                              });
+                            } else if (value == 2) {
+                              // Handle other action here
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ViewNodeConfigsScreen(nodeId: nodes.id)),
+                              );
+                            }
                           },
-                          icon: Icon(Icons.delete, color: Colors.red),
-                        ),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Delete'),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Configuration'),
+                                ],
+                              ),
+                            ),
+                          ],
+                          icon: Icon(Icons.more_vert, color: Colors.black),
+                        )
                       ],
                     ),
                   );

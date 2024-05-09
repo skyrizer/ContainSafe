@@ -39,6 +39,8 @@ class APIConstant {
    // node configs
    static String get GetNodeConfigsURL => "${APIConstant.URL}getNodeConfigs";
    static String get AddNodeConfigsURL => "${APIConstant.URL}addNodeConfig";
+   static String get GetConfigByNodeURL => "${APIConstant.URL}getNodeConfig";
+
 
 
 

@@ -80,5 +80,36 @@ class NodeConfigRepository {
     }
   }
 
+  Future<List<NodeConfig>> getConfigByNode(int nodeId) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      print(token);
+      var url = Uri.parse(APIConstant.GetConfigByNodeURL+"/${nodeId}");
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.get(url, headers: header);
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        List<dynamic> jsonData = responseData['nodeConfigs']; // Accessing the 'nodes' key
+
+        List<NodeConfig> nodeConfigs = jsonData.map((data) => NodeConfig.fromJson(data)).toList();
+
+
+        return nodeConfigs;
+      }
+      else {
+        print("Failed to load nodes. Status code: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error in getting all nodes: $e");
+      return [];
+    }
+  }
+
 
 }
