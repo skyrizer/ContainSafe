@@ -29,9 +29,19 @@ class APIConstant {
   static String get GetOneContainerURL => "${APIConstant.URL}getOneContainer";    // must append with id
   static String get UpdateContainerURL => "${APIConstant.URL}updateContainer";    // must append with id
 
-  // node
+  // http response
   static String get GetHttpResponsesURL => "${APIConstant.URL}getHttpResponses";   // a list of nodes
-  static String get DeleteNodeURL => "${APIConstant.URL}deleteNode";   // a list of nodes
+  static String get DeleteNodeURL => "${APIConstant.URL}deleteNode";
+
+  // configs
+   static String get GetConfigsURL => "${APIConstant.URL}getConfigs";
+
+   // node configs
+   static String get GetNodeConfigsURL => "${APIConstant.URL}getNodeConfigs";
+   static String get AddNodeConfigsURL => "${APIConstant.URL}addNodeConfig";
+
+
+
 
 
 

@@ -3,6 +3,7 @@ import 'package:containsafe/bloc/container/performance/performance_state.dart';
 import 'package:containsafe/bloc/httpResponse/httpResponse_event.dart';
 import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
 import 'package:containsafe/repository/container_repo.dart';
+import 'package:containsafe/repository/nodeConfig_repo.dart';
 import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/performance_repo.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
 
+import 'bloc/config/get/getConfig_bloc.dart';
 import 'bloc/container/get/getContainer_state.dart';
 import 'bloc/container/performance/performance_bloc.dart';
 import 'bloc/httpResponse/httpResponse_bloc.dart';
@@ -22,6 +24,9 @@ import 'bloc/node/addNode/addNode_state.dart';
 import 'bloc/node/deleteNode/deleteNode_bloc.dart';
 import 'bloc/node/deleteNode/deleteNode_state.dart';
 import 'bloc/node/getAll/getAllNode_bloc.dart';
+import 'bloc/nodeConfig/add/addNodeConfig_bloc.dart';
+import 'bloc/nodeConfig/add/addNodeConfig_state.dart';
+import 'bloc/nodeConfig/get/getNodeConfig_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,11 +59,20 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetAllNodeBloc>(
           create: (context) => GetAllNodeBloc(),
         ),
+        BlocProvider<GetAllNodeConfigBloc>(
+          create: (context) => GetAllNodeConfigBloc(),
+        ),
+        BlocProvider<GetAllConfigBloc>(
+          create: (context) => GetAllConfigBloc(),
+        ),
         BlocProvider<GetHttpResponsesBloc>(
           create: (context) => GetHttpResponsesBloc(),
         ),
         BlocProvider<AddNodeBloc>(
           create: (context) => AddNodeBloc(AddNodeState(), NodeRepository()),
+        ),
+        BlocProvider<AddNodeConfigBloc>(
+          create: (context) => AddNodeConfigBloc(AddNodeConfigState(), NodeConfigRepository()),
         ),
         BlocProvider<GetContainerBloc>(
           create: (context) => GetContainerBloc(GetContainerState(), ContainerRepository()),

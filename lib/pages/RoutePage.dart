@@ -1,6 +1,6 @@
-
 import 'package:containsafe/pages/httpResponse/viewHttpResponsesScreen.dart';
 import 'package:containsafe/pages/node/viewNodesScreen.dart';
+import 'package:containsafe/pages/nodeConfig/ViewNodeConfigScreen.dart';
 import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 
@@ -15,11 +15,12 @@ class _RoutePageState extends State<RoutePage> {
   int _currentIndex = 0;
 
   final List<Widget> _tablist = [
-     HomeScreen(),
+    HomeScreen(),
     // SearchUserView(),
     // NewPost(),
-     ViewNodesScreen(),
-     ViewHttpResponsesScreen(),
+    ViewNodesScreen(),
+    ViewHttpResponsesScreen(),
+    ViewNodeConfigsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -30,8 +31,8 @@ class _RoutePageState extends State<RoutePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index){
-          setState((){
+        onTap: (index) {
+          setState(() {
             _currentIndex = index;
           });
         },
@@ -52,7 +53,7 @@ class _RoutePageState extends State<RoutePage> {
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.settings),
             label: 'Post',
             backgroundColor: Colors.black,
           ),
