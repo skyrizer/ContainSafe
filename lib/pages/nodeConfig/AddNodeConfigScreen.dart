@@ -168,7 +168,7 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
     return config.map((config) {
       return DropdownMenuItem<Config>(
         value: config,
-        child: Text(config.name),
+        child: Text(config.name!),
       );
     }).toList();
   }
@@ -209,7 +209,7 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
         onPressed: () {
           // Dispatch an event to add node
           _addNodeConfigBloc.add(AddNodeConfigButtonPressed(
-            configId: _selectedConfig!.id,
+            configId: _selectedConfig!.id!,
             nodeId: _selectedNode!.id,
             value: int.parse(valueController.text)
           ));

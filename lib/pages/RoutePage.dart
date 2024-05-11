@@ -2,6 +2,7 @@ import 'package:containsafe/pages/httpResponse/viewHttpResponsesScreen.dart';
 import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:containsafe/pages/nodeConfig/ViewNodeConfigScreen.dart';
 import 'package:flutter/material.dart';
+import 'config/viewConfigScreen.dart';
 import 'homeScreen.dart';
 
 class RoutePage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _RoutePageState extends State<RoutePage> {
     // NewPost(),
     ViewNodesScreen(),
     ViewHttpResponsesScreen(),
-    //ViewNodeConfigsScreen(),
+    ViewConfigsScreen(),
   ];
   @override
   Widget build(BuildContext context) {

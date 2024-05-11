@@ -1,35 +1,36 @@
 import 'package:containsafe/bloc/node/addNode/addNode_event.dart';
-import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/node/addNode/addNode_bloc.dart';
 import '../../bloc/node/addNode/addNode_state.dart';
+import '../../bloc/role/add/addRole_bloc.dart';
+import '../../bloc/role/add/addRole_event.dart';
+import '../../bloc/role/add/addRole_state.dart';
 import '../RoutePage.dart';
 
-class AddNodeScreen extends StatefulWidget {
-  const AddNodeScreen({Key? key}) : super(key: key);
+class AddRoleScreen extends StatefulWidget {
+  const AddRoleScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddNodeScreen> createState() => _AddNodeScreenState();
+  State<AddRoleScreen> createState() => _AddRoleScreenState();
 }
 
-class _AddNodeScreenState extends State<AddNodeScreen> {
-  late AddNodeBloc _addNodeBloc;
+class _AddRoleScreenState extends State<AddRoleScreen> {
+  late AddRoleBloc _addRoleBloc;
 
-  TextEditingController hostnameController = TextEditingController();
-  TextEditingController ipAddrController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
 
   @override
   void initState() {
-    _addNodeBloc = BlocProvider.of<AddNodeBloc>(context);
+    _addRoleBloc = BlocProvider.of<AddRoleBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _addNodeBloc,
+      create: (context) => _addRoleBloc,
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -38,7 +39,7 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
                 width: 8.0,
               ),
               Text(
-                'Add Node',
+                'Add Role',
                 style: Theme.of(context).textTheme.bodyText1,
               )
             ],
@@ -46,11 +47,11 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
           backgroundColor: HexColor("#ecd9c9"),
           bottomOpacity: 0.0,
           elevation: 0.0,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
         ),
-        body: BlocListener<AddNodeBloc, AddNodeState>(
+        body: BlocListener<AddRoleBloc, AddRoleState>(
           listener: (context, state) {
-            if (state is AddNodeSuccessState) {
+            if (state is AddRoleSuccessState) {
               Future.delayed(Duration(milliseconds: 100), () {
                 Navigator.pushReplacement(
                   context,
@@ -59,20 +60,20 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
               });
             }
           },
-          child: BlocBuilder<AddNodeBloc, AddNodeState>(
+          child: BlocBuilder<AddRoleBloc, AddRoleState>(
             builder: (context, state) {
-              if (state is AddNodeLoadingState) {
+              if (state is AddRoleLoadingState) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (state is AddNodeFailState) {
+              } else if (state is AddRoleFailState) {
                 // Handle failure state
                 return Center(
                   child: Text(state.message),
                 );
               } else {
                 // Handle initial state or any other state
-                return _buildAddNode();
+                return _buildAddRole();
               }
             },
           ),
@@ -81,16 +82,16 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
     );
   }
 
-  Widget _buildAddNode() {
+  Widget _buildAddRole() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            controller: hostnameController,
+            controller: roleController,
             decoration: InputDecoration(
-              labelText: 'Hostname',
+              labelText: 'Role name',
               labelStyle: TextStyle(color: Colors.brown),
               border: OutlineInputBorder(),
               focusedBorder: OutlineInputBorder(
@@ -100,18 +101,12 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
             ),
           ),
           SizedBox(height: 16.0),
-          TextFormField(
-            controller: ipAddrController,
-            decoration: InputDecoration(labelText: 'IP Address'),
-          ),
-          SizedBox(height: 16.0),
           Center(
             child: ElevatedButton(
               onPressed: () {
                 // Dispatch an event to add node
-                _addNodeBloc.add(AddNodeButtonPressed(
-                  hostname: hostnameController.text,
-                  ipAddress: ipAddrController.text,
+                _addRoleBloc.add(AddRoleButtonPressed(
+                  role: roleController.text,
                 ));
               },
               style: ElevatedButton.styleFrom(

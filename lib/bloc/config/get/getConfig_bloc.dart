@@ -19,11 +19,11 @@ class GetAllConfigBloc extends Bloc<GetAllConfigEvent, GetAllConfigState> {
         emit(GetAllConfigLoaded(configList: configList));
 
         if (configList[0].error != "") {
-          emit(GetAllNodeError(
+          emit(GetAllConfigError(
               error: configList[0].error));
         }
       } on http.ClientException {
-        emit(const GetAllNodeError(
+        emit(const GetAllConfigError(
             error: "Failed to fetch data in your device online"));
       }
     });

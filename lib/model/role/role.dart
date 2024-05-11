@@ -1,32 +1,29 @@
-class Config {
+
+class Role {
   int? id;
-  String? name;
-  String? unit;
+  String? role;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? error;
 
-  Config({
+  Role({
     required this.id,
-    required this.name,
-    required this.unit,
+    required this.role,
     required this.createdAt,
     required this.updatedAt,
     required this.error,
   });
 
-  Config.edit({
+  Role.edit({
     required this.id,
-    required this.name,
-    required this.unit,
+    required this.role,
   });
 
-  factory Config.fromJson(Map<String, dynamic> json) {
-    return Config(
+  factory Role.fromJson(Map<String, dynamic> json) {
+    return Role(
       error: json['error'] ?? '',
       id: json['id'],
-      name: json['name'],
-      unit: json['unit'],
+      role: json['role'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : DateTime.now(),
@@ -36,10 +33,4 @@ class Config {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'unit': unit,
-    };
-  }
 }

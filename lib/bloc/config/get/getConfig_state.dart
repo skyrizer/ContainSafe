@@ -16,9 +16,9 @@ class GetAllConfigLoaded extends GetAllConfigState {
   const GetAllConfigLoaded({required this.configList});
 }
 
-class GetAllNodeError extends GetAllConfigState {
+class GetAllConfigError extends GetAllConfigState {
   final String? error;
-  const GetAllNodeError({required this.error});
+  const GetAllConfigError({required this.error});
 }
 
-class GetAllNodeEmpty extends GetAllConfigState {}
+class GetAllConfigEmpty extends GetAllConfigState {}

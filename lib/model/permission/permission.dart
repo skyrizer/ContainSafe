@@ -1,32 +1,29 @@
-class Config {
+
+class Permission {
   int? id;
   String? name;
-  String? unit;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? error;
 
-  Config({
+  Permission({
     required this.id,
     required this.name,
-    required this.unit,
     required this.createdAt,
     required this.updatedAt,
     required this.error,
   });
 
-  Config.edit({
+  Permission.edit({
     required this.id,
     required this.name,
-    required this.unit,
   });
 
-  factory Config.fromJson(Map<String, dynamic> json) {
-    return Config(
+  factory Permission.fromJson(Map<String, dynamic> json) {
+    return Permission(
       error: json['error'] ?? '',
       id: json['id'],
       name: json['name'],
-      unit: json['unit'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : DateTime.now(),
@@ -36,10 +33,4 @@ class Config {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'unit': unit,
-    };
-  }
 }

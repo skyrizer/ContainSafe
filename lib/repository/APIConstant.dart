@@ -35,11 +35,20 @@ class APIConstant {
 
   // configs
    static String get GetConfigsURL => "${APIConstant.URL}getConfigs";
+   static String get AddConfigURL => "${APIConstant.URL}addConfig";
+   static String get UpdateConfigURL => "${APIConstant.URL}updateConfig";
+
 
    // node configs
    static String get GetNodeConfigsURL => "${APIConstant.URL}getNodeConfigs";
    static String get AddNodeConfigsURL => "${APIConstant.URL}addNodeConfig";
    static String get GetConfigByNodeURL => "${APIConstant.URL}getNodeConfig";
+
+
+   // permission configs
+   static String get GetPermissionsURL => "${APIConstant.URL}getPermissions";
+   static String get AddPermissionURL => "${APIConstant.URL}addPermission";
+   static String get UpdatePermissionURL => "${APIConstant.URL}updatePermission";
 
 
 

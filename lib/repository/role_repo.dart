@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'package:containsafe/repository/APIConstant.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/config/config.dart';
+import '../model/node/node.dart';
+import '../model/role/role.dart';
 
-class ConfigRepository {
+class RoleRepository {
 
-  Future<List<Config>> getAllConfigs() async {
+  Future<List<Role>> getAllRoles() async {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       print(token);
-      var url = Uri.parse(APIConstant.GetConfigsURL);  ///  tak tukar url lagii
+      var url = Uri.parse(APIConstant.GetNodeListURL);
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
@@ -19,33 +20,32 @@ class ConfigRepository {
       var response = await http.get(url, headers: header);
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.body);
-        List<
-            dynamic> jsonData = responseData['configs']; // Accessing the 'nodes' key
+        List<dynamic> jsonData = responseData['roles']; // Accessing the 'nodes' key
 
-        List<Config> configs = jsonData.map((data) => Config.fromJson(data)).toList();
+        List<Role> roles = jsonData.map((data) => Role.fromJson(data)).toList();
 
-        return configs;
+        return roles;
       } else {
         print("Failed to load nodes. Status code: ${response.statusCode}");
         return [];
       }
     } catch (e) {
-      print("Error in getting all nodes: $e");
+      print("Error in getting all roles: $e");
       return [];
     }
   }
 
-  Future<int> addConfig(String name, String unit) async{
+  Future<int> addRole(String role) async{
     var pref = await SharedPreferences.getInstance();
     try{
 
       String? token = pref.getString("token");
 
-      var url = Uri.parse(APIConstant.AddConfigURL);
+      var url = Uri.parse(APIConstant.AddNodeURL);  //dsfdfdsf
 
       var body = json.encode({
-        "name": name,
-        "unit": unit
+        "role": role,
+
       });
 
       print(body.toString());
@@ -55,6 +55,8 @@ class ConfigRepository {
       );
 
       if (response.statusCode == 200){
+        // String data =  response.body;
+        // pref.setString("token", data);
         return 0;
       }
       else {
@@ -63,28 +65,26 @@ class ConfigRepository {
 
 
     } catch (e) {
-      print('error in add config');
+      print('error in add role');
       print(e.toString());
       return 3;
     }
   }
 
-
-  Future<bool> updateConfig(Config config) async {
+  Future<bool> updateRole(Role role) async {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
 
       if (token!.isNotEmpty) {
-        var url = Uri.parse(APIConstant.UpdateConfigURL+"/${config.id}");  // take note
+        var url = Uri.parse(APIConstant.UpdateConfigURL+"/${role.id}");  // take note
         print(url);
         var header = {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${token}",
         };
         var body = json.encode({
-          "name": config.name,
-          "unit": config.unit,
+          "role": role.role,
 
         });
         var response = await http.put(url, headers: header, body: body);
@@ -102,6 +102,7 @@ class ConfigRepository {
       return false;
     }
   }
+
 
 
 }
