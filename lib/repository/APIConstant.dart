@@ -44,6 +44,13 @@ class APIConstant {
    static String get AddNodeConfigsURL => "${APIConstant.URL}addNodeConfig";
    static String get GetConfigByNodeURL => "${APIConstant.URL}getNodeConfig";
 
+   // node access
+   static String get GetNodeAccessesURL => "${APIConstant.URL}getNodeAccess";
+   static String get AddNodeAccessURL => "${APIConstant.URL}addNodeAccess";
+   static String get UpdateNodeAccessURL => "${APIConstant.URL}updateNodeAccess";
+   static String get DeleteNodeAccessURL => "${APIConstant.URL}deleteNodeAccess";
+
+
 
    // permission configs
    static String get GetPermissionsURL => "${APIConstant.URL}getPermissions";
