@@ -2,6 +2,7 @@ import 'package:containsafe/bloc/container/get/getContainer_bloc.dart';
 import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
 import 'package:containsafe/repository/config_repo.dart';
 import 'package:containsafe/repository/container_repo.dart';
+import 'package:containsafe/repository/nodeAccess_repo.dart';
 import 'package:containsafe/repository/nodeConfig_repo.dart';
 import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
@@ -26,6 +27,9 @@ import 'bloc/node/addNode/addNode_state.dart';
 import 'bloc/node/deleteNode/deleteNode_bloc.dart';
 import 'bloc/node/deleteNode/deleteNode_state.dart';
 import 'bloc/node/getAll/getAllNode_bloc.dart';
+import 'bloc/nodeAccess/add/addNodeAccess_bloc.dart';
+import 'bloc/nodeAccess/add/addNodeAccess_state.dart';
+import 'bloc/nodeAccess/getByNode/getAccessByNode_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_state.dart';
 import 'bloc/nodeConfig/get/getNodeConfig_bloc.dart';
@@ -40,6 +44,7 @@ import 'bloc/role/add/addRole_state.dart';
 import 'bloc/role/edit/editRole_bloc.dart';
 import 'bloc/role/edit/editRole_state.dart';
 import 'bloc/role/get/getRole_bloc.dart';
+import 'bloc/user/get/getUser_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,8 +89,14 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetAllPermissionBloc>(
           create: (context) => GetAllPermissionBloc(),
         ),
+        BlocProvider<GetAllUserBloc>(
+          create: (context) => GetAllUserBloc(),
+        ),
         BlocProvider<GetConfigByNodeBloc>(
           create: (context) => GetConfigByNodeBloc(),
+        ),
+        BlocProvider<GetAccessByNodeBloc>(
+          create: (context) => GetAccessByNodeBloc(),
         ),
         BlocProvider<GetHttpResponsesBloc>(
           create: (context) => GetHttpResponsesBloc(),
@@ -104,6 +115,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AddPermissionBloc>(
           create: (context) => AddPermissionBloc(AddPermissionState(), PermissionRepository()),
+        ),
+        BlocProvider<AddNodeAccessBloc>(
+          create: (context) => AddNodeAccessBloc(AddNodeAccessState(), NodeAccessRepository()),
         ),
         BlocProvider<EditConfigBloc>(
           create: (context) => EditConfigBloc(EditConfigState(), ConfigRepository()),

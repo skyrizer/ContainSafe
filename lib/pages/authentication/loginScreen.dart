@@ -1,3 +1,4 @@
+import 'package:containsafe/pages/authentication/registerScreen.dart';
 import 'package:containsafe/pages/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   //_forgotPassword(),
                   msg,
                   _loginButton(),
-                  //_signUpText(),
+                  _signUpText(),
                 ],
               ),
             ),
@@ -89,16 +90,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Widget _signUpText(){
-  //   return Container(
-  //       child: TextButton(
-  //         onPressed: (){
-  //           Navigator.push(context,MaterialPageRoute(builder: (context) => SignUpView(),));
-  //         },
-  //         child: Text('Don\'t have an account? Sign up here', style: Theme.of(context).textTheme.bodyMedium,),
-  //       )
-  //   );
-  // }
+  Widget _signUpText(){
+    return Container(
+        child: TextButton(
+          onPressed: (){
+            Navigator.push(context,MaterialPageRoute(builder: (context) => RegisterScreen(),));
+          },
+          child: Text('Don\'t have an account? Sign up here', style: Theme.of(context).textTheme.bodyMedium,),
+        )
+    );
+  }
 
   // Widget _forgotPassword(){
   //   return Container(

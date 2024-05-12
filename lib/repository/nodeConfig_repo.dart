@@ -112,4 +112,30 @@ class NodeConfigRepository {
   }
 
 
+  // delete node access
+  Future<bool> deleteNodeConfig(int nodeConfigId) async{
+    try{
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeConfigId.toString()}");  /// url
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.delete(url, headers: header);
+      if (response.statusCode == 200){
+
+        return true;
+      }else{
+        return false;
+      }
+
+    } catch (e){
+      print("error to delete node config ${e.toString()}");
+      return false;
+    }
+  }
+
+
+
 }

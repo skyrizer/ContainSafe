@@ -77,28 +77,21 @@ class AuthRepository{
     }
   }
 
-  Future<int> register(String username, String fullname, String email,
-      String password, int gender, String bdayDate,
-      String address, double latitude, double longitude) async{
+  Future<int> register(String username, String name, String email,
+      String password, String confirmPassword, String phoneNumber,
+      ) async{
     var pref = await SharedPreferences.getInstance();
     try{
-      bool genderFemale;
-      if (gender == 0){ genderFemale = true; }
-      else            { genderFemale = false; }
 
       var url = Uri.parse(APIConstant.RegisterURL);
 
       var body = json.encode({
         "username": username,
-        "fullName": fullname,
+        "name": name,
         "email": email,
         "password": password,
-        "gender": genderFemale,
-        "dateOfBirth": bdayDate,
-        "roleId": 2,
-        "address": address,
-        "latitude": latitude,
-        "longitude": longitude,
+        "password_confirmation": confirmPassword,
+        "phone_number": phoneNumber,
       });
 
       print(body.toString());

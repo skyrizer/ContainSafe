@@ -10,7 +10,7 @@ class NodeAccessRepository {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.GetNodeConfigsURL);   ///  take note
+      var url = Uri.parse(APIConstant.GetNodeAccessesURL);   ///  take note
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
@@ -43,13 +43,45 @@ class NodeAccessRepository {
   }
 
 
+  Future<List<NodeAccess>> getAccessByNode(int nodeId) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      print(token);
+      var url = Uri.parse(APIConstant.GetAccessByNodeURL+"/${nodeId}");   ////
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.get(url, headers: header);
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        List<dynamic> jsonData = responseData['nodeAccesses']; // Accessing the 'nodes' key
+
+        List<NodeAccess> nodeAccesses = jsonData.map((data) => NodeAccess.fromJson(data)).toList();
+
+
+        return nodeAccesses;
+      }
+      else {
+        print("Failed to load node accesses. Status code: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error in getting all node access: $e");
+      return [];
+    }
+  }
+
+
   Future<int> addNodeAccess(int roleId,int userId, int nodeId) async{
     var pref = await SharedPreferences.getInstance();
     try{
 
       String? token = pref.getString("token");
 
-      var url = Uri.parse(APIConstant.AddNodeURL);   /// take note
+      var url = Uri.parse(APIConstant.AddNodeAccessURL);   /// take note
 
       var body = json.encode({
         "role_id": roleId,
@@ -86,7 +118,7 @@ class NodeAccessRepository {
       String? token = pref.getString("token");
 
       if (token!.isNotEmpty) {
-        var url = Uri.parse(APIConstant.UpdateConfigURL+"/${nodeAccess.id}");  // take note
+        var url = Uri.parse(APIConstant.UpdateNodeAccessURL+"/${nodeAccess.id}");  // take note
         print(url);
         var header = {
           "Content-Type": "application/json",
@@ -120,7 +152,7 @@ class NodeAccessRepository {
     try{
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeURL + "/${nodeAccessId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeAccessId.toString()}");  /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

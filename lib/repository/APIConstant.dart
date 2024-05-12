@@ -1,19 +1,22 @@
 class APIConstant {
 
   // wafir 10.131.77.251
-   static const String ipaddress = "http://192.168.0.115:8000/";
-  // static const String ipaddress = "http://10.131.77.251:8000/";
+  // static const String ipaddress = "http://192.168.0.115:8000/";
+   static const String ipaddress = "http://10.131.77.123:8000/";
 
 
   static const String URL = "${ipaddress}api/";
 
   // auth module
   static String get LoginURL => "${APIConstant.URL}login";
-  // not functioning yet
-  static String get RegisterURL => "${APIConstant.URL}auth/register";
+  static String get RegisterURL => "${APIConstant.URL}register";
+  static String get LogoutURL => "${APIConstant.URL}logout";
+
+
+
   static String get ForgotPasswordURL =>
       "${APIConstant.URL}auth/forgot-password";
-  static String get LogoutURL => "${APIConstant.URL}auth/logout";
+
 
   // performance
   static String get PerformanceURL => "${APIConstant.URL}allPerformance";
@@ -49,7 +52,11 @@ class APIConstant {
    static String get AddNodeAccessURL => "${APIConstant.URL}addNodeAccess";
    static String get UpdateNodeAccessURL => "${APIConstant.URL}updateNodeAccess";
    static String get DeleteNodeAccessURL => "${APIConstant.URL}deleteNodeAccess";
+   static String get GetAccessByNodeURL => "${APIConstant.URL}getNodeAccess";
 
+
+   // user
+   static String get GetUsersURL => "${APIConstant.URL}user";
 
 
    // permission configs
