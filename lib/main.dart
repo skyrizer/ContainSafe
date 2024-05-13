@@ -1,11 +1,13 @@
 import 'package:containsafe/bloc/container/get/getContainer_bloc.dart';
 import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
+import 'package:containsafe/bloc/rolePermission/get/getRolePermission_bloc.dart';
 import 'package:containsafe/repository/config_repo.dart';
 import 'package:containsafe/repository/container_repo.dart';
 import 'package:containsafe/repository/nodeAccess_repo.dart';
 import 'package:containsafe/repository/nodeConfig_repo.dart';
 import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
+import 'package:containsafe/repository/rolePermission_repo.dart';
 import 'package:containsafe/repository/role_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +50,10 @@ import 'bloc/role/add/addRole_state.dart';
 import 'bloc/role/edit/editRole_bloc.dart';
 import 'bloc/role/edit/editRole_state.dart';
 import 'bloc/role/get/getRole_bloc.dart';
+import 'bloc/rolePermission/add/addRolePermission_bloc.dart';
+import 'bloc/rolePermission/add/addRolePermission_state.dart';
+import 'bloc/rolePermission/delete/delRolePermission_bloc.dart';
+import 'bloc/rolePermission/delete/delRolePermission_state.dart';
 import 'bloc/user/get/getUser_bloc.dart';
 
 void main() {
@@ -96,6 +102,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetAllUserBloc>(
           create: (context) => GetAllUserBloc(),
         ),
+        BlocProvider<GetAllRolePermissionBloc>(
+          create: (context) => GetAllRolePermissionBloc(),
+        ),
         BlocProvider<GetConfigByNodeBloc>(
           create: (context) => GetConfigByNodeBloc(),
         ),
@@ -123,6 +132,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddNodeAccessBloc>(
           create: (context) => AddNodeAccessBloc(AddNodeAccessState(), NodeAccessRepository()),
         ),
+        BlocProvider<AddRolePermissionBloc>(
+          create: (context) => AddRolePermissionBloc(AddRolePermissionState(), RolePermissionRepository()),
+        ),
         BlocProvider<EditConfigBloc>(
           create: (context) => EditConfigBloc(EditConfigState(), ConfigRepository()),
         ),
@@ -143,6 +155,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DeleteNodeAccessBloc>(
           create: (context) => DeleteNodeAccessBloc(DeleteNodeAccessState(), NodeAccessRepository()),
+        ),
+        BlocProvider<DeleteRolePermissionBloc>(
+          create: (context) => DeleteRolePermissionBloc(DeleteRolePermissionState(), RolePermissionRepository()),
         ),
       ],
       child: MaterialApp(

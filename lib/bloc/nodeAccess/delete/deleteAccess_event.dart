@@ -9,10 +9,15 @@ class DeleteNodeAccessEvents extends Equatable{
 class StartDeleteNodeAccess extends DeleteNodeAccessEvents {}
 
 class DeleteAccessButtonPressed extends DeleteNodeAccessEvents{
-  final int nodeAccessId;
+  final int nodeId;
+  final int userId;
+  final int roleId;
+
 
   DeleteAccessButtonPressed({
-    required this.nodeAccessId,
+    required this.nodeId,
+    required this.userId,
+    required this.roleId,
   });
 
 }

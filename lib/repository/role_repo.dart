@@ -26,7 +26,7 @@ class RoleRepository {
 
         return roles;
       } else {
-        print("Failed to load nodes. Status code: ${response.statusCode}");
+        print("Failed to load roles. Status code: ${response.statusCode}");
         return [];
       }
     } catch (e) {

@@ -69,6 +69,12 @@ class APIConstant {
    static String get UpdatePermissionURL => "${APIConstant.URL}updatePermission";
 
 
+   // role permission
+   static String get GetRolePermissionsURL => "${APIConstant.URL}rolePermissions";
+   static String get AddRolePermissionURL => "${APIConstant.URL}addRolePermission";
+   static String get DeleteNodePermissionURL => "${APIConstant.URL}delRolePermission";
+
+
 
 
 

@@ -17,7 +17,7 @@ class DeleteNodeAccessBloc extends Bloc<DeleteNodeAccessEvents, DeleteNodeAccess
     on<DeleteAccessButtonPressed>((event, emit) async{
       emit(DeleteNodeAccessLoadingState());
 
-      bool isCreated = await nodeAccessRepo.deleteNodeAccess(event.nodeAccessId);
+      bool isCreated = await nodeAccessRepo.deleteNodeAccess(event.nodeId, event.userId, event.roleId);
       if (isCreated) {
         emit(DeleteNodeAccessSuccessState());
       } else {

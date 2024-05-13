@@ -148,11 +148,11 @@ class NodeAccessRepository {
 
 
   // delete node access
-  Future<bool> deleteNodeAccess(int nodeAccessId) async{
+  Future<bool> deleteNodeAccess(int nodeId, int userId, int roleId) async{
     try{
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeAccessId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeId.toString()}/${userId.toString()}/${roleId.toString()}");  /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

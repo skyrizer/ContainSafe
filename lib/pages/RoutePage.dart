@@ -1,5 +1,6 @@
 import 'package:containsafe/pages/permission/viewPermissionScreen.dart';
 import 'package:containsafe/pages/role/viewRoleScreen.dart';
+import 'package:containsafe/pages/rolePermission/ViewRolePermissionScreen.dart';
 import 'package:flutter/material.dart';
 import 'config/viewConfigScreen.dart';
 import 'homeScreen.dart';
@@ -54,6 +55,8 @@ class _RoutePageState extends State<RoutePage> {
                   _buildMenuItem(Icons.settings, 'Configuration', 3),
                   _buildMenuItem(Icons.settings, 'Permission', 4),
                   _buildMenuItem(Icons.settings, 'Role', 5),
+                  _buildMenuItem(Icons.settings, 'Role Permission', 6),
+
 
 
 
@@ -93,6 +96,8 @@ class _RoutePageState extends State<RoutePage> {
         return ViewPermissionsScreen();
       case 5:
         return ViewRolesScreen();
+      case 6:
+        return ViewRolePermissionsScreen();
       default:
         return HomeScreen(); // Default to HomeScreen if index is out of bounds
     }
