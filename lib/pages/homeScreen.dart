@@ -51,13 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider(
       create: (context) => _performanceBloc,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('ContainSafe', style: Theme.of(context).textTheme.bodyText1),
-          backgroundColor: HexColor("#ecd9c9"),
-          bottomOpacity: 0.0,
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
-        ),
+        // appBar: AppBar(
+        //   title: Text('ContainSafe', style: Theme.of(context).textTheme.bodyText1),
+        //   backgroundColor: HexColor("#ecd9c9"),
+        //   bottomOpacity: 0.0,
+        //   elevation: 0.0,
+        //   automaticallyImplyLeading: false,
+        // ),
         body: BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
             return _buildContent(state);

@@ -16,7 +16,7 @@ class DeleteNodeConfigBloc extends Bloc<DeleteNodeConfigEvents, DeleteNodeConfig
     on<DeleteNodeConfigButtonPressed>((event, emit) async{
       emit(DeleteNodeConfigLoadingState());
 
-      bool isCreated = await nodeConfigRepo.deleteNodeConfig(event.nodeConfigId);
+      bool isCreated = await nodeConfigRepo.deleteNodeConfig(event.nodeId, event.configId);
       if (isCreated) {
         emit(DeleteNodeConfigSuccessState());
       } else {

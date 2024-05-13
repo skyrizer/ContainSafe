@@ -29,9 +29,13 @@ import 'bloc/node/deleteNode/deleteNode_state.dart';
 import 'bloc/node/getAll/getAllNode_bloc.dart';
 import 'bloc/nodeAccess/add/addNodeAccess_bloc.dart';
 import 'bloc/nodeAccess/add/addNodeAccess_state.dart';
+import 'bloc/nodeAccess/delete/deleteAccess_bloc.dart';
+import 'bloc/nodeAccess/delete/deleteAccess_state.dart';
 import 'bloc/nodeAccess/getByNode/getAccessByNode_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/add/addNodeConfig_state.dart';
+import 'bloc/nodeConfig/delete/deleteNodeConfig_bloc.dart';
+import 'bloc/nodeConfig/delete/deleteNodeConfig_state.dart';
 import 'bloc/nodeConfig/get/getNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
 import 'bloc/permission/add/addPermission_bloc.dart';
@@ -133,6 +137,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DeleteNodeBloc>(
           create: (context) => DeleteNodeBloc(DeleteNodeState(), NodeRepository()),
+        ),
+        BlocProvider<DeleteNodeConfigBloc>(
+          create: (context) => DeleteNodeConfigBloc(DeleteNodeConfigState(), NodeConfigRepository()),
+        ),
+        BlocProvider<DeleteNodeAccessBloc>(
+          create: (context) => DeleteNodeAccessBloc(DeleteNodeAccessState(), NodeAccessRepository()),
         ),
       ],
       child: MaterialApp(

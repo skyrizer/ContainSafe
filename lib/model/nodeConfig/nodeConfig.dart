@@ -4,7 +4,6 @@ import '../config/config.dart';
 import '../node/node.dart';
 
 class NodeConfig {
-  final int id;
   final int nodeId;
   final int configId;
   final int value;
@@ -15,7 +14,6 @@ class NodeConfig {
   final Node node;
 
   NodeConfig({
-    required this.id,
     required this.nodeId,
     required this.configId,
     required this.value,
@@ -29,7 +27,6 @@ class NodeConfig {
   factory NodeConfig.fromJson(Map<String, dynamic> json) {
     return NodeConfig(
       error: json['error'] ?? '',
-      id: json['id'] ?? '',
       nodeId: json['node_id'] ?? '',
       configId: json['config_id'] ?? '',
       value: json['value'] ?? '',

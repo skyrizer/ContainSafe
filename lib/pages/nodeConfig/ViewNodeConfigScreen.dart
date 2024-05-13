@@ -26,9 +26,12 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
 
   @override
   void initState() {
-    super.initState();
-    _nodeConfigListBloc.add(GetConfigByNodeList(nodeId: widget.nodeId)); // Dispatch the event here
+
     _deleteNodeConfigBloc = BlocProvider.of<DeleteNodeConfigBloc>(context);
+    _nodeConfigListBloc.add(GetConfigByNodeList(nodeId: widget.nodeId)); // Dispatch the event here
+    super.initState();
+
+
 
   }
 
@@ -138,7 +141,7 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
                           color: Colors.black,
                           onPressed: () {
                             // // Handle delete functionality here
-                            _deleteNodeConfigBloc.add(DeleteNodeConfigButtonPressed(nodeConfigId: nodeConfigs.id));
+                            _deleteNodeConfigBloc.add(DeleteNodeConfigButtonPressed(nodeId: nodeConfigs.node.id, configId: nodeConfigs.config.id!));
 
                             setState(() {
                               BlocProvider.of<GetConfigByNodeBloc>(context).add(GetConfigByNodeList(nodeId: widget.nodeId));

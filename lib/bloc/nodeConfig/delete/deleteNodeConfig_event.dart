@@ -9,10 +9,13 @@ class DeleteNodeConfigEvents extends Equatable{
 class StartDeleteNodeConfig extends DeleteNodeConfigEvents {}
 
 class DeleteNodeConfigButtonPressed extends DeleteNodeConfigEvents{
-  final int nodeConfigId;
+  final int nodeId;
+  final int configId;
 
   DeleteNodeConfigButtonPressed({
-    required this.nodeConfigId,
+    required this.nodeId,
+    required this.configId,
+
   });
 
 }

@@ -12,7 +12,7 @@ class RoleRepository {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       print(token);
-      var url = Uri.parse(APIConstant.GetNodeListURL);
+      var url = Uri.parse(APIConstant.GetRolesURL);
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

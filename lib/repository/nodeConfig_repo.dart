@@ -113,11 +113,11 @@ class NodeConfigRepository {
 
 
   // delete node access
-  Future<bool> deleteNodeConfig(int nodeConfigId) async{
+  Future<bool> deleteNodeConfig(int nodeId, int configId) async{
     try{
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeConfigId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeId.toString()}/${configId.toString()}");  /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

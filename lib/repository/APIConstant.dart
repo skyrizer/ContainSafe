@@ -59,6 +59,10 @@ class APIConstant {
    static String get GetUsersURL => "${APIConstant.URL}user";
 
 
+   // role
+   static String get GetRolesURL => "${APIConstant.URL}getRoles";
+
+
    // permission configs
    static String get GetPermissionsURL => "${APIConstant.URL}getPermissions";
    static String get AddPermissionURL => "${APIConstant.URL}addPermission";
