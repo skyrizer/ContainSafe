@@ -21,25 +21,37 @@ class RolePermissionRepository {
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        Map<String, dynamic> rolePermissionsData = responseData['rolePermissions'];
+        if (responseData.containsKey('rolePermissions') && responseData['rolePermissions'] != null) {
+          Map<String, dynamic>? rolePermissionsData = responseData['rolePermissions'] as Map<String, dynamic>?;
 
-        List<RolePermission> rolePermissions = [];
-        rolePermissionsData.forEach((key, value) {
-          List<dynamic> rPsData = value;
-          rPsData.forEach((rPData) {
-            RolePermission rolePermission = RolePermission.fromJson(rPData);
-            rolePermissions.add(rolePermission);
-          });
-        });
+          if (rolePermissionsData != null) {
+            List<RolePermission> rolePermissions = [];
 
-        return rolePermissions;
+            rolePermissionsData.forEach((key, value) {
+              if (value != null && value is List<dynamic>) {
+                List<dynamic> rPsData = value;
+                rPsData.forEach((rPData) {
+                  if (rPData != null) {
+                    RolePermission rolePermission = RolePermission.fromJson(rPData);
+                    rolePermissions.add(rolePermission);
+                  }
+                });
+              }
+            });
+
+            return rolePermissions;
+          }
+        }
+
+        // Return an empty list if rolePermissionsData is null or not valid
+        return [];
       }
       else {
-        print("Failed to load nodes. Status code: ${response.statusCode}");
+        print("Failed to load role permissions. Status code: ${response.statusCode}");
         return [];
       }
     } catch (e) {
-      print("Error in getting all nodes: $e");
+      print("Error in getting all role permissions: $e");
       return [];
     }
   }

@@ -1,7 +1,9 @@
+import 'package:containsafe/pages/httpResponse/SearchByCode.dart';
 import 'package:containsafe/pages/permission/viewPermissionScreen.dart';
 import 'package:containsafe/pages/role/viewRoleScreen.dart';
 import 'package:containsafe/pages/rolePermission/ViewRolePermissionScreen.dart';
 import 'package:flutter/material.dart';
+import 'RoutePageLog.dart';
 import 'config/viewConfigScreen.dart';
 import 'homeScreen.dart';
 import 'httpResponse/viewHttpResponsesScreen.dart';
@@ -45,7 +47,7 @@ class _RoutePageState extends State<RoutePage> {
           if (_isMenuOpen)
             Container(
               color: Colors.white?.withOpacity(1.0),
-              width: MediaQuery.of(context).size.width * 0.8, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
@@ -84,8 +86,10 @@ class _RoutePageState extends State<RoutePage> {
         return HomeScreen();
       case 1:
         return ViewNodesScreen();
+      // case 2:
+      //   return ViewHttpResponsesScreen();
       case 2:
-        return ViewHttpResponsesScreen();
+        return RoutePageLog();
       case 3:
         return ViewConfigsScreen();
       case 4:

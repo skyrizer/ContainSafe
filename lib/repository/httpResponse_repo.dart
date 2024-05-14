@@ -33,4 +33,36 @@ class HttpResponseRepository {
       return [];
     }
   }
+
+  Future<List<HttpResponse>> searchByCode(int statusCode) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      print(token);
+      var url = Uri.parse(APIConstant.SearchByCodeURL);
+      var body = json.encode({
+        "status_code": statusCode,
+
+      });
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.post(url, headers: header, body: body);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        List<dynamic> jsonData = responseData['httpResponse']; // Accessing the 'httpResponse' key
+
+        List<HttpResponse> nodes = jsonData.map((data) => HttpResponse.fromJson(data)).toList();
+
+        return nodes;
+      } else {
+        print("Failed to load http responses. Status code: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error in getting all http responses: $e");
+      return [];
+    }
+  }
 }

@@ -1,8 +1,8 @@
 class APIConstant {
 
   // wafir 10.131.77.251
-  // static const String ipaddress = "http://192.168.0.115:8000/";
-   static const String ipaddress = "http://10.131.77.123:8000/";
+   static const String ipaddress = "http://192.168.0.115:8000/";
+  // static const String ipaddress = "http://10.131.77.123:8000/";
 
 
   static const String URL = "${ipaddress}api/";
@@ -35,8 +35,10 @@ class APIConstant {
   // http response
   static String get GetHttpResponsesURL => "${APIConstant.URL}getHttpResponses";   // a list of nodes
   static String get DeleteNodeURL => "${APIConstant.URL}deleteNode";
+  static String get SearchByCodeURL => "${APIConstant.URL}searchByCode";
 
-  // configs
+
+   // configs
    static String get GetConfigsURL => "${APIConstant.URL}getConfigs";
    static String get AddConfigURL => "${APIConstant.URL}addConfig";
    static String get UpdateConfigURL => "${APIConstant.URL}updateConfig";

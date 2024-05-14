@@ -3,6 +3,7 @@ import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
 import 'package:containsafe/bloc/rolePermission/get/getRolePermission_bloc.dart';
 import 'package:containsafe/repository/config_repo.dart';
 import 'package:containsafe/repository/container_repo.dart';
+import 'package:containsafe/repository/httpResponse_repo.dart';
 import 'package:containsafe/repository/nodeAccess_repo.dart';
 import 'package:containsafe/repository/nodeConfig_repo.dart';
 import 'package:containsafe/repository/node_repo.dart';
@@ -25,6 +26,8 @@ import 'bloc/config/update/editConfig_state.dart';
 import 'bloc/container/get/getContainer_state.dart';
 import 'bloc/container/performance/performance_bloc.dart';
 import 'bloc/httpResponse/httpResponse_bloc.dart';
+import 'bloc/httpResponse/searchByNode/searchByCode_bloc.dart';
+import 'bloc/httpResponse/searchByNode/searchByCode_state.dart';
 import 'bloc/node/addNode/addNode_state.dart';
 import 'bloc/node/deleteNode/deleteNode_bloc.dart';
 import 'bloc/node/deleteNode/deleteNode_state.dart';
@@ -158,6 +161,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DeleteRolePermissionBloc>(
           create: (context) => DeleteRolePermissionBloc(DeleteRolePermissionState(), RolePermissionRepository()),
+        ),
+        BlocProvider<SearchByCodeBloc>(
+          create: (context) => SearchByCodeBloc(SearchByCodeState(), HttpResponseRepository()),
         ),
       ],
       child: MaterialApp(

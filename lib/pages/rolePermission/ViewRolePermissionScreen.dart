@@ -160,7 +160,11 @@ class _ViewRolePermissionsScreenState extends State<ViewRolePermissionsScreen> {
               ),
             );
           }
-          return SizedBox.shrink(); // Return an empty widget if none of the conditions match
+          return Container(
+            child: Center(
+              child: Text("No Data Available"),
+            ),
+          ); // Return an empty widget if none of the conditions match
         },
       ),
     );
