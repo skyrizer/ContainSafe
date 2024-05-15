@@ -26,6 +26,8 @@ import 'bloc/config/update/editConfig_state.dart';
 import 'bloc/container/get/getContainer_state.dart';
 import 'bloc/container/performance/performance_bloc.dart';
 import 'bloc/httpResponse/httpResponse_bloc.dart';
+import 'bloc/httpResponse/searchByDate/searchByDate_bloc.dart';
+import 'bloc/httpResponse/searchByDate/searchByDate_state.dart';
 import 'bloc/httpResponse/searchByNode/searchByCode_bloc.dart';
 import 'bloc/httpResponse/searchByNode/searchByCode_state.dart';
 import 'bloc/node/addNode/addNode_state.dart';
@@ -164,6 +166,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SearchByCodeBloc>(
           create: (context) => SearchByCodeBloc(SearchByCodeState(), HttpResponseRepository()),
+        ),
+        BlocProvider<SearchByDateBloc>(
+          create: (context) => SearchByDateBloc(SearchByDateState(), HttpResponseRepository()),
         ),
       ],
       child: MaterialApp(

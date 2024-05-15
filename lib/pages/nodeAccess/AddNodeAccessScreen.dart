@@ -1,25 +1,19 @@
-import 'package:containsafe/bloc/config/get/getConfig_bloc.dart';
-import 'package:containsafe/bloc/config/get/getConfig_event.dart';
+
 import 'package:containsafe/bloc/node/getAll/getAllNode_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../bloc/config/get/getConfig_state.dart';
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
 import '../../bloc/nodeAccess/add/addNodeAccess_bloc.dart';
 import '../../bloc/nodeAccess/add/addNodeAccess_event.dart';
 import '../../bloc/nodeAccess/add/addNodeAccess_state.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_bloc.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_event.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_state.dart';
 import '../../bloc/role/get/getRole_bloc.dart';
 import '../../bloc/role/get/getRole_event.dart';
 import '../../bloc/role/get/getRole_state.dart';
 import '../../bloc/user/get/getUser_bloc.dart';
 import '../../bloc/user/get/getUser_event.dart';
 import '../../bloc/user/get/getUser_state.dart';
-import '../../model/config/config.dart';
 import '../../model/node/node.dart';
 import '../../model/role/role.dart';
 import '../../model/user/user.dart';
@@ -45,6 +39,7 @@ class _AddNodeAccessScreenState extends State<AddNodeAccessScreen> {
 
   @override
   void initState() {
+
     _addNodeAccessBloc = BlocProvider.of<AddNodeAccessBloc>(context);
 
     _getAllNodeBloc .add(GetAllNodeList());

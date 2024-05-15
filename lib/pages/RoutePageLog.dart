@@ -2,6 +2,8 @@ import 'package:containsafe/pages/httpResponse/SearchByCode.dart';
 import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:flutter/material.dart';
 
+import 'httpResponse/SearchByDate.dart';
+
 class RoutePageLog extends StatefulWidget {
   const RoutePageLog({super.key});
 
@@ -12,7 +14,7 @@ class RoutePageLog extends StatefulWidget {
 class _RoutePageLogState extends State<RoutePageLog> {
   final List<Widget> _tablist = [
     SearchByCodeView(),
-    ViewNodesScreen(),
+    SearchByDateView(),
     // ViewHttpResponsesScreen(),
     // ViewConfigsScreen(),
   ];

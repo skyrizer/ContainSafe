@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
+import '../nodeAccess/ViewNodeAccessScreen.dart';
 import 'addNodeScreen.dart';
 
 class ViewNodesScreen extends StatefulWidget {
@@ -145,6 +146,12 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                 context,
                                 MaterialPageRoute(builder: (context) => ViewNodeConfigsScreen(nodeId: nodes.id)),
                               );
+                            } else if (value == 3) {
+                              // Handle other action here
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ViewNodeAccessesScreen(nodeId: nodes.id)),
+                              );
                             }
                           },
                           itemBuilder: (context) => [
@@ -165,6 +172,16 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                   Icon(Icons.settings, color: Colors.brown),
                                   SizedBox(width: 8),
                                   Text('Setting'),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: 3,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Access'),
                                 ],
                               ),
                             ),

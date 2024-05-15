@@ -9,6 +9,7 @@ import '../../bloc/nodeAccess/getByNode/getAccessByNode_state.dart';
 import '../../bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
 import '../../bloc/nodeConfig/getByNode/getConfigByNode_event.dart';
 import '../../bloc/nodeConfig/getByNode/getConfigByNode_state.dart';
+import 'AddNodeAccessScreen.dart';
 
 class ViewNodeAccessesScreen extends StatefulWidget {
   final int nodeId;
@@ -52,10 +53,10 @@ class _ViewNodeAccessesScreenState extends State<ViewNodeAccessesScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // Navigate to the page where you can add a new node
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => AddNodeConfigScreen()),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddNodeAccessScreen()),
+            );
           },
           backgroundColor: HexColor("#3c1e08"),
           child: Icon(Icons.add),
