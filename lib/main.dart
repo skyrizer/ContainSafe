@@ -10,6 +10,7 @@ import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
 import 'package:containsafe/repository/rolePermission_repo.dart';
 import 'package:containsafe/repository/role_repo.dart';
+import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -18,6 +19,7 @@ import 'package:containsafe/pages/splashScreen.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'bloc/config/add/addConfig_bloc.dart';
 import 'bloc/config/add/addConfig_state.dart';
 import 'bloc/config/get/getConfig_bloc.dart';
@@ -61,8 +63,10 @@ import 'bloc/rolePermission/delete/delRolePermission_bloc.dart';
 import 'bloc/rolePermission/delete/delRolePermission_state.dart';
 import 'bloc/user/get/getUser_bloc.dart';
 
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   OneSignal.Debug.setAlertLevel(OSLogLevel.none);
   OneSignal.initialize("2c9ce8b1-a075-4864-83a3-009c8497310e");
@@ -73,6 +77,7 @@ void main() {
 
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

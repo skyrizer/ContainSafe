@@ -1,4 +1,5 @@
 import 'package:containsafe/pages/authentication/loginScreen.dart';
+import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -19,6 +20,8 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   late AuthBloc authBloc;
+  //late WebSocketRepository webSocketRepository;
+  final webSocketRepository = WebSocketRepository('ws://192.168.0.115:8080'); // Adjust IP for your case
 
   Future<String> checkToken() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
@@ -38,6 +41,8 @@ class _SplashState extends State<Splash> {
     Future.delayed(Duration(milliseconds: 1000),(){
       redirect();
     });
+
+
   }
 
   Future<void> redirect() async {
@@ -51,6 +56,10 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    webSocketRepository.sendMessage('Hello from Flutter!');
+    webSocketRepository.messages.listen((message) {
+      print('Received message: $message');
+    });
     return Scaffold(
       body:
       BlocListener<AuthBloc, AuthState>(

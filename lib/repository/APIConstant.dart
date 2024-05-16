@@ -1,8 +1,8 @@
 class APIConstant {
 
   // wafir 10.131.77.251
-  // static const String ipaddress = "http://192.168.0.115:8000/";
-   static const String ipaddress = "http://10.131.74.174:8000/";
+   static const String ipaddress = "http://192.168.0.115:8000/";
+ //  static const String ipaddress = "http://10.131.74.174:8000/";
 
 
   static const String URL = "${ipaddress}api/";
