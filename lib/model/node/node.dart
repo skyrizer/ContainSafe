@@ -1,10 +1,14 @@
+
+
 class Node {
-  final int id;
-  final String hostname;
-  final String ipAddress;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  late String error;
+  int? id;
+  String hostname;
+  String ipAddress;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? error;
+  bool? isConnected;
+
 
   Node({
     required this.id,
@@ -13,6 +17,14 @@ class Node {
     required this.createdAt,
     required this.updatedAt,
     required this.error,
+    this.isConnected = false, // Default connection status is false
+
+  });
+
+  Node.test({
+    required this.hostname,
+    required this.ipAddress,
+    this.isConnected = false,
   });
 
   factory Node.fromJson(Map<String, dynamic> json) {

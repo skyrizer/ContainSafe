@@ -141,7 +141,7 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
                           color: Colors.black,
                           onPressed: () {
                             // // Handle delete functionality here
-                            _deleteNodeConfigBloc.add(DeleteNodeConfigButtonPressed(nodeId: nodeConfigs.node.id, configId: nodeConfigs.config.id!));
+                            _deleteNodeConfigBloc.add(DeleteNodeConfigButtonPressed(nodeId: nodeConfigs.node.id!, configId: nodeConfigs.config.id!));
 
                             setState(() {
                               BlocProvider.of<GetConfigByNodeBloc>(context).add(GetConfigByNodeList(nodeId: widget.nodeId));

@@ -10,6 +10,7 @@ import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
 import 'package:containsafe/repository/rolePermission_repo.dart';
 import 'package:containsafe/repository/role_repo.dart';
+import 'package:containsafe/repository/user_repo.dart';
 import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,8 @@ import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'bloc/authentication/register/register_bloc.dart';
+import 'bloc/authentication/register/register_state.dart';
 import 'bloc/config/add/addConfig_bloc.dart';
 import 'bloc/config/add/addConfig_state.dart';
 import 'bloc/config/get/getConfig_bloc.dart';
@@ -123,6 +126,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GetHttpResponsesBloc>(
           create: (context) => GetHttpResponsesBloc(),
+        ),
+        BlocProvider<RegisterBloc>(
+          create: (context) => RegisterBloc(RegisterState(), AuthRepository()),
         ),
         BlocProvider<AddNodeBloc>(
           create: (context) => AddNodeBloc(AddNodeState(), NodeRepository()),

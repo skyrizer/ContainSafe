@@ -210,7 +210,7 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
           // Dispatch an event to add node
           _addNodeConfigBloc.add(AddNodeConfigButtonPressed(
             configId: _selectedConfig!.id!,
-            nodeId: _selectedNode!.id,
+            nodeId: _selectedNode!.id!,
             value: int.parse(valueController.text)
           ));
         },

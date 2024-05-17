@@ -150,7 +150,7 @@ class _ViewNodeAccessesScreenState extends State<ViewNodeAccessesScreen> {
                             // // Handle delete functionality here
                             _deleteNodeAccessBloc.add(DeleteAccessButtonPressed(
                               
-                                nodeId: nodeAccesses.node.id,
+                                nodeId: nodeAccesses.node.id!,
                                 userId: nodeAccesses.user.id,
                                 roleId: nodeAccesses.role.id!));
 

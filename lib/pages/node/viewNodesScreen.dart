@@ -1,13 +1,15 @@
-import 'package:containsafe/bloc/node/deleteNode/deleteNode_bloc.dart';
-import 'package:containsafe/bloc/node/deleteNode/deleteNode_event.dart';
-import 'package:containsafe/pages/nodeConfig/ViewNodeConfigScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:containsafe/model/node/node.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import '../../bloc/node/deleteNode/deleteNode_bloc.dart';
+import '../../bloc/node/deleteNode/deleteNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
+import '../../repository/webSocket_repo.dart';
 import '../nodeAccess/ViewNodeAccessScreen.dart';
+import '../nodeConfig/ViewNodeConfigScreen.dart';
 import 'addNodeScreen.dart';
 
 class ViewNodesScreen extends StatefulWidget {
@@ -18,14 +20,14 @@ class ViewNodesScreen extends StatefulWidget {
 }
 
 class _ViewNodesScreenState extends State<ViewNodesScreen> {
-
   final GetAllNodeBloc _nodeListBloc = GetAllNodeBloc();
   late DeleteNodeBloc _deleteNodeBloc;
+  List<Node> nodeInfoList = [];
 
   @override
   void initState() {
     super.initState();
-    _nodeListBloc.add(GetAllNodeList()); // Dispatch the event here
+    _nodeListBloc.add(GetAllNodeList());
     _deleteNodeBloc = BlocProvider.of<DeleteNodeBloc>(context);
   }
 
@@ -33,6 +35,20 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _nodeListBloc.add(GetAllNodeList());
+  }
+
+  Future<bool> _testNodeConnection(String ipAddress) async {
+    final webSocketRepository =
+        WebSocketRepository('ws://$ipAddress:8080');
+    final isConnected = await webSocketRepository.testConnection();
+    return isConnected;
+  }
+
+  Future<void> _checkNodeConnection(Node node) async {
+    final isConnected = await _testNodeConnection(node.ipAddress);
+    setState(() {
+      node.isConnected = isConnected;
+    });
   }
 
   @override
@@ -57,7 +73,6 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
         body: _buildListNode(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Navigate to the page where you can add a new node
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AddNodeScreen()),
@@ -84,6 +99,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
               child: CircularProgressIndicator(color: HexColor("#3c1e08")),
             );
           } else if (state is GetAllNodeLoaded) {
+            nodeInfoList = state.nodeList;
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: Theme.of(context)
@@ -91,11 +107,14 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                     .copyWith(primary: HexColor("#3c1e08")),
               ),
               child: ListView.builder(
-                itemCount: state.nodeList.length,
+                itemCount: nodeInfoList.length,
                 itemBuilder: (context, index) {
-                  final nodes = state.nodeList[index];
+                  final nodes = nodeInfoList[index];
+                  _checkNodeConnection(
+                      nodes); // Check connection for each node individually
                   return Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -129,28 +148,40 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                 fontSize: 14.0,
                               ),
                             ),
+                            Text(
+                              nodes.isConnected! ? 'Alive' : 'Disconnected',
+                              style: TextStyle(
+                                color: nodes.isConnected!
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                         PopupMenuButton<int>(
                           onSelected: (value) {
                             if (value == 1) {
-                              // Handle delete functionality here
-                              _deleteNodeBloc.add(DeleteButtonPressed(nodeId: nodes.id));
-
+                              _deleteNodeBloc
+                                  .add(DeleteButtonPressed(nodeId: nodes.id!));
                               setState(() {
-                                BlocProvider.of<GetAllNodeBloc>(context).add(GetAllNodeList());
+                                BlocProvider.of<GetAllNodeBloc>(context)
+                                    .add(GetAllNodeList());
                               });
                             } else if (value == 2) {
-                              // Handle other action here
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ViewNodeConfigsScreen(nodeId: nodes.id)),
+                                MaterialPageRoute(
+                                    builder: (context) => ViewNodeConfigsScreen(
+                                        nodeId: nodes.id!)),
                               );
                             } else if (value == 3) {
-                              // Handle other action here
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ViewNodeAccessesScreen(nodeId: nodes.id)),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewNodeAccessesScreen(
+                                            nodeId: nodes.id!)),
                               );
                             }
                           },
@@ -195,11 +226,10 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
               ),
             );
           }
-          return SizedBox.shrink(); // Return an empty widget if none of the conditions match
+          return SizedBox
+              .shrink(); // Return an empty widget if none of the conditions match
         },
       ),
     );
   }
-
-
 }

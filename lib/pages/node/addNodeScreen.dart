@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/node/addNode/addNode_bloc.dart';
 import '../../bloc/node/addNode/addNode_state.dart';
+import '../../repository/webSocket_repo.dart';
 import '../RoutePage.dart';
 
 class AddNodeScreen extends StatefulWidget {
@@ -19,11 +20,49 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
 
   TextEditingController hostnameController = TextEditingController();
   TextEditingController ipAddrController = TextEditingController();
+  bool _isConnecting = false;
+  bool _connectionSuccessful = false;
 
   @override
   void initState() {
     _addNodeBloc = BlocProvider.of<AddNodeBloc>(context);
     super.initState();
+  }
+
+  Future<void> _testWebSocketConnection(String ipAddress) async {
+    setState(() {
+      _isConnecting = true;
+    });
+
+    // String url =
+    //     "ws://$ipAddress:8080"; // Assume WebSocket server is running on port 8080
+    WebSocketRepository webSocketRepository = WebSocketRepository("ws://$ipAddress:8080");
+
+    bool success = await webSocketRepository.testConnection();
+
+    setState(() {
+      _isConnecting = false;
+      _connectionSuccessful = success;
+    });
+
+    if (success) {
+      _addNodeBloc.add(AddNodeButtonPressed(
+                 hostname: hostnameController.text,
+                 ipAddress: ipAddrController.text,
+              ));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ViewNodesScreen()),
+      );
+    } else {
+      // Show connection failed message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Connection failed')),
+      );
+    }
+
+    webSocketRepository.close();
   }
 
   @override
@@ -34,9 +73,6 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
         appBar: AppBar(
           title: Row(
             children: [
-              SizedBox(
-                width: 8.0,
-              ),
               Text(
                 'Add Node',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -46,7 +82,7 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
           backgroundColor: HexColor("#ecd9c9"),
           bottomOpacity: 0.0,
           elevation: 0.0,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
         ),
         body: BlocListener<AddNodeBloc, AddNodeState>(
           listener: (context, state) {
@@ -105,21 +141,51 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
             decoration: InputDecoration(labelText: 'IP Address'),
           ),
           SizedBox(height: 16.0),
+          // Center(
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       // Dispatch an event to add node
+          //       _addNodeBloc.add(AddNodeButtonPressed(
+          //         hostname: hostnameController.text,
+          //         ipAddress: ipAddrController.text,
+          //       ));
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //       primary: Colors.brown, // Change the background color here
+          //     ),
+          //     child: Text('Save'),
+          //   ),
+          // ),
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                // Dispatch an event to add node
-                _addNodeBloc.add(AddNodeButtonPressed(
-                  hostname: hostnameController.text,
-                  ipAddress: ipAddrController.text,
-                ));
+              onPressed: _isConnecting
+                  ? null
+                  : () {
+                _testWebSocketConnection(ipAddrController.text);
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.brown, // Change the background color here
+                primary: Colors.brown,
               ),
-              child: Text('Save'),
+              child: _isConnecting
+                  ? CircularProgressIndicator()
+                  : Text('Save'),
             ),
           ),
+          SizedBox(height: 16.0),
+          if (_connectionSuccessful)
+            Center(
+              child: Text(
+                'Connection successful!',
+                style: TextStyle(color: Colors.green),
+              ),
+            ),
+          if (!_connectionSuccessful && !_isConnecting && ipAddrController.text.isNotEmpty)
+            Center(
+              child: Text(
+                'Connection failed. Try again.',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
         ],
       ),
     );

@@ -237,7 +237,7 @@ class _AddNodeAccessScreenState extends State<AddNodeAccessScreen> {
           // Dispatch an event to add node
           _addNodeAccessBloc.add(AddNodeAccessButtonPressed(
               userId: _selectedUser!.id!,
-              nodeId: _selectedNode!.id,
+              nodeId: _selectedNode!.id!,
               roleId: _selectedRole!.id!
           ));
         },
