@@ -34,8 +34,11 @@ class WebSocketRepository {
     });
 
     // Return the result of the completer when the connection test finishes or times out
-    return completer.future.timeout(Duration(seconds: 5), onTimeout: () {
+    bool result = await completer.future.timeout(Duration(seconds: 5), onTimeout: () {
       return false;
     });
+
+    close(); // Close the connection after the test
+    return result;
   }
 }

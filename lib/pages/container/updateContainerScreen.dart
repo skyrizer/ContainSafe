@@ -12,7 +12,7 @@ import '../SnackBarDesign.dart';
 
 class UpdateContainerScreen extends StatefulWidget {
 
-  final List<Map<String, dynamic>> containerId; // Add containerId parameter
+  final String containerId; // Add containerId parameter
 
   const UpdateContainerScreen({Key? key, required this.containerId}) : super(key: key);
 
@@ -40,7 +40,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
   void initState() {
     // TODO: implement initState
     updateContainerBloc = BlocProvider.of<GetContainerBloc>(context);
-    updateContainerBloc.add(StartLoadContainer(containerId: "${widget.containerId[0]['container_id']}"));
+    updateContainerBloc.add(StartLoadContainer(containerId: "${widget.containerId}"));
 
     // Listen to state changes in the bloc
     updateContainerBloc.stream.listen((state) {
@@ -270,7 +270,7 @@ class UpdateContainerState extends State<UpdateContainerScreen> {
 
 
               ContainerModel containerUpdate = ContainerModel.edit(
-                id: widget.containerId[0]['container_id'],
+                id: widget.containerId,
                 diskLimit: diskLimit,
                 netLimit: netLimit,
                 memLimit: memLimit,

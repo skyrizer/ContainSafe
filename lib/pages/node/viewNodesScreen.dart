@@ -8,6 +8,7 @@ import '../../bloc/node/getAll/getAllNode_bloc.dart';
 import '../../bloc/node/getAll/getAllNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_state.dart';
 import '../../repository/webSocket_repo.dart';
+import '../ContainerPerformanceScreen.dart';
 import '../nodeAccess/ViewNodeAccessScreen.dart';
 import '../nodeConfig/ViewNodeConfigScreen.dart';
 import 'addNodeScreen.dart';
@@ -37,18 +38,19 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
     _nodeListBloc.add(GetAllNodeList());
   }
 
-  Future<bool> _testNodeConnection(String ipAddress) async {
-    final webSocketRepository =
-        WebSocketRepository('ws://$ipAddress:8080');
-    final isConnected = await webSocketRepository.testConnection();
-    return isConnected;
+  Future<void> _checkNodeConnections() async {
+    for (var node in nodeInfoList) {
+      final isConnected = await _testNodeConnection(node.ipAddress);
+      setState(() {
+        node.isConnected = isConnected;
+      });
+    }
   }
 
-  Future<void> _checkNodeConnection(Node node) async {
-    final isConnected = await _testNodeConnection(node.ipAddress);
-    setState(() {
-      node.isConnected = isConnected;
-    });
+  Future<bool> _testNodeConnection(String ipAddress) async {
+    final webSocketRepository = WebSocketRepository('ws://$ipAddress:8080');
+    final isConnected = await webSocketRepository.testConnection();
+    return isConnected;
   }
 
   @override
@@ -100,6 +102,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
             );
           } else if (state is GetAllNodeLoaded) {
             nodeInfoList = state.nodeList;
+            _checkNodeConnections();  // Check connections when data is loaded
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: Theme.of(context)
@@ -110,11 +113,9 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                 itemCount: nodeInfoList.length,
                 itemBuilder: (context, index) {
                   final nodes = nodeInfoList[index];
-                  _checkNodeConnection(
-                      nodes); // Check connection for each node individually
                   return Container(
                     margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -183,6 +184,12 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                         ViewNodeAccessesScreen(
                                             nodeId: nodes.id!)),
                               );
+                            } else if (value == 4) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ContainerPerformanceScreen(node: nodes)),
+                              );
                             }
                           },
                           itemBuilder: (context) => [
@@ -216,6 +223,16 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                 ],
                               ),
                             ),
+                            PopupMenuItem(
+                              value: 4,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Monitor'),
+                                ],
+                              ),
+                            ),
                           ],
                           icon: Icon(Icons.more_vert, color: Colors.black),
                         )
@@ -226,8 +243,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
               ),
             );
           }
-          return SizedBox
-              .shrink(); // Return an empty widget if none of the conditions match
+          return SizedBox.shrink(); // Return an empty widget if none of the conditions match
         },
       ),
     );

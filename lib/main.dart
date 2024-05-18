@@ -30,6 +30,7 @@ import 'bloc/config/update/editConfig_bloc.dart';
 import 'bloc/config/update/editConfig_state.dart';
 import 'bloc/container/get/getContainer_state.dart';
 import 'bloc/container/performance/performance_bloc.dart';
+import 'bloc/container/performanceWS/performanceWS_bloc.dart';
 import 'bloc/httpResponse/httpResponse_bloc.dart';
 import 'bloc/httpResponse/searchByDate/searchByDate_bloc.dart';
 import 'bloc/httpResponse/searchByDate/searchByDate_state.dart';
@@ -93,6 +94,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(LoginInitState(), AuthRepository()),
+        ),
+        BlocProvider<PerformanceWSBloc>(
+          create: (context) => PerformanceWSBloc(),
         ),
         BlocProvider<PerformanceBloc>(
           create: (context) => PerformanceBloc(),

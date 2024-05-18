@@ -1,3 +1,4 @@
+import 'package:containsafe/pages/ViewPerformanceWS.dart';
 import 'package:containsafe/pages/httpResponse/SearchByCode.dart';
 import 'package:containsafe/pages/permission/viewPermissionScreen.dart';
 import 'package:containsafe/pages/role/viewRoleScreen.dart';
@@ -5,7 +6,7 @@ import 'package:containsafe/pages/rolePermission/ViewRolePermissionScreen.dart';
 import 'package:flutter/material.dart';
 import 'RoutePageLog.dart';
 import 'config/viewConfigScreen.dart';
-import 'homeScreen.dart';
+import 'ContainerPerformanceScreen.dart';
 import 'httpResponse/viewHttpResponsesScreen.dart';
 import 'node/viewNodesScreen.dart';
 
@@ -58,6 +59,8 @@ class _RoutePageState extends State<RoutePage> {
                   _buildMenuItem(Icons.settings, 'Permission', 4),
                   _buildMenuItem(Icons.settings, 'Role', 5),
                   _buildMenuItem(Icons.settings, 'Role Permission', 6),
+                  _buildMenuItem(Icons.settings, 'Performance WS', 7),
+
 
                 ],
               ),
@@ -82,8 +85,8 @@ class _RoutePageState extends State<RoutePage> {
 
   Widget _getCurrentPage() {
     switch (_currentIndex) {
-      case 0:
-        return HomeScreen();
+      // case 0:
+      //   return HomeScreen(node: [],);
       case 1:
         return ViewNodesScreen();
       // case 2:
@@ -98,8 +101,10 @@ class _RoutePageState extends State<RoutePage> {
         return ViewRolesScreen();
       case 6:
         return ViewRolePermissionsScreen();
+      case 7:
+        return ViewPerformaceWSScreen();
       default:
-        return HomeScreen(); // Default to HomeScreen if index is out of bounds
+        return ViewNodesScreen(); // Default to HomeScreen if index is out of bounds
     }
   }
 
@@ -109,5 +114,5 @@ class _RoutePageState extends State<RoutePage> {
     });
   }
 
-  int _currentIndex = 0; // Default to HomeScreen when app starts
+  int _currentIndex = 1; // Default to HomeScreen when app starts
 }
