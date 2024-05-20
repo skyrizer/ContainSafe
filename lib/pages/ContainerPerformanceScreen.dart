@@ -1,3 +1,4 @@
+import 'package:containsafe/bloc/nodeConfig/get/getNodeConfig_event.dart';
 import 'package:containsafe/repository/APIConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,13 @@ import '../bloc/container/performanceWS/performanceWS_state.dart';
 import '../bloc/node/getAll/getAllNode_bloc.dart';
 import '../bloc/node/getAll/getAllNode_event.dart';
 import '../bloc/node/getAll/getAllNode_state.dart';
+import '../bloc/nodeConfig/get/getNodeConfig_bloc.dart';
+import '../bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
+import '../bloc/nodeConfig/getByNode/getConfigByNode_event.dart';
+import '../bloc/nodeConfig/getByNode/getConfigByNode_state.dart';
 import '../model/node/node.dart';
+import '../model/nodeConfig/nodeConfig.dart';
+import '../repository/webSocket_repo.dart';
 import 'container/updateContainerScreen.dart';
 
 class ContainerPerformanceScreen extends StatefulWidget {
@@ -22,13 +29,18 @@ class ContainerPerformanceScreen extends StatefulWidget {
 class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen> {
   late PerformanceWSBloc _performanceWSBloc;
   final GetAllNodeBloc _allNodeBloc = GetAllNodeBloc();
+  final GetConfigByNodeBloc _nodeConfigBloc = GetConfigByNodeBloc();
+
   Node? _selectedNode;
+  List<NodeConfig> _nodeConfigList = [];
 
   @override
   void initState() {
     super.initState();
     _allNodeBloc.add(GetAllNodeList());
+    _nodeConfigBloc.add(GetConfigByNodeList(nodeId: widget.node.id!));
     _performanceWSBloc = PerformanceWSBloc()..add(LoadPerformanceWSData(widget.node.ipAddress));
+
   }
 
   @override
@@ -37,6 +49,14 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
     super.dispose();
   }
 
+
+  void _sendMessage(String message) async {
+    final webSocketRepository = WebSocketRepository('ws://${widget.node.ipAddress}:8765');
+    webSocketRepository.sendSleepDuration(int.parse(message));
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -44,11 +64,14 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
         BlocProvider<GetAllNodeBloc>(
           create: (context) => _allNodeBloc,
         ),
+        BlocProvider<GetConfigByNodeBloc>(
+          create: (context) => _nodeConfigBloc,
+        ),
         BlocProvider<PerformanceWSBloc>(
           create: (context) => _performanceWSBloc,
         ),
       ],
-      child:Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           title: Row(
             children: [
@@ -60,15 +83,42 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
           elevation: 0.0,
           automaticallyImplyLeading: true,
         ),
-        body: BlocBuilder<PerformanceWSBloc, PerformanceWSState>(
-          builder: (context, state) {
-            return _buildContent(state);
-          },
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16),
+            BlocBuilder<GetConfigByNodeBloc, GetConfigByNodeState>(
+              builder: (context, state) {
+                if (state is GetConfigByNodeLoading) {
+                  return Center(child: CircularProgressIndicator(color: HexColor("#3c1e08")));
+                } else if (state is GetConfigByNodeError) {
+                  return Center(child: Text('Failed to load node configuration'));
+                } else if (state is GetConfigByNodeEmpty) {
+                  return Center(child: Text('No configuration available for this node'));
+                } else if (state is GetConfigByNodeLoaded) {
+                  _nodeConfigList = state.nodeConfigList;
+                  _nodeConfigList.forEach((config) {
+                    if (config.configId == 1) {
+                      _sendMessage(config.value.toString());
+                    }
+                  });
+                  return SizedBox.shrink();
+                }
+                return SizedBox.shrink();
+              },
+            ),
+            Expanded(
+              child: BlocBuilder<PerformanceWSBloc, PerformanceWSState>(
+                builder: (context, state) {
+                  return _buildContent(state);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
   Widget _buildContent(PerformanceWSState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

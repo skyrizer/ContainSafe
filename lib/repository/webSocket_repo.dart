@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
@@ -10,6 +11,11 @@ class WebSocketRepository {
   }
 
   void sendMessage(String message) {
+    channel.sink.add(message);
+  }
+
+  void sendSleepDuration(int duration) {
+    final message = json.encode({"sleep_duration": duration});
     channel.sink.add(message);
   }
 

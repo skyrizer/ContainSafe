@@ -16,7 +16,7 @@ class PerformanceWSBloc extends Bloc<PerformanceWSEvent, PerformanceWSState> {
   }
 
   Future<void> _startListening(LoadPerformanceWSData event, Emitter<PerformanceWSState> emit) async {
-    final String wsUrl = 'ws://${event.ipAddress}:8080'; // Construct WebSocket URL using the IP address
+    final String wsUrl = 'ws://${event.ipAddress}:8765'; // Construct WebSocket URL using the IP address
     _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
 
     await emit.forEach(
