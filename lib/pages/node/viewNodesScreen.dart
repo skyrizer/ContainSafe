@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:containsafe/model/node/node.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../bloc/node/deleteNode/deleteNode_bloc.dart';
 import '../../bloc/node/deleteNode/deleteNode_event.dart';
 import '../../bloc/node/getAll/getAllNode_bloc.dart';
@@ -30,6 +31,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
     super.initState();
     _nodeListBloc.add(GetAllNodeList());
     _deleteNodeBloc = BlocProvider.of<DeleteNodeBloc>(context);
+    //sendEmail();
   }
 
   @override
@@ -48,10 +50,22 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
   }
 
   Future<bool> _testNodeConnection(String ipAddress) async {
-    final webSocketRepository = WebSocketRepository('ws://$ipAddress:8080');
+    var pref = await SharedPreferences.getInstance();
+    pref.setString("ipAddress", ipAddress);
+    final webSocketRepository = WebSocketRepository('ws://$ipAddress:8765');
     final isConnected = await webSocketRepository.testConnection();
     return isConnected;
   }
+
+  //
+  // void sendEmail() async {
+  //   var pref = await SharedPreferences.getInstance();
+  //   String? ipAddress = pref.getString("ipAddress");
+  //   String? email = pref.getString("email");
+  //   final webSocketRepository = WebSocketRepository('ws://$ipAddress:8765');
+  //   webSocketRepository.sendEmailUser(email!);
+  // }
+
 
   @override
   Widget build(BuildContext context) {

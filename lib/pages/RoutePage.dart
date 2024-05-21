@@ -59,8 +59,6 @@ class _RoutePageState extends State<RoutePage> {
                   _buildMenuItem(Icons.settings, 'Permission', 4),
                   _buildMenuItem(Icons.settings, 'Role', 5),
                   _buildMenuItem(Icons.settings, 'Role Permission', 6),
-                  _buildMenuItem(Icons.settings, 'Performance WS', 7),
-
 
                 ],
               ),
@@ -101,8 +99,6 @@ class _RoutePageState extends State<RoutePage> {
         return ViewRolesScreen();
       case 6:
         return ViewRolePermissionsScreen();
-      case 7:
-        return ViewPerformaceWSScreen();
       default:
         return ViewNodesScreen(); // Default to HomeScreen if index is out of bounds
     }

@@ -90,7 +90,7 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
             BlocBuilder<GetConfigByNodeBloc, GetConfigByNodeState>(
               builder: (context, state) {
                 if (state is GetConfigByNodeLoading) {
-                  return Center(child: CircularProgressIndicator(color: HexColor("#3c1e08")));
+                  return SizedBox.shrink();
                 } else if (state is GetConfigByNodeError) {
                   return Center(child: Text('Failed to load node configuration'));
                 } else if (state is GetConfigByNodeEmpty) {

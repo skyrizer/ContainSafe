@@ -37,12 +37,22 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
+
+    sendEmail();
     // Delay the execution of the FutureBuilder for 2000 milliseconds.
     Future.delayed(Duration(milliseconds: 1000),(){
       redirect();
     });
 
 
+  }
+
+  Future<void> sendEmail() async {
+    var pref = await SharedPreferences.getInstance();
+    String? ipAddress = pref.getString("ipAddress");
+    String? email = pref.getString("email");
+    final webSocketRepository = WebSocketRepository('ws://$ipAddress:8765');
+    webSocketRepository.sendEmailUser(email!);
   }
 
   Future<void> redirect() async {

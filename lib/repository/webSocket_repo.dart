@@ -10,7 +10,8 @@ class WebSocketRepository {
     channel = WebSocketChannel.connect(Uri.parse(url));
   }
 
-  void sendMessage(String message) {
+  void sendEmailUser(String email) {
+    final message = json.encode({"email": email});
     channel.sink.add(message);
   }
 
