@@ -1,3 +1,4 @@
+import 'package:containsafe/pages/service/ViewServiceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:containsafe/model/node/node.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -204,6 +205,12 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => ContainerPerformanceScreen(node: nodes)),
                               );
+                            } else if (value == 5) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewServiceScreen(node: nodes)),
+                              );
                             }
                           },
                           itemBuilder: (context) => [
@@ -244,6 +251,16 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                   Icon(Icons.settings, color: Colors.brown),
                                   SizedBox(width: 8),
                                   Text('Monitor'),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: 5,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Services'),
                                 ],
                               ),
                             ),

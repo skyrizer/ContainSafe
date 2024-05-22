@@ -65,6 +65,7 @@ import 'bloc/rolePermission/add/addRolePermission_bloc.dart';
 import 'bloc/rolePermission/add/addRolePermission_state.dart';
 import 'bloc/rolePermission/delete/delRolePermission_bloc.dart';
 import 'bloc/rolePermission/delete/delRolePermission_state.dart';
+import 'bloc/services/get/getServices_bloc.dart';
 import 'bloc/user/get/getUser_bloc.dart';
 
 
@@ -121,6 +122,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GetAllRolePermissionBloc>(
           create: (context) => GetAllRolePermissionBloc(),
+        ),
+        BlocProvider<GetServicesBloc>(
+          create: (context) => GetServicesBloc(),
         ),
         BlocProvider<GetConfigByNodeBloc>(
           create: (context) => GetConfigByNodeBloc(),
