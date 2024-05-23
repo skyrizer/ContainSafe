@@ -1,5 +1,3 @@
-
-
 import 'package:containsafe/model/service/service_status.dart';
 import 'package:containsafe/model/node/node.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ import '../../bloc/services/get/getServices_bloc.dart';
 import '../../bloc/services/get/getServices_event.dart';
 import '../../bloc/services/get/getServices_state.dart';
 
-
 class ViewServiceScreen extends StatefulWidget {
   final Node node;
   const ViewServiceScreen({super.key, required this.node});
@@ -20,18 +17,12 @@ class ViewServiceScreen extends StatefulWidget {
 }
 
 class _ViewServiceScreenState extends State<ViewServiceScreen> {
-
   late GetServicesBloc _getServicesBloc;
-
-
-  Node? _selectedNode;
-  List<ServiceStatus> _nodeConfigList = [];
 
   @override
   void initState() {
     super.initState();
     _getServicesBloc = GetServicesBloc()..add(LoadGetServicesData(widget.node.ipAddress));
-
   }
 
   @override
@@ -43,25 +34,34 @@ class _ViewServiceScreenState extends State<ViewServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => _getServicesBloc,
-    child: Scaffold(
-      appBar: AppBar(
-        title: Text('Service Status'),
+      create: (context) => _getServicesBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text('Service Status', style: Theme.of(context).textTheme.bodyText1),
+            ],
+          ),
+          backgroundColor: HexColor("#ecd9c9"),
+          elevation: 0.0,
+        ),
+        body: Container(
+          color: HexColor("#ecd9c9"),
+          child: BlocBuilder<GetServicesBloc, GetServicesState>(
+            builder: (context, state) {
+              if (state is GetServicesLoading) {
+                return Center(child: CircularProgressIndicator(color: HexColor("#3c1e08")));
+              } else if (state is GetServicesLoaded) {
+                return _buildServiceList(state.statusList);
+              } else if (state is GetServicesError) {
+                return Center(child: Text(state.error));
+              } else {
+                return Center(child: Text('Unknown state'));
+              }
+            },
+          ),
+        ),
       ),
-      body: BlocBuilder<GetServicesBloc, GetServicesState>(
-        builder: (context, state) {
-          if (state is GetServicesLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is GetServicesLoaded) {
-            return _buildServiceList(state.statusList);
-          } else if (state is GetServicesError) {
-            return Center(child: Text(state.error));
-          } else {
-            return Center(child: Text('Unknown state'));
-          }
-        },
-      ),
-    )
     );
   }
 
@@ -70,36 +70,53 @@ class _ViewServiceScreenState extends State<ViewServiceScreen> {
       itemCount: serviceStatusList.length,
       itemBuilder: (context, index) {
         final serviceStatus = serviceStatusList[index];
-        return ListTile(
-          title: Text('Service ${index + 1}'),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildServiceStatus('Apache', serviceStatus.apache),
-              _buildServiceStatus('MySQL', serviceStatus.mysql),
-              _buildServiceStatus('Tomcat', serviceStatus.tomcat),
-            ],
-          ),
+        return Column(
+          children: [
+            _buildServiceContainer('Apache', serviceStatus.apache),
+            _buildServiceContainer('MySQL', serviceStatus.mysql),
+            _buildServiceContainer('Tomcat', serviceStatus.tomcat),
+            _buildServiceContainer('Docker', serviceStatus.docker),
+          ],
         );
       },
     );
   }
 
-  Widget _buildServiceStatus(String serviceName, bool isRunning) {
-    return Row(
-      children: [
-        Text(serviceName),
-        SizedBox(width: 8),
-        Text(
-          isRunning ? 'Running' : 'Stopped',
-          style: TextStyle(
-            color: isRunning ? Colors.green : Colors.red,
-            fontWeight: FontWeight.bold,
+  Widget _buildServiceContainer(String serviceName, bool isRunning) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
           ),
-        ),
-      ],
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            serviceName,
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          Text(
+            isRunning ? 'Running' : 'Not Running',
+            style: TextStyle(
+              color: isRunning ? Colors.green : Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
-
-
 }
