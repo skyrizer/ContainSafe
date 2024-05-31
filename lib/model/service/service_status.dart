@@ -14,10 +14,10 @@ class ServiceStatus {
 
   factory ServiceStatus.fromJson(Map<String, dynamic> json) {
     return ServiceStatus(
-      apache: json['apache'],
-      mysql: json['mysql'],
-      tomcat: json['tomcat'],
-      docker: json['docker']
+      apache: json['Apache'],
+      mysql: json['MySQL'],
+      tomcat: json['Tomcat'],
+      docker: json['Docker'] ?? false
     );
   }
 }

@@ -58,16 +58,6 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
     return isConnected;
   }
 
-  //
-  // void sendEmail() async {
-  //   var pref = await SharedPreferences.getInstance();
-  //   String? ipAddress = pref.getString("ipAddress");
-  //   String? email = pref.getString("email");
-  //   final webSocketRepository = WebSocketRepository('ws://$ipAddress:8765');
-  //   webSocketRepository.sendEmailUser(email!);
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
