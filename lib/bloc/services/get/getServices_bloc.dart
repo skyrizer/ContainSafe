@@ -26,12 +26,17 @@ class GetServicesBloc extends Bloc<GetServicesEvent, GetServicesState> {
       _channel.stream,
       onData: (data) {
         try {
-          final Map<String, dynamic> serviceStatus = json.decode(data)['service_status'];
-          if (serviceStatus.isNotEmpty) {
-            final status = ServiceStatus.fromJson(serviceStatus);
-            return GetServicesLoaded([status]);
+          final Map<String, dynamic> jsonData = json.decode(data);
+          final List<dynamic> serviceStatusList = jsonData['service_status'];
+
+          if (serviceStatusList.isNotEmpty) {
+            final List<ServiceStatus> statusList = serviceStatusList
+                .map((status) => ServiceStatus.fromJson(status))
+                .toList();
+            return GetServicesLoaded(statusList);
+          } else {
+            return GetServicesEmpty();
           }
-          return GetServicesEmpty();
         } catch (error) {
           return GetServicesError(error.toString());
         }

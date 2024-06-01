@@ -1,6 +1,8 @@
+import 'package:containsafe/bloc/backgroundProcess/getByService/getBpService_bloc.dart';
 import 'package:containsafe/bloc/container/get/getContainer_bloc.dart';
 import 'package:containsafe/bloc/node/addNode/addNode_bloc.dart';
 import 'package:containsafe/bloc/rolePermission/get/getRolePermission_bloc.dart';
+import 'package:containsafe/repository/backgroundProcess_repo.dart';
 import 'package:containsafe/repository/config_repo.dart';
 import 'package:containsafe/repository/container_repo.dart';
 import 'package:containsafe/repository/httpResponse_repo.dart';
@@ -10,6 +12,7 @@ import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
 import 'package:containsafe/repository/rolePermission_repo.dart';
 import 'package:containsafe/repository/role_repo.dart';
+import 'package:containsafe/repository/service_repo.dart';
 import 'package:containsafe/repository/user_repo.dart';
 import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,8 @@ import 'package:containsafe/repository/auth_repo.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'bloc/authentication/register/register_bloc.dart';
 import 'bloc/authentication/register/register_state.dart';
+import 'bloc/backgroundProcess/add/addBp_bloc.dart';
+import 'bloc/backgroundProcess/add/addBp_state.dart';
 import 'bloc/config/add/addConfig_bloc.dart';
 import 'bloc/config/add/addConfig_state.dart';
 import 'bloc/config/get/getConfig_bloc.dart';
@@ -65,6 +70,8 @@ import 'bloc/rolePermission/add/addRolePermission_bloc.dart';
 import 'bloc/rolePermission/add/addRolePermission_state.dart';
 import 'bloc/rolePermission/delete/delRolePermission_bloc.dart';
 import 'bloc/rolePermission/delete/delRolePermission_state.dart';
+import 'bloc/services/add/addService_bloc.dart';
+import 'bloc/services/add/addService_state.dart';
 import 'bloc/services/get/getServices_bloc.dart';
 import 'bloc/user/get/getUser_bloc.dart';
 
@@ -132,6 +139,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetAccessByNodeBloc>(
           create: (context) => GetAccessByNodeBloc(),
         ),
+        BlocProvider<GetBpByServiceBloc>(
+          create: (context) => GetBpByServiceBloc(),
+        ),
         BlocProvider<GetHttpResponsesBloc>(
           create: (context) => GetHttpResponsesBloc(),
         ),
@@ -158,6 +168,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AddRolePermissionBloc>(
           create: (context) => AddRolePermissionBloc(AddRolePermissionState(), RolePermissionRepository()),
+        ),
+        BlocProvider<AddServiceBloc>(
+          create: (context) => AddServiceBloc(AddServiceState(), ServiceRepository()),
+        ),
+        BlocProvider<AddBpBloc>(
+          create: (context) => AddBpBloc(AddBpState(), BackgroundProcessRepository()),
         ),
         BlocProvider<EditConfigBloc>(
           create: (context) => EditConfigBloc(EditConfigState(), ConfigRepository()),

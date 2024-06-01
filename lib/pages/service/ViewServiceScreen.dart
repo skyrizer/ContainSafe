@@ -1,3 +1,4 @@
+import 'package:containsafe/bloc/backgroundProcess/add/addBp_bloc.dart';
 import 'package:containsafe/model/service/service_status.dart';
 import 'package:containsafe/model/node/node.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/services/get/getServices_bloc.dart';
 import '../../bloc/services/get/getServices_event.dart';
 import '../../bloc/services/get/getServices_state.dart';
+import 'AddServiceScreen.dart';
 
 class ViewServiceScreen extends StatefulWidget {
   final Node node;
@@ -18,11 +20,13 @@ class ViewServiceScreen extends StatefulWidget {
 
 class _ViewServiceScreenState extends State<ViewServiceScreen> {
   late GetServicesBloc _getServicesBloc;
+  late AddBpBloc _addBpBloc;
 
   @override
   void initState() {
     super.initState();
     _getServicesBloc = GetServicesBloc()..add(LoadGetServicesData(widget.node.ipAddress));
+    _addBpBloc = BlocProvider.of<AddBpBloc>(context);
   }
 
   @override
@@ -61,6 +65,18 @@ class _ViewServiceScreenState extends State<ViewServiceScreen> {
             },
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Add your action here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddServiceScreen()),
+            );
+
+          },
+          backgroundColor: HexColor("#3c1e08"),
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -70,14 +86,7 @@ class _ViewServiceScreenState extends State<ViewServiceScreen> {
       itemCount: serviceStatusList.length,
       itemBuilder: (context, index) {
         final serviceStatus = serviceStatusList[index];
-        return Column(
-          children: [
-            _buildServiceContainer('Apache', serviceStatus.apache),
-            _buildServiceContainer('MySQL', serviceStatus.mysql),
-            _buildServiceContainer('Tomcat', serviceStatus.tomcat),
-            _buildServiceContainer('Docker', serviceStatus.docker),
-          ],
-        );
+        return _buildServiceContainer(serviceStatus.name, serviceStatus.value);
       },
     );
   }
@@ -105,7 +114,7 @@ class _ViewServiceScreenState extends State<ViewServiceScreen> {
             serviceName,
             style: TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
             ),
           ),
           Text(
