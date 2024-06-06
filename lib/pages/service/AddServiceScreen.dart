@@ -25,6 +25,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
   @override
   void initState() {
     _addServiceBloc = BlocProvider.of<AddServiceBloc>(context);
+    _addServiceBloc.add(StartAddService());
     super.initState();
   }
 

@@ -6,7 +6,7 @@ class AddServiceEvents extends Equatable{
   List<Object> get props => [];
 }
 
-class StartRegister extends AddServiceEvents {}
+class StartAddService extends AddServiceEvents {}
 
 class AddServiceButtonPressed extends AddServiceEvents {
   final String name;
