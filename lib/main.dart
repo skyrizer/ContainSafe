@@ -8,6 +8,7 @@ import 'package:containsafe/repository/container_repo.dart';
 import 'package:containsafe/repository/httpResponse_repo.dart';
 import 'package:containsafe/repository/nodeAccess_repo.dart';
 import 'package:containsafe/repository/nodeConfig_repo.dart';
+import 'package:containsafe/repository/nodeService_repo.dart';
 import 'package:containsafe/repository/node_repo.dart';
 import 'package:containsafe/repository/permission_repo.dart';
 import 'package:containsafe/repository/rolePermission_repo.dart';
@@ -56,6 +57,10 @@ import 'bloc/nodeConfig/delete/deleteNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/delete/deleteNodeConfig_state.dart';
 import 'bloc/nodeConfig/get/getNodeConfig_bloc.dart';
 import 'bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
+import 'bloc/nodeService/add/addNodeService_bloc.dart';
+import 'bloc/nodeService/add/addNodeService_state.dart';
+import 'bloc/nodeService/delete/deleteService_bloc.dart';
+import 'bloc/nodeService/delete/deleteService_state.dart';
 import 'bloc/permission/add/addPermission_bloc.dart';
 import 'bloc/permission/add/addPermission_state.dart';
 import 'bloc/permission/edit/editPermission_bloc.dart';
@@ -73,6 +78,7 @@ import 'bloc/rolePermission/delete/delRolePermission_state.dart';
 import 'bloc/services/add/addService_bloc.dart';
 import 'bloc/services/add/addService_state.dart';
 import 'bloc/services/get/getServices_bloc.dart';
+import 'bloc/services/getByNode/getNodeServices_bloc.dart';
 import 'bloc/user/get/getUser_bloc.dart';
 
 
@@ -130,8 +136,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<GetAllRolePermissionBloc>(
           create: (context) => GetAllRolePermissionBloc(),
         ),
-        BlocProvider<GetServicesBloc>(
-          create: (context) => GetServicesBloc(),
+        BlocProvider<GetAllServiceBloc>(
+          create: (context) => GetAllServiceBloc(),
+        ),
+        BlocProvider<GetNodeServicesBloc>(
+          create: (context) => GetNodeServicesBloc(),
         ),
         BlocProvider<GetConfigByNodeBloc>(
           create: (context) => GetConfigByNodeBloc(),
@@ -166,6 +175,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddNodeAccessBloc>(
           create: (context) => AddNodeAccessBloc(AddNodeAccessState(), NodeAccessRepository()),
         ),
+        BlocProvider<AddNodeServiceBloc>(
+          create: (context) => AddNodeServiceBloc(AddNodeServiceState(), NodeServiceRepository()),
+        ),
         BlocProvider<AddRolePermissionBloc>(
           create: (context) => AddRolePermissionBloc(AddRolePermissionState(), RolePermissionRepository()),
         ),
@@ -198,6 +210,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DeleteRolePermissionBloc>(
           create: (context) => DeleteRolePermissionBloc(DeleteRolePermissionState(), RolePermissionRepository()),
+        ),
+        BlocProvider<DeleteNodeServiceBloc>(
+          create: (context) => DeleteNodeServiceBloc(DeleteNodeServiceState(), NodeServiceRepository()),
         ),
         BlocProvider<SearchByCodeBloc>(
           create: (context) => SearchByCodeBloc(SearchByCodeState(), HttpResponseRepository()),

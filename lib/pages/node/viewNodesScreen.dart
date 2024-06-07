@@ -1,4 +1,4 @@
-import 'package:containsafe/pages/service/ViewServiceScreen.dart';
+import 'package:containsafe/pages/nodeService/ViewNodeServiceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:containsafe/model/node/node.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -199,7 +199,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ViewServiceScreen(node: nodes)),
+                                    builder: (context) => ViewNodeServiceScreen(node: nodes)),
                               );
                             }
                           },

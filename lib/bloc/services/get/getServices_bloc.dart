@@ -1,58 +1,35 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:bloc/bloc.dart';
-import 'package:containsafe/bloc/container/performanceWS/performanceWS_event.dart';
-import 'package:containsafe/bloc/container/performanceWS/performanceWS_state.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
-import '../../../model/performance/performanceWS.dart';
-import '../../../model/service/service_status.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import '../../../model/role/role.dart';
+import '../../../model/service/service_model..dart';
+import '../../../repository/service_repo.dart';
 import 'getServices_event.dart';
 import 'getServices_state.dart';
 
-class GetServicesBloc extends Bloc<GetServicesEvent, GetServicesState> {
-  late WebSocketChannel _channel;
-  StreamSubscription? _subscription;
+// the AuthBloc contain AuthEvents class and AuthState class
+class GetAllServiceBloc extends Bloc<GetAllServiceEvent, GetAllServiceState> {
 
-  GetServicesBloc() : super(GetServicesLoading()) {
-    on<LoadGetServicesData>(_startListening);
-  }
+  final ServiceRepository serviceRepository = ServiceRepository();
 
-  Future<void> _startListening(LoadGetServicesData event, Emitter<GetServicesState> emit) async {
-    final String wsUrl = 'ws://${event.ipAddress}:8765'; // Construct WebSocket URL using the IP address
-    _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
+  GetAllServiceBloc() : super(GetAllServiceInitial()) {
 
-    await emit.forEach(
-      _channel.stream,
-      onData: (data) {
-        try {
-          final Map<String, dynamic> jsonData = json.decode(data);
-          final List<dynamic> serviceStatusList = jsonData['service_status'];
+    on<GetAllServiceList>((event, emit) async {
+      try {
+        emit(GetAllServiceLoading());
+        final List<ServiceModel> serviceList = await serviceRepository
+            .getAllServices();
+        emit(GetAllServiceLoaded(serviceList: serviceList));
 
-          if (serviceStatusList.isNotEmpty) {
-            final List<ServiceStatus> statusList = serviceStatusList
-                .map((status) => ServiceStatus.fromJson(status))
-                .toList();
-            return GetServicesLoaded(statusList);
-          } else {
-            return GetServicesEmpty();
-          }
-        } catch (error) {
-          return GetServicesError(error.toString());
+        if (serviceList[0].error != null) {
+          emit(GetAllServiceError(
+              error: serviceList[0].error));
         }
-      },
-      onError: (error, stackTrace) {
-        return GetServicesError(error.toString());
-      },
-    );
+      } on http.ClientException {
+        emit(const GetAllServiceError(
+            error: "Failed to fetch data in your device online"));
+      }
+    });
 
-    await _channel.sink.close();
-  }
 
-  @override
-  Future<void> close() {
-    _subscription?.cancel();
-    _channel.sink.close();
-    return super.close();
   }
 }

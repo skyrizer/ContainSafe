@@ -1,32 +1,25 @@
-import 'package:containsafe/model/service/service_status.dart';
+
 import 'package:equatable/equatable.dart';
-import 'package:containsafe/model/performance/performanceWS.dart';
+import '../../../model/service/service_model..dart';
 
-abstract class GetServicesState extends Equatable {
-  const GetServicesState();
-
+class GetAllServiceState extends Equatable {
+  const GetAllServiceState();
   @override
   List<Object> get props => [];
 }
 
-class GetServicesLoading extends GetServicesState {}
+class GetAllServiceInitial extends GetAllServiceState { }
 
-class GetServicesLoaded extends GetServicesState {
-  final List<ServiceStatus> statusList;
+class GetAllServiceLoading extends GetAllServiceState { }
 
-  const GetServicesLoaded(this.statusList);
-
-  @override
-  List<Object> get props => [statusList];
+class GetAllServiceLoaded extends GetAllServiceState {
+  final List<ServiceModel> serviceList;
+  const GetAllServiceLoaded({required this.serviceList});
 }
 
-class GetServicesEmpty extends GetServicesState{}
-
-class GetServicesError extends GetServicesState {
-  final String error;
-
-  const GetServicesError(this.error);
-
-  @override
-  List<Object> get props => [error];
+class GetAllServiceError extends GetAllServiceState {
+  final String? error;
+  const GetAllServiceError({required this.error});
 }
+
+class GetAllServiceEmpty extends GetAllServiceState {}

@@ -1,14 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-abstract class GetServicesEvent extends Equatable {
-  const GetServicesEvent();
 
+class GetAllServiceEvent extends Equatable{
+  const GetAllServiceEvent();
   @override
   List<Object> get props => [];
 }
 
-class LoadGetServicesData extends GetServicesEvent {
-  final String ipAddress;
-
-  const LoadGetServicesData(this.ipAddress);
-}
+class GetAllServiceList extends GetAllServiceEvent {}

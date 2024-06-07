@@ -31,8 +31,6 @@ class _ViewNodeConfigsScreenState extends State<ViewNodeConfigsScreen> {
     _nodeConfigListBloc.add(GetConfigByNodeList(nodeId: widget.nodeId)); // Dispatch the event here
     super.initState();
 
-
-
   }
 
 

@@ -80,6 +80,11 @@ class APIConstant {
 
   // service
   static String get AddServiceURL => "${APIConstant.URL}addService";
+  static String get GetServicesURL => "${APIConstant.URL}getServices";
+
+  // node service
+  static String get AddNodeServiceURL => "${APIConstant.URL}addNodeService";
+  static String get DeleteNodeServiceURL => "${APIConstant.URL}deleteNodeService";
 
 
 }

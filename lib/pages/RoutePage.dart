@@ -3,6 +3,7 @@ import 'package:containsafe/pages/httpResponse/SearchByCode.dart';
 import 'package:containsafe/pages/permission/viewPermissionScreen.dart';
 import 'package:containsafe/pages/role/viewRoleScreen.dart';
 import 'package:containsafe/pages/rolePermission/ViewRolePermissionScreen.dart';
+import 'package:containsafe/pages/service/ViewServiceScreen.dart';
 import 'package:flutter/material.dart';
 import 'RoutePageLog.dart';
 import 'config/viewConfigScreen.dart';
@@ -59,6 +60,8 @@ class _RoutePageState extends State<RoutePage> {
                   _buildMenuItem(Icons.settings, 'Permission', 4),
                   _buildMenuItem(Icons.settings, 'Role', 5),
                   _buildMenuItem(Icons.settings, 'Role Permission', 6),
+                  _buildMenuItem(Icons.settings, 'Service', 7),
+
 
                 ],
               ),
@@ -99,6 +102,8 @@ class _RoutePageState extends State<RoutePage> {
         return ViewRolesScreen();
       case 6:
         return ViewRolePermissionsScreen();
+      case 7:
+        return ViewServicesScreen();
       default:
         return ViewNodesScreen(); // Default to HomeScreen if index is out of bounds
     }
