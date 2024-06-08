@@ -27,9 +27,11 @@ class AuthRepository{
 
         // Extract the token from the response data
         String token = responseData['token'];
+        int roleId = responseData["node_accesses"][0]["role_id"];
 
         // Store the token using shared preferences
         pref.setString("token", token);
+        pref.setInt("roleId", roleId);
         pref.setString("email", email);
         return 1;
       }
@@ -153,10 +155,10 @@ class AuthRepository{
       if (token != null){
         var header = {
           "Content-Type": "application/json",
-          'token' : token
+          "Authorization": "Bearer ${token}",
         };
 
-        var response = await http.delete(url, headers: header,);
+        var response = await http.post(url, headers: header,);
 
         if (response.statusCode == 200) {
           pref.remove("token");

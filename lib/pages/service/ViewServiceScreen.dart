@@ -1,4 +1,5 @@
 
+import 'package:containsafe/pages/backgroundProcess/ViewBackgroundProcess.dart';
 import 'package:containsafe/pages/role/updateRoleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,30 +126,30 @@ class _ViewServicesScreenState extends State<ViewServicesScreen> {
                             ),
                           ],
                         ),
-                        // PopupMenuButton<int>(
-                        //   onSelected: (value) {
-                        //     if (value == 2) {
-                        //       // Handle other action here
-                        //       Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(builder: (context) => UpdateRoleScreen(role: roles)),
-                        //       );
-                        //     }
-                        //   },
-                        //   itemBuilder: (context) => [
-                        //     PopupMenuItem(
-                        //       value: 2,
-                        //       child: Row(
-                        //         children: [
-                        //           Icon(Icons.settings, color: Colors.brown),
-                        //           SizedBox(width: 8),
-                        //           Text('Setting'),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ],
-                        //   icon: Icon(Icons.more_vert, color: Colors.black),
-                        // )
+                        PopupMenuButton<int>(
+                          onSelected: (value) {
+                            if (value == 1) {
+                              // Handle other action here
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ViewBackgroundProcessesScreen(serviceId: services.id)),
+                              );
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings, color: Colors.brown),
+                                  SizedBox(width: 8),
+                                  Text('Background Process'),
+                                ],
+                              ),
+                            ),
+                          ],
+                          icon: Icon(Icons.more_vert, color: Colors.black),
+                        )
                       ],
                     ),
                   );

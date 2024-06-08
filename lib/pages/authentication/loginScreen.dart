@@ -1,12 +1,15 @@
 import 'package:containsafe/pages/authentication/registerScreen.dart';
 import 'package:containsafe/pages/ContainerPerformanceScreen.dart';
+import 'package:containsafe/pages/node/viewNodesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_event.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../AdminRoutePage.dart';
 import '../RoutePage.dart';
 import 'forgotPwdScreen.dart';
 
@@ -24,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController pwdController = TextEditingController();
   // declare attribute
   late AuthBloc authBloc;
+  late int roleId;
 
   @override
   void initState() {
@@ -31,6 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
     // initialize
     authBloc = BlocProvider.of<AuthBloc>(context);
     super.initState();
+  }
+
+
+  Future<void> getRoleId() async {
+    final prefs = await SharedPreferences.getInstance();
+    roleId = prefs.getInt('roleId')!;
   }
 
   @override
@@ -53,16 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }
     );
     return Scaffold(
-      body:
-      BlocListener<AuthBloc, AuthState>(
-        listener: (context, state){
-          if (state is UserLoginSuccessState){
-            Navigator.pushAndRemoveUntil(
-                context, MaterialPageRoute(
-                builder: (context) => const RoutePage()), (Route<dynamic> route) => false
-                //builder: (context) => HomeScreen()), (Route<dynamic> route) => false
-
-            );
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) async {
+          if (state is UserLoginSuccessState) {
+            await _navigateBasedOnRole(context);
           }
         },
         child: Center(
@@ -89,6 +93,28 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _navigateBasedOnRole(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final roleId = prefs.getInt('roleId');
+
+    print(roleId);
+    if (roleId != null) {
+      if (roleId == 3) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminRoutePage()),
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const RoutePage()),
+              (Route<dynamic> route) => false,
+        );
+      }
+    }
   }
 
   Widget _signUpText(){

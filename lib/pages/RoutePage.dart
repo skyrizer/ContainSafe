@@ -5,6 +5,9 @@ import 'package:containsafe/pages/role/viewRoleScreen.dart';
 import 'package:containsafe/pages/rolePermission/ViewRolePermissionScreen.dart';
 import 'package:containsafe/pages/service/ViewServiceScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/authentication/logout/logout_bloc.dart';
+import '../bloc/authentication/logout/logout_event.dart';
 import 'RoutePageLog.dart';
 import 'config/viewConfigScreen.dart';
 import 'ContainerPerformanceScreen.dart';
@@ -21,6 +24,15 @@ class RoutePage extends StatefulWidget {
 
 class _RoutePageState extends State<RoutePage> {
   bool _isMenuOpen = false;
+  late LogoutBloc logoutbloc;
+
+  @override
+  void initState() {
+
+    logoutbloc = BlocProvider.of<LogoutBloc>(context);
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +43,22 @@ class _RoutePageState extends State<RoutePage> {
           icon: Icon(
             _isMenuOpen ? Icons.close : Icons.menu,
             color: _isMenuOpen ? Colors.white : Colors.white, // Change the colors as desired
-          ),          onPressed: () {
+          ),
+          onPressed: () {
             setState(() {
               _isMenuOpen = !_isMenuOpen;
             });
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Trigger logout action here
+              logoutbloc.add(LogoutButtonPressed());
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -54,14 +76,12 @@ class _RoutePageState extends State<RoutePage> {
                 padding: EdgeInsets.zero,
                 children: [
                   _buildMenuItem(Icons.home, 'Home', 0),
-                  _buildMenuItem(Icons.list_alt, 'Node', 1),
-                  _buildMenuItem(Icons.list, 'Log', 2),
-                  _buildMenuItem(Icons.settings, 'Configuration', 3),
-                  _buildMenuItem(Icons.settings, 'Permission', 4),
-                  _buildMenuItem(Icons.settings, 'Role', 5),
-                  _buildMenuItem(Icons.settings, 'Role Permission', 6),
-                  _buildMenuItem(Icons.settings, 'Service', 7),
-
+                  _buildMenuItem(Icons.list, 'Log', 1),
+                  _buildMenuItem(Icons.settings, 'Configuration', 2),
+                  _buildMenuItem(Icons.settings, 'Permission', 3),
+                  _buildMenuItem(Icons.settings, 'Role', 4),
+                  _buildMenuItem(Icons.settings, 'Role Permission', 5),
+                  _buildMenuItem(Icons.settings, 'Service', 6),
 
                 ],
               ),
@@ -86,23 +106,19 @@ class _RoutePageState extends State<RoutePage> {
 
   Widget _getCurrentPage() {
     switch (_currentIndex) {
-      // case 0:
-      //   return HomeScreen(node: [],);
-      case 1:
+      case 0:
         return ViewNodesScreen();
-      // case 2:
-      //   return ViewHttpResponsesScreen();
-      case 2:
+      case 1:
         return RoutePageLog();
-      case 3:
+      case 2:
         return ViewConfigsScreen();
-      case 4:
+      case 3:
         return ViewPermissionsScreen();
-      case 5:
+      case 4:
         return ViewRolesScreen();
-      case 6:
+      case 5:
         return ViewRolePermissionsScreen();
-      case 7:
+      case 6:
         return ViewServicesScreen();
       default:
         return ViewNodesScreen(); // Default to HomeScreen if index is out of bounds
@@ -115,5 +131,5 @@ class _RoutePageState extends State<RoutePage> {
     });
   }
 
-  int _currentIndex = 1; // Default to HomeScreen when app starts
+  int _currentIndex = 0; // Default to HomeScreen when app starts
 }

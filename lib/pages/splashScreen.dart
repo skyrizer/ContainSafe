@@ -8,6 +8,7 @@ import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_event.dart';
 
+import 'AdminRoutePage.dart';
 import 'RoutePage.dart';
 
 
@@ -73,13 +74,25 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       body:
       BlocListener<AuthBloc, AuthState>(
-        listener: (context, state){
+        listener: (context, state) async {
+
+          final prefs = await SharedPreferences.getInstance();
+          final roleId = prefs.getInt('roleId');
+          print(roleId);
           if (state is RefreshTokenSuccess){
-            Navigator.pushAndRemoveUntil(
-                context, MaterialPageRoute(
-                builder: (context) => RoutePage()),
-                    (Route<dynamic> route) => false
-            );
+            if (roleId == 3) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const AdminRoutePage()),
+                    (Route<dynamic> route) => false,
+              );
+            } else {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const RoutePage()),
+                    (Route<dynamic> route) => false,
+              );
+            }
           } else if (state is RefreshTokenFail || state is LoginInitState){
             Navigator.pushAndRemoveUntil(
                 context, MaterialPageRoute(

@@ -21,7 +21,7 @@ class BackgroundProcessRepository {
       if (response.statusCode == 200) {
 
         Map<String, dynamic> responseData = jsonDecode(response.body);
-        List<dynamic> jsonData = responseData['backgroundService']; // Accessing the 'backgroundService' key
+        List<dynamic> jsonData = responseData['backgroundProcesses']; // Accessing the 'backgroundService' key
 
         List<BackgroundProcess> backgroundProcesses = jsonData.map((data) => BackgroundProcess.fromJson(data)).toList();
 

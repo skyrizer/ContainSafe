@@ -25,6 +25,8 @@ import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'bloc/authentication/logout/logout_bloc.dart';
+import 'bloc/authentication/logout/logout_state.dart';
 import 'bloc/authentication/register/register_bloc.dart';
 import 'bloc/authentication/register/register_state.dart';
 import 'bloc/backgroundProcess/add/addBp_bloc.dart';
@@ -108,6 +110,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(LoginInitState(), AuthRepository()),
+        ),
+        BlocProvider<LogoutBloc>(
+          create: (context) => LogoutBloc(LogoutInitState(), AuthRepository()),
         ),
         BlocProvider<PerformanceWSBloc>(
           create: (context) => PerformanceWSBloc(),
