@@ -6,7 +6,7 @@ class AddNodeServiceEvents extends Equatable{
   List<Object> get props => [];
 }
 
-class StartRegister extends AddNodeServiceEvents {}
+class StartNodeServiceRegister extends AddNodeServiceEvents {}
 
 class AddNodeServiceButtonPressed extends AddNodeServiceEvents {
 

@@ -14,7 +14,7 @@ class RegisterBloc extends Bloc<RegisterEvents, RegisterState>{
       emit(RegisterLoadingState());
       int validSignUp = await repo.register(
           event.username,event.name,event.email, event.password,
-          event.confirmPassword, event.phoneNumber);
+          event.confirmPassword, event.phoneNumber, event.roleId);
       if (validSignUp == 0){
         emit(RegisterSuccessState());
       } else if (validSignUp == 1){

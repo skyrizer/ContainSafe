@@ -105,6 +105,10 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
             return Center(
               child: CircularProgressIndicator(color: HexColor("#3c1e08")),
             );
+          } else if (state is GetAllNodeEmpty) {
+            return Center(
+              child: Text("There is no available node"),
+            );
           } else if (state is GetAllNodeLoaded) {
             nodeInfoList = state.nodeList;
             _checkNodeConnections();  // Check connections when data is loaded

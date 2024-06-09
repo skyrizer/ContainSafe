@@ -11,7 +11,7 @@ class NodeRepository {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       print(token);
-      var url = Uri.parse(APIConstant.GetNodeListURL);
+      var url = Uri.parse(APIConstant.GetUserNodeURL);
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
@@ -34,41 +34,54 @@ class NodeRepository {
     }
   }
 
-  Future<int> addNode(String hostname, String ipAddress) async{
+  Future<int> addNode(String hostname, String ipAddress) async {
     var pref = await SharedPreferences.getInstance();
-    try{
-
+    try {
       String? token = pref.getString("token");
+      int? roleId = pref.getInt("roleId");
+      int? userId = pref.getInt("userId");
 
       var url = Uri.parse(APIConstant.AddNodeURL);
+      late String body; // Declare body variable
 
-      var body = json.encode({
-        "hostname": hostname,
-        "ip_address": ipAddress
-      });
+      if (roleId == 1) {
+        body = json.encode({
+          "hostname": hostname,
+          "ip_address": ipAddress,
+          "role_id": roleId,
+          "user_id": userId
+        });
+      } else {
+        body = json.encode({
+          "hostname": hostname,
+          "ip_address": ipAddress,
+        });
+      }
 
       print(body.toString());
-      var response = await http.post(url,
-          headers: {"Content-Type": "application/json","Authorization": "Bearer ${token}"},
-          body: body
+      var response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${token}"
+        },
+        body: body,
       );
 
-      if (response.statusCode == 200){
+      if (response.statusCode == 200) {
         // String data =  response.body;
         // pref.setString("token", data);
         return 0;
-      }
-      else {
+      } else {
         return 3;
       }
-
-
     } catch (e) {
       print('error in add node');
       print(e.toString());
       return 3;
     }
   }
+
 
   // delete node
   Future<bool> deleteNode(int nodeId) async{

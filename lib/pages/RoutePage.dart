@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/authentication/logout/logout_bloc.dart';
 import '../bloc/authentication/logout/logout_event.dart';
+import '../bloc/authentication/logout/logout_state.dart';
 import 'RoutePageLog.dart';
+import 'authentication/loginScreen.dart';
 import 'config/viewConfigScreen.dart';
 import 'ContainerPerformanceScreen.dart';
 import 'httpResponse/viewHttpResponsesScreen.dart';
 import 'node/viewNodesScreen.dart';
-
 
 class RoutePage extends StatefulWidget {
   const RoutePage({Key? key}) : super(key: key);
@@ -28,65 +29,79 @@ class _RoutePageState extends State<RoutePage> {
 
   @override
   void initState() {
-
     logoutbloc = BlocProvider.of<LogoutBloc>(context);
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ContainSafe'),
-        leading: IconButton(
-          icon: Icon(
-            _isMenuOpen ? Icons.close : Icons.menu,
-            color: _isMenuOpen ? Colors.white : Colors.white, // Change the colors as desired
-          ),
-          onPressed: () {
-            setState(() {
-              _isMenuOpen = !_isMenuOpen;
-            });
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
+    return BlocListener<LogoutBloc, LogoutState>(
+      listener: (context, state) {
+        if (state is LogoutSuccessState) {
+          // If logout is successful, navigate to login screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('ContainSafe'),
+          leading: IconButton(
+            icon: Icon(
+              _isMenuOpen ? Icons.close : Icons.menu,
+              color: _isMenuOpen
+                  ? Colors.white
+                  : Colors.white, // Change the colors as desired
+            ),
             onPressed: () {
-              // Trigger logout action here
-              logoutbloc.add(LogoutButtonPressed());
+              setState(() {
+                _isMenuOpen = !_isMenuOpen;
+              });
             },
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Main content of each page
-          Container(
-            color: Colors.white,
-            child: _getCurrentPage(),
-          ),
-          // Side navigation menu
-          if (_isMenuOpen)
-            Container(
-              color: Colors.white?.withOpacity(1.0),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  _buildMenuItem(Icons.home, 'Home', 0),
-                  _buildMenuItem(Icons.list, 'Log', 1),
-                  _buildMenuItem(Icons.settings, 'Configuration', 2),
-                  _buildMenuItem(Icons.settings, 'Permission', 3),
-                  _buildMenuItem(Icons.settings, 'Role', 4),
-                  _buildMenuItem(Icons.settings, 'Role Permission', 5),
-                  _buildMenuItem(Icons.settings, 'Service', 6),
-
-                ],
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Colors.white,
               ),
+              onPressed: () {
+                // Trigger logout action here
+                logoutbloc.add(LogoutButtonPressed());
+              },
             ),
-        ],
+          ],
+        ),
+        body: Stack(
+          children: [
+            // Main content of each page
+            Container(
+              color: Colors.white,
+              child: _getCurrentPage(),
+            ),
+            // Side navigation menu
+            if (_isMenuOpen)
+              Container(
+                color: Colors.white?.withOpacity(1.0),
+                width: MediaQuery.of(context).size.width *
+                    0.6, // Adjust width as needed
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    _buildMenuItem(Icons.home, 'Home', 0),
+                    _buildMenuItem(Icons.list, 'Log', 1),
+                    _buildMenuItem(Icons.settings, 'Configuration', 2),
+                    _buildMenuItem(Icons.settings, 'Permission', 3),
+                    _buildMenuItem(Icons.settings, 'Role', 4),
+                    _buildMenuItem(Icons.settings, 'Role Permission', 5),
+                    _buildMenuItem(Icons.settings, 'Service', 6),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

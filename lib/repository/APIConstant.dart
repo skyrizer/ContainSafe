@@ -20,8 +20,8 @@ class APIConstant {
   static String get RefreshURL => "${APIConstant.URL}refreshToken";
 
   // node
-  static String get GetNodeListURL =>
-      "${APIConstant.URL}getNodes"; // a list of nodes
+  static String get GetNodeListURL => "${APIConstant.URL}getNodes";
+  static String get GetUserNodeURL => "${APIConstant.URL}user/nodes";
   static String get AddNodeURL => "${APIConstant.URL}addNode"; // add a node
 
   // container

@@ -13,6 +13,7 @@ import '../../bloc/services/get/getServices_event.dart';
 import '../../bloc/services/get/getServices_state.dart';
 import '../../model/node/node.dart';
 import '../../model/service/service_model..dart';
+import '../../repository/nodeService_repo.dart';
 
 class AddNodeServiceScreen extends StatefulWidget {
 
@@ -26,6 +27,7 @@ class AddNodeServiceScreen extends StatefulWidget {
 
 class _AddNodeServiceScreenState extends State<AddNodeServiceScreen> {
 
+  NodeServiceRepository repo = NodeServiceRepository();
   final GetAllServiceBloc _getAllServiceBloc  = GetAllServiceBloc();
   final GetAllNodeBloc _getAllNodeBloc  = GetAllNodeBloc();
 
@@ -40,8 +42,17 @@ class _AddNodeServiceScreenState extends State<AddNodeServiceScreen> {
 
     _addNodeServiceBloc = BlocProvider.of<AddNodeServiceBloc>(context);
 
-    _getAllNodeBloc .add(GetAllNodeList());
-    _getAllServiceBloc .add(GetAllServiceList());
+    try {
+      // Try adding an event to the Bloc
+      _addNodeServiceBloc.add(StartNodeServiceRegister());
+    } catch (error) {
+      // If adding the event fails due to the Bloc being closed, recreate the Bloc
+      _addNodeServiceBloc = AddNodeServiceBloc(AddNodeServiceInitState(), repo);
+      _addNodeServiceBloc.add(StartNodeServiceRegister());
+    }
+
+    _getAllNodeBloc.add(GetAllNodeList());
+    _getAllServiceBloc.add(GetAllServiceList());
 
     super.initState();
   }
@@ -69,18 +80,31 @@ class _AddNodeServiceScreenState extends State<AddNodeServiceScreen> {
   }
 
   Widget _buildContent(AddNodeServiceState state) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // _buildNodeDropdown(), // Dropdown to select nodes
-          // SizedBox(height: 16),
-          _buildServiceDropdown(),
-          SizedBox(height: 16),
-          saveButton(),
-        ],
-      ),
-    );
+    if (state is AddNodeServiceLoadingState) {
+      return Center(
+        child: CircularProgressIndicator(), // Show a loading indicator
+      );
+    } else if (state is AddNodeServiceFailState) {
+      return Center(
+        child: Text("Failed to add node service: ${state.message}"), // Show an error message
+      );
+    } else if (state is AddNodeServiceSuccessState) {
+      Navigator.of(context).pop();
+      return Container();
+    } else {
+      return SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // _buildNodeDropdown(), // Dropdown to select nodes
+            // SizedBox(height: 16),
+            _buildServiceDropdown(),
+            SizedBox(height: 16),
+            saveButton(),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildNodeDropdown() {
@@ -189,6 +213,7 @@ class _AddNodeServiceScreenState extends State<AddNodeServiceScreen> {
               nodeId: widget.node.id!,
               serviceId: _selectedService!.id!,
           ));
+
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.brown, // Change the background color here

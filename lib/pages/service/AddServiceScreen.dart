@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../bloc/backgroundProcess/add/addBp_bloc.dart';
-import '../../bloc/backgroundProcess/add/addBp_event.dart';
-import '../../bloc/backgroundProcess/add/addBp_state.dart';
 import '../../bloc/services/add/addService_bloc.dart';
 import '../../bloc/services/add/addService_event.dart';
 import '../../bloc/services/add/addService_state.dart';

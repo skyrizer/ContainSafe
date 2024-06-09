@@ -15,6 +15,7 @@ class SignUpButtonPressed extends RegisterEvents {
   final String password;
   final String confirmPassword;
   final String phoneNumber;
+  final int roleId;
 
   SignUpButtonPressed({
     required this.username,
@@ -23,6 +24,7 @@ class SignUpButtonPressed extends RegisterEvents {
     required this.password,
     required this.confirmPassword,
     required this.phoneNumber,
+    required this.roleId,
   });
 }
 

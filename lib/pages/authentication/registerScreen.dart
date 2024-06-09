@@ -8,6 +8,11 @@ import 'package:containsafe/bloc/authentication/register/register_event.dart';
 import 'package:containsafe/bloc/authentication/register/register_state.dart';
 import 'package:containsafe/bloc/authentication/register/register_bloc.dart';
 
+import '../../bloc/role/get/getRole_bloc.dart';
+import '../../bloc/role/get/getRole_event.dart';
+import '../../bloc/role/get/getRole_state.dart';
+import '../../model/role/role.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,6 +32,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+
+  final GetAllRoleBloc _getAllRoleBloc  = GetAllRoleBloc();
+  Role? _selectedRole; // Selected node
+
   // controller
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -44,14 +53,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   late RegisterBloc registerBloc;
 
-  int _gender = 0;
-  // 0 means false - male
-  // 1 means true - female
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getAllRoleBloc.add(GetAllRoleList());
     registerBloc = BlocProvider.of<RegisterBloc>(context);
   }
   @override
@@ -102,10 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   _usernameField(),
                   _emailField(),
                   _nameField(),
-                  //_dobField(),
+                  _buildRoleDropdown(),
                   const SizedBox(height: 10.0,),
-                  _genderField(),
-                  //_addressField(),
                   _passwordField(),
                   _confirmpasswordField(),
                   _matchPassword(),
@@ -119,6 +124,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildRoleDropdown() {
+    return BlocProvider<GetAllRoleBloc>(
+      create: (context) => _getAllRoleBloc, // Provide the instance of GetAllNodeBloc
+      child: BlocBuilder<GetAllRoleBloc, GetAllRoleState>(
+        builder: (context, state) {
+          if (state is GetAllRoleLoaded) {
+            return Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child:
+                  Text('Role'),
+
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: DropdownButton<Role>(
+                    hint: Text('Select Role'),
+                    value: _selectedRole,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedRole = newValue; // Update selected node
+                      });
+                    },
+                    items: _getRoleDropdownItems(state.roleList),
+                    // Display the hostname for each item
+                    // value will be the Node object itself
+                  ),
+                ),
+              ],
+            );
+          } else {
+            // Handle loading or error state
+            return SizedBox.shrink(); // Or display an error message
+          }
+        },
+      ),
+    );
+  }
+
+  List<DropdownMenuItem<Role>> _getRoleDropdownItems(List<Role> roles) {
+    return roles.map((role) {
+      return DropdownMenuItem<Role>(
+        value: role,
+        child: Text(role.role!),
+      );
+    }).toList();
   }
 
   Widget _signUpText(){
@@ -317,6 +371,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: pwdController.text.trim(),
                   confirmPassword: confirmpwdController.text.trim(),
                   phoneNumber: phoneNumController.text.trim(),
+                  roleId: _selectedRole!.id!,
                 ));
               }
 
@@ -337,163 +392,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  Widget _genderField() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        decoration: BoxDecoration(
-
-            border: Border(
-                bottom: BorderSide(
-                  color: HexColor("#a4a4a4"),
-                  width: 1.0,
-                )
-            )
-
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Gender", style: TextStyle(fontSize: 16,),),
-            Row(
-              children: [
-                Expanded(
-                  child: RadioListTile(
-                    title: const Text('Male', style: TextStyle(fontSize: 14),),
-                    value: 0,
-                    activeColor: HexColor('#3c1e08'),
-                    groupValue: _gender,
-                    onChanged: (value) {
-                      setState(() {
-                        _gender = value!;
-                      });
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile(
-                    title: const Text('Female', style: TextStyle(fontSize: 14),),
-                    value: 1,
-                    activeColor: HexColor('#3c1e08'),
-                    groupValue: _gender,
-                    onChanged: (value) {
-                      setState(() {
-                        _gender = value!;
-                      });                    },
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Widget _addressField(){
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 5.0),
-  //     child: TextFormField(
-  //       readOnly: true,
-  //       controller: addressController,
-  //       maxLines: 3,
-  //       decoration:  InputDecoration(
-  //         prefixIcon: Icon(Icons.house, color: HexColor("#3c1e08"),),
-  //         labelText: 'Address',
-  //         labelStyle: TextStyle(color: HexColor("#3c1e08")),
-  //         focusColor: HexColor("#3c1e08"),
-  //         enabledBorder: UnderlineInputBorder(
-  //           borderSide: BorderSide(color: HexColor("#a4a4a4")),
-  //         ),
-  //         focusedBorder: UnderlineInputBorder(
-  //           borderSide: BorderSide(color:  HexColor("#3c1e08")),
-  //         ),
-  //         suffixIconColor: HexColor("#3c1e08"),
-  //         suffixIcon: IconButton(
-  //           icon: const Icon(Icons.add_location),
-  //           onPressed: (){
-  //             Navigator.push(
-  //                 context, MaterialPageRoute(builder: (context) => const MapScreen())
-  //             ).then((value) => {
-  //               if (value != null)
-  //                 {
-  //                   lat = value['lat'],
-  //                   long = value['lng'],
-  //                   addressController.text = value['address']
-  //                 }
-  //             });
-  //           },
-  //         ),
-  //       ),
-  //       validator: (value){
-  //         if (value == null || value.isEmpty){
-  //           return 'Please enter password';
-  //         }
-  //         return null;
-  //       } ,
-  //     ),
-  //   );
-  // }
-  //
-  // Future<void> _selectDate() async{
-  //   DateTime now = DateTime.now();
-  //   DateTime lastdob = DateTime(now.year - 10, now.month, now.day);
-  //   DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: lastdob,
-  //     firstDate:  DateTime(1950),
-  //     lastDate: lastdob,
-  //     builder: (BuildContext context, Widget? child) {
-  //       return Theme(
-  //         data: ThemeData(
-  //           dialogBackgroundColor: Colors.white,
-  //           primarySwatch: Colors.brown,
-  //
-  //         ),
-  //         child: child!,
-  //       );
-  //     },
-  //   );
-  //   if (picked != null){
-  //     setState(() {
-  //       String datedob = DateFormat("yyyy-MM-dd").format(picked);
-  //       dateController.text = datedob;
-  //     });
-  //   }
-  // }
-  //
-  // Widget _dobField(){
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 5.0),
-  //     child: TextFormField(
-  //       readOnly: true,
-  //       controller: dateController,
-  //       decoration: InputDecoration(
-  //         labelText: "Date of birth",
-  //         prefixIcon: Icon(Icons.date_range_rounded, color: HexColor("#3c1e08"),),
-  //         focusColor: HexColor("#3c1e08"),
-  //         labelStyle: TextStyle(color: HexColor("#3c1e08")),
-  //         enabledBorder: UnderlineInputBorder(
-  //           borderSide: BorderSide(color: HexColor("#a4a4a4")),
-  //         ),
-  //         focusedBorder: UnderlineInputBorder(
-  //           borderSide: BorderSide(color:  HexColor("#3c1e08")),
-  //         ),
-  //       ),
-  //       maxLines: 1,
-  //       validator: (value){
-  //         if (value!.isEmpty || value!.length < 1){
-  //           return 'Choose Date';
-  //         }
-  //       },
-  //       onTap: (){
-  //         _selectDate();
-  //         FocusScope.of(context).requestFocus(new FocusNode());
-  //       },
-  //     ),
-  //   );
-  // }
-
 
 }

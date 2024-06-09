@@ -48,7 +48,7 @@ class NodeAccessRepository {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       print(token);
-      var url = Uri.parse(APIConstant.GetAccessByNodeURL+"/${nodeId}");   ////
+      var url = Uri.parse(APIConstant.GetAccessByNodeURL+"/${nodeId}");
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

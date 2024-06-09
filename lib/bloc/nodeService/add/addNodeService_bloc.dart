@@ -10,7 +10,7 @@ class AddNodeServiceBloc extends Bloc<AddNodeServiceEvents, AddNodeServiceState>
 
   AddNodeServiceBloc(AddNodeServiceState initialState, this.repo): super(initialState){
 
-    on<StartRegister>((event,emit){
+    on<StartNodeServiceRegister>((event,emit){
       emit(AddNodeServiceInitState());
     });
 

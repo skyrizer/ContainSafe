@@ -28,10 +28,12 @@ class AuthRepository{
         // Extract the token from the response data
         String token = responseData['token'];
         int roleId = responseData["node_accesses"][0]["role_id"];
+        int userId = responseData["user"]["id"];
 
         // Store the token using shared preferences
         pref.setString("token", token);
         pref.setInt("roleId", roleId);
+        pref.setInt("userId", userId);
         pref.setString("email", email);
         return 1;
       }
@@ -80,7 +82,7 @@ class AuthRepository{
   }
 
   Future<int> register(String username, String name, String email,
-      String password, String confirmPassword, String phoneNumber,
+      String password, String confirmPassword, String phoneNumber, int roleId
       ) async{
     var pref = await SharedPreferences.getInstance();
     try{
@@ -94,6 +96,7 @@ class AuthRepository{
         "password": password,
         "password_confirmation": confirmPassword,
         "phone_number": phoneNumber,
+        "role_id": roleId
       });
 
       print(body.toString());
