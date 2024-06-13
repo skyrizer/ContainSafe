@@ -8,8 +8,8 @@ import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_event.dart';
 
-import 'AdminRoutePage.dart';
-import 'RoutePage.dart';
+import 'RoutePage1.dart';
+import 'RoutePage2.dart';
 
 
 class Splash extends StatefulWidget {
@@ -89,7 +89,7 @@ class _SplashState extends State<Splash> {
             } else {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const RoutePage()),
+                MaterialPageRoute(builder: (context) => const DevOpsRoutePage()),
                     (Route<dynamic> route) => false,
               );
             }

@@ -1,5 +1,6 @@
-import 'package:containsafe/pages/RoutePage.dart';
+import 'package:containsafe/pages/RoutePage2.dart';
 import 'package:containsafe/pages/SnackBarDesign.dart';
+import 'package:containsafe/pages/authentication/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -79,11 +80,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body:
       BlocListener<RegisterBloc, RegisterState>(
-        listener: (context,state){
+        listener: (context,state) async {
           if (state is RegisterSuccessState) {
             Navigator.pushAndRemoveUntil(
                 context, MaterialPageRoute(
-                builder: (context) => const RoutePage()), (Route<dynamic> route) => false
+                builder: (context) => LoginScreen()), (Route<dynamic> route) => false
             );
           } else if (state is UsernameFailState) {
             final snackBar = SnackBarDesign.customSnackBar('Username has been taken');
