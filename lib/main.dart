@@ -15,7 +15,6 @@ import 'package:containsafe/repository/rolePermission_repo.dart';
 import 'package:containsafe/repository/role_repo.dart';
 import 'package:containsafe/repository/service_repo.dart';
 import 'package:containsafe/repository/user_repo.dart';
-import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -24,7 +23,6 @@ import 'package:containsafe/pages/splashScreen.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'bloc/authentication/logout/logout_bloc.dart';
 import 'bloc/authentication/logout/logout_state.dart';
 import 'bloc/authentication/register/register_bloc.dart';
@@ -48,6 +46,8 @@ import 'bloc/node/addNode/addNode_state.dart';
 import 'bloc/node/deleteNode/deleteNode_bloc.dart';
 import 'bloc/node/deleteNode/deleteNode_state.dart';
 import 'bloc/node/getAll/getAllNode_bloc.dart';
+import 'bloc/node/update/updateNode_bloc.dart';
+import 'bloc/node/update/updateNode_state.dart';
 import 'bloc/nodeAccess/add/addNodeAccess_bloc.dart';
 import 'bloc/nodeAccess/add/addNodeAccess_state.dart';
 import 'bloc/nodeAccess/delete/deleteAccess_bloc.dart';
@@ -82,9 +82,12 @@ import 'bloc/services/add/addService_state.dart';
 import 'bloc/services/get/getServices_bloc.dart';
 import 'bloc/services/getByNode/getNodeServices_bloc.dart';
 import 'bloc/user/get/getUser_bloc.dart';
+import 'bloc/user/search/searchUser_bloc.dart';
+import 'bloc/user/search/searchUser_state.dart';
 
 
 void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
@@ -195,6 +198,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<EditConfigBloc>(
           create: (context) => EditConfigBloc(EditConfigState(), ConfigRepository()),
         ),
+        BlocProvider<EditNodeBloc>(
+          create: (context) => EditNodeBloc(EditNodeState(), NodeRepository()),
+        ),
         BlocProvider<EditRoleBloc>(
           create: (context) => EditRoleBloc(EditRoleState(), RoleRepository()),
         ),
@@ -224,6 +230,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SearchByDateBloc>(
           create: (context) => SearchByDateBloc(SearchByDateState(), HttpResponseRepository()),
+        ),
+        BlocProvider<SearchUserBloc>(
+          create: (context) => SearchUserBloc(SearchUserState(), UserRepository()),
         ),
       ],
       child: MaterialApp(

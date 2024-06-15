@@ -1,6 +1,6 @@
 class APIConstant {
   // wafir 10.131.77.251
-  static const String ipaddress = "http://192.168.0.115:8000/";
+  static const String ipaddress = "http://192.168.0.117:8000/";
   // static const String ipaddress = "http://10.131.74.159:8000/";
 
   static const String URL = "${ipaddress}api/";
@@ -23,6 +23,8 @@ class APIConstant {
   static String get GetNodeListURL => "${APIConstant.URL}getNodes";
   static String get GetUserNodeURL => "${APIConstant.URL}user/nodes";
   static String get AddNodeURL => "${APIConstant.URL}addNode"; // add a node
+  static String get UpdateNodeURL => "${APIConstant.URL}updateNode";
+
 
   // container
   static String get GetOneContainerURL =>
@@ -56,6 +58,9 @@ class APIConstant {
 
   // user
   static String get GetUsersURL => "${APIConstant.URL}user";
+  static String get SearchUsersURL => "${APIConstant.URL}searchUser";
+
+
 
   // role
   static String get GetRolesURL => "${APIConstant.URL}getRoles";

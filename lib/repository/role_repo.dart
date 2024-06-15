@@ -15,7 +15,7 @@ class RoleRepository {
       var url = Uri.parse(APIConstant.GetRolesURL);
       var header = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${token}",
+        //"Authorization": "Bearer ${token}",
       };
       var response = await http.get(url, headers: header);
       if (response.statusCode == 200) {

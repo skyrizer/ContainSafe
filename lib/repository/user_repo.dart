@@ -36,6 +36,38 @@ class UserRepository {
     }
   }
 
+  Future<List<User>> searchUser(String name) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("token");
+      print(token);
+      var url = Uri.parse(APIConstant.SearchUsersURL);
+      var body = json.encode({
+        "name": name,
+
+      });
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}",
+      };
+      var response = await http.post(url, headers: header, body: body);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        List<dynamic> jsonData = responseData['users']; // Accessing the 'httpResponse' key
+
+        List<User> users = jsonData.map((data) => User.fromJson(data)).toList();
+
+        return users;
+      } else {
+        print("Failed to load users. Status code: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error in getting all users: $e");
+      return [];
+    }
+  }
+
   // Future<int> addNode(String hostname, String ipAddress) async{
   //   var pref = await SharedPreferences.getInstance();
   //   try{

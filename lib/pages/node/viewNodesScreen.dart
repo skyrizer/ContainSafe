@@ -1,3 +1,4 @@
+import 'package:containsafe/pages/node/updateNodeScreen.dart';
 import 'package:containsafe/pages/nodeService/ViewNodeServiceScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:containsafe/model/node/node.dart';
@@ -26,13 +27,24 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
   final GetAllNodeBloc _nodeListBloc = GetAllNodeBloc();
   late DeleteNodeBloc _deleteNodeBloc;
   List<Node> nodeInfoList = [];
+  bool _isMounted = false;
+  late int? roleId;
+
 
   @override
   void initState() {
     super.initState();
+    _isMounted = true;
     _nodeListBloc.add(GetAllNodeList());
     _deleteNodeBloc = BlocProvider.of<DeleteNodeBloc>(context);
-    //sendEmail();
+    _getRoleId();
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    _nodeListBloc.close();
+    super.dispose();
   }
 
   @override
@@ -41,12 +53,19 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
     _nodeListBloc.add(GetAllNodeList());
   }
 
+  Future<void> _getRoleId() async {
+    var pref = await SharedPreferences.getInstance(); // Await the future
+    roleId = pref.getInt("roleId"); // Handle potential null value
+  }
+
   Future<void> _checkNodeConnections() async {
     for (var node in nodeInfoList) {
       final isConnected = await _testNodeConnection(node.ipAddress);
-      setState(() {
-        node.isConnected = isConnected;
-      });
+      if (_isMounted) {
+        setState(() {
+          node.isConnected = isConnected;
+        });
+      }
     }
   }
 
@@ -172,20 +191,25 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                         PopupMenuButton<int>(
                           onSelected: (value) {
                             if (value == 1) {
-                              _deleteNodeBloc
-                                  .add(DeleteButtonPressed(nodeId: nodes.id!));
-                              setState(() {
-                                BlocProvider.of<GetAllNodeBloc>(context)
-                                    .add(GetAllNodeList());
-                              });
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => ContainerPerformanceScreen(node: nodes)),
+                            );
                             } else if (value == 2) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewNodeServiceScreen(node: nodes)),
+                              );
+                            } else if (value == 3) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ViewNodeConfigsScreen(
                                         nodeId: nodes.id!)),
                               );
-                            } else if (value == 3) {
+                            } else if (value == 4) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -193,72 +217,124 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
                                         ViewNodeAccessesScreen(
                                             nodeId: nodes.id!)),
                               );
-                            } else if (value == 4) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ContainerPerformanceScreen(node: nodes)),
-                              );
                             } else if (value == 5) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ViewNodeServiceScreen(node: nodes)),
+                                    builder: (context) => UpdateNodeScreen(node: nodes)),
                               );
+                            } else if (value == 6) {
+                              _deleteNodeBloc
+                                  .add(DeleteButtonPressed(nodeId: nodes.id!));
+                              setState(() {
+                                BlocProvider.of<GetAllNodeBloc>(context)
+                                    .add(GetAllNodeList());
+                              });
                             }
                           },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: 1,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.delete, color: Colors.brown),
-                                  SizedBox(width: 8),
-                                  Text('Delete'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 2,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.settings, color: Colors.brown),
-                                  SizedBox(width: 8),
-                                  Text('Setting'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 3,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.settings, color: Colors.brown),
-                                  SizedBox(width: 8),
-                                  Text('Access'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 4,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.settings, color: Colors.brown),
-                                  SizedBox(width: 8),
-                                  Text('Monitor'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 5,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.settings, color: Colors.brown),
-                                  SizedBox(width: 8),
-                                  Text('Services'),
-                                ],
-                              ),
-                            ),
-                          ],
+                          itemBuilder: (context) {
+                            List<PopupMenuEntry<int>> items = [];
+                            if (roleId == 3) {
+                              items.add(
+                                PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Monitor'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Services'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              items.add(
+                                PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Monitor'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Services'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 3,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Setting'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 4,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.settings, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Access'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 5,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Edit'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                              items.add(
+                                PopupMenuItem(
+                                  value: 6,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete, color: Colors.brown),
+                                      SizedBox(width: 8),
+                                      Text('Delete'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return items;
+                          },
                           icon: Icon(Icons.more_vert, color: Colors.black),
                         )
                       ],

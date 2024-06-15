@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:containsafe/repository/APIConstant.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/nodeAccess/nodeAccess.dart';
 
 class NodeServiceRepository {
 
@@ -43,39 +42,39 @@ class NodeServiceRepository {
     }
   }
 
-  Future<bool> updateNodeAccess(NodeAccess nodeAccess) async {
-    try {
-      var pref = await SharedPreferences.getInstance();
-      String? token = pref.getString("token");
-
-      if (token!.isNotEmpty) {
-        var url = Uri.parse(APIConstant.UpdateNodeAccessURL+"/${nodeAccess.id}");  // take note
-        print(url);
-        var header = {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${token}",
-        };
-        var body = json.encode({
-          "role_id": nodeAccess.roleId,
-          "user_id": nodeAccess.userId,
-          "node_id": nodeAccess.nodeId
-
-        });
-        var response = await http.put(url, headers: header, body: body);
-
-        if (response.statusCode == 200) {
-          return true;
-        } else {
-          print("response fail: ${response.statusCode}");
-          print("response fail: ${response.body}");
-        }
-      }
-      return false;
-    } catch (e) {
-      print("error in updating permission ${e.toString()}");
-      return false;
-    }
-  }
+  // Future<bool> updateNodeAccess(NodeAccess nodeAccess) async {
+  //   try {
+  //     var pref = await SharedPreferences.getInstance();
+  //     String? token = pref.getString("token");
+  //
+  //     if (token!.isNotEmpty) {
+  //       var url = Uri.parse(APIConstant.UpdateNodeAccessURL+"/${nodeAccess.id}");  // take note
+  //       print(url);
+  //       var header = {
+  //         "Content-Type": "application/json",
+  //         "Authorization": "Bearer ${token}",
+  //       };
+  //       var body = json.encode({
+  //         "role_id": nodeAccess.roleId,
+  //         "user_id": nodeAccess.userId,
+  //         "node_id": nodeAccess.nodeId
+  //
+  //       });
+  //       var response = await http.put(url, headers: header, body: body);
+  //
+  //       if (response.statusCode == 200) {
+  //         return true;
+  //       } else {
+  //         print("response fail: ${response.statusCode}");
+  //         print("response fail: ${response.body}");
+  //       }
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     print("error in updating permission ${e.toString()}");
+  //     return false;
+  //   }
+  // }
 
 
   // delete node access

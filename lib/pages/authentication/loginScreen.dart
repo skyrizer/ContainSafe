@@ -100,22 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final prefs = await SharedPreferences.getInstance();
     final roleId = prefs.getInt('roleId');
 
-    print(roleId);
-    if (roleId != null) {
-      if (roleId == 3) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminRoutePage()),
-              (Route<dynamic> route) => false,
-        );
-      } else {
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const RoutePage()),
               (Route<dynamic> route) => false,
         );
-      }
-    }
+
   }
 
   Widget _signUpText(){

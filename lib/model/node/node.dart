@@ -21,6 +21,12 @@ class Node {
 
   });
 
+  Node.edit({
+    required this.id,
+    required this.hostname,
+    required this.ipAddress,
+  });
+
   Node.test({
     required this.hostname,
     required this.ipAddress,
