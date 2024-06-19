@@ -1,22 +1,10 @@
-import 'package:containsafe/bloc/config/get/getConfig_bloc.dart';
-import 'package:containsafe/bloc/config/get/getConfig_event.dart';
-import 'package:containsafe/bloc/node/getAll/getAllNode_event.dart';
-import 'package:containsafe/model/service/service_model..dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/backgroundProcess/add/addBp_bloc.dart';
 import '../../bloc/backgroundProcess/add/addBp_event.dart';
 import '../../bloc/backgroundProcess/add/addBp_state.dart';
-import '../../bloc/config/get/getConfig_state.dart';
-import '../../bloc/node/getAll/getAllNode_bloc.dart';
-import '../../bloc/node/getAll/getAllNode_state.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_bloc.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_event.dart';
-import '../../bloc/nodeConfig/add/addNodeConfig_state.dart';
-import '../../bloc/services/get/getServices_bloc.dart';
-import '../../model/config/config.dart';
-import '../../model/node/node.dart';
 
 class AddBackgroundProcessScreen extends StatefulWidget {
   final int serviceId;

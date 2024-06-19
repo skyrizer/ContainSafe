@@ -117,7 +117,7 @@ class NodeConfigRepository {
     try{
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${nodeId.toString()}/${configId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteNodeConfigURL + "/${nodeId.toString()}/${configId.toString()}");  /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

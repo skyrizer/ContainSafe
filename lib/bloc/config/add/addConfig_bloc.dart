@@ -11,7 +11,7 @@ class AddConfigBloc extends Bloc<AddConfigEvents, AddConfigState>{
 
   AddConfigBloc(AddConfigState initialState, this.repo): super(initialState){
 
-    on<StartRegister>((event,emit){
+    on<StartRegisterNodeConfig>((event,emit){
       emit(AddConfigInitState());
     });
 

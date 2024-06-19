@@ -10,8 +10,7 @@ import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RoutePage.dart';
-import '../RoutePage1.dart';
-import '../RoutePage2.dart';
+
 import 'forgotPwdScreen.dart';
 
 
@@ -138,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _logoText(){
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text('ContainSafe', style: Theme.of(context).textTheme.bodyLarge),
+      child: Text('Stay safe with us', style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 

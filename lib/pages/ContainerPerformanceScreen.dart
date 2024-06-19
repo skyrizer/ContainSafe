@@ -1,5 +1,3 @@
-import 'package:containsafe/bloc/nodeConfig/get/getNodeConfig_event.dart';
-import 'package:containsafe/repository/APIConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -9,7 +7,6 @@ import '../bloc/container/performanceWS/performanceWS_state.dart';
 import '../bloc/node/getAll/getAllNode_bloc.dart';
 import '../bloc/node/getAll/getAllNode_event.dart';
 import '../bloc/node/getAll/getAllNode_state.dart';
-import '../bloc/nodeConfig/get/getNodeConfig_bloc.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_event.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_state.dart';
@@ -23,10 +20,12 @@ class ContainerPerformanceScreen extends StatefulWidget {
   const ContainerPerformanceScreen({super.key, required this.node});
 
   @override
-  State<ContainerPerformanceScreen> createState() => _ContainerPerformanceScreenState();
+  State<ContainerPerformanceScreen> createState() =>
+      _ContainerPerformanceScreenState();
 }
 
-class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen> {
+class _ContainerPerformanceScreenState
+    extends State<ContainerPerformanceScreen> {
   late PerformanceWSBloc _performanceWSBloc;
   final GetAllNodeBloc _allNodeBloc = GetAllNodeBloc();
   final GetConfigByNodeBloc _nodeConfigBloc = GetConfigByNodeBloc();
@@ -39,8 +38,8 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
     super.initState();
     _allNodeBloc.add(GetAllNodeList());
     _nodeConfigBloc.add(GetConfigByNodeList(nodeId: widget.node.id!));
-    _performanceWSBloc = PerformanceWSBloc()..add(LoadPerformanceWSData(widget.node.ipAddress));
-
+    _performanceWSBloc = PerformanceWSBloc()
+      ..add(LoadPerformanceWSData(widget.node.ipAddress));
   }
 
   @override
@@ -49,13 +48,30 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
     super.dispose();
   }
 
-
   void _sendMessage(String message) async {
-    final webSocketRepository = WebSocketRepository('ws://${widget.node.ipAddress}:8765');
+    final webSocketRepository =
+        WebSocketRepository('ws://${widget.node.ipAddress}:8765');
     webSocketRepository.sendSleepDuration(int.parse(message));
-
   }
 
+  double parseAndConvertToBytes(String memString) {
+    final regex = RegExp(r'(\d+(\.\d+)?)'); // Match numeric part
+    final match = regex.firstMatch(memString);
+    if (match != null) {
+      double value = double.parse(match.group(0)!);
+      if (memString.toLowerCase().contains('kib')) {
+        return value * 1024; // KiB to bytes
+      } else if (memString.toLowerCase().contains('mib')) {
+        return value * 1024 * 1024; // MiB to bytes
+      } else if (memString.toLowerCase().contains('gib')) {
+        return value * 1024 * 1024 * 1024; // GiB to bytes
+      } else {
+        return value; // Assume already in bytes or unknown unit
+      }
+    } else {
+      throw FormatException('Invalid memory string format');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,22 +95,24 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
             ],
           ),
           backgroundColor: HexColor("#ecd9c9"),
-          bottomOpacity: 0.0,
-          elevation: 0.0,
+          // bottomOpacity: 0.0,
+          // elevation: 0.0,
           automaticallyImplyLeading: true,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16),
+            // SizedBox(height: 16),
             BlocBuilder<GetConfigByNodeBloc, GetConfigByNodeState>(
               builder: (context, state) {
                 if (state is GetConfigByNodeLoading) {
                   return SizedBox.shrink();
                 } else if (state is GetConfigByNodeError) {
-                  return Center(child: Text('Failed to load node configuration'));
+                  return Center(
+                      child: Text('Failed to load node configuration'));
                 } else if (state is GetConfigByNodeEmpty) {
-                  return Center(child: Text('No configuration available for this node'));
+                  return Center(
+                      child: Text('No configuration available for this node'));
                 } else if (state is GetConfigByNodeLoaded) {
                   _nodeConfigList = state.nodeConfigList;
                   _nodeConfigList.forEach((config) {
@@ -119,12 +137,13 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
       ),
     );
   }
+
   Widget _buildContent(PerformanceWSState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-       // _buildDropdown(),
-        SizedBox(height: 16),
+        // _buildDropdown(),
+        //SizedBox(height: 16),
         Expanded(
           child: _buildListPerformance(state),
         ),
@@ -132,43 +151,44 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
     );
   }
 
-  Widget _buildDropdown() {
-    return BlocBuilder<GetAllNodeBloc, GetAllNodeState>(
-      builder: (context, state) {
-        if (state is GetAllNodeLoaded) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: DropdownButton<Node>(
-              hint: Text('Select Node'),
-              value: _selectedNode,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedNode = newValue;
-                  _performanceWSBloc.add(LoadPerformanceWSData(newValue!.ipAddress));
-                });
-              },
-              items: _getDropdownItems(state.nodeList),
-            ),
-          );
-        } else {
-          return SizedBox.shrink();
-        }
-      },
-    );
-  }
-
-  List<DropdownMenuItem<Node>> _getDropdownItems(List<Node> nodes) {
-    return nodes.map((node) {
-      return DropdownMenuItem<Node>(
-        value: node,
-        child: Text(node.hostname),
-      );
-    }).toList();
-  }
+  // Widget _buildDropdown() {
+  //   return BlocBuilder<GetAllNodeBloc, GetAllNodeState>(
+  //     builder: (context, state) {
+  //       if (state is GetAllNodeLoaded) {
+  //         return Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 24.0),
+  //           child: DropdownButton<Node>(
+  //             hint: Text('Select Node'),
+  //             value: _selectedNode,
+  //             onChanged: (newValue) {
+  //               setState(() {
+  //                 _selectedNode = newValue;
+  //                 _performanceWSBloc.add(LoadPerformanceWSData(newValue!.ipAddress));
+  //               });
+  //             },
+  //             items: _getDropdownItems(state.nodeList),
+  //           ),
+  //         );
+  //       } else {
+  //         return SizedBox.shrink();
+  //       }
+  //     },
+  //   );
+  // }
+  //
+  // List<DropdownMenuItem<Node>> _getDropdownItems(List<Node> nodes) {
+  //   return nodes.map((node) {
+  //     return DropdownMenuItem<Node>(
+  //       value: node,
+  //       child: Text(node.hostname),
+  //     );
+  //   }).toList();
+  // }
 
   Widget _buildListPerformance(PerformanceWSState state) {
     if (state is PerformanceWSLoading) {
-      return Center(child: CircularProgressIndicator(color: HexColor("#3c1e08")));
+      return Center(
+          child: CircularProgressIndicator(color: HexColor("#3c1e08")));
     } else if (state is PerformanceWSError) {
       return Center(child: Text('Failed to load performance data'));
     } else if (state is PerformanceWSEmpty) {
@@ -181,6 +201,17 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
         itemCount: state.performanceList.length,
         itemBuilder: (context, index) {
           final performance = state.performanceList[index];
+
+          // Parse and convert memory usage and size to bytes
+          double memUsageBytes = parseAndConvertToBytes(performance.memUsage);
+          double memSizeBytes = parseAndConvertToBytes(performance.memSize);
+
+          // Calculate the percentage
+          double memPercentage = (memUsageBytes / memSizeBytes) * 100;
+
+          // Format the percentage with one decimal place
+          String percentageText = memPercentage.toStringAsFixed(1);
+
           return Container(
             margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             padding: EdgeInsets.all(10.0),
@@ -218,7 +249,8 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UpdateContainerScreen(containerId: performance.containerId),
+                                  builder: (context) => UpdateContainerScreen(
+                                      containerId: performance.containerId),
                                 ),
                               );
                             },
@@ -248,7 +280,10 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
                                 text: 'Memory Usage: ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: '${performance.memUsage}/${performance.memSize}'),
+                              TextSpan(
+                                text:
+                                    '${performance.memUsage}/${performance.memSize} (${percentageText}%)',
+                              ),
                             ],
                           ),
                         ),
@@ -262,7 +297,9 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
                                 text: 'Network: ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: '${performance.netInput}/${performance.netOutput}'),
+                              TextSpan(
+                                  text:
+                                      '${performance.netInput}/${performance.netOutput}'),
                             ],
                           ),
                         ),
@@ -276,25 +313,27 @@ class _ContainerPerformanceScreenState extends State<ContainerPerformanceScreen>
                                 text: 'Block: ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: '${performance.blockInput}/${performance.blockOutput}'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 4.0),
-                      Container(
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
                               TextSpan(
-                                text: 'PIDs: ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: '${performance.pids}'),
+                                  text:
+                                      '${performance.blockInput}/${performance.blockOutput}'),
                             ],
                           ),
                         ),
                       ),
+                      // SizedBox(height: 4.0),
+                      // Container(
+                      //   child: Text.rich(
+                      //     TextSpan(
+                      //       children: [
+                      //         TextSpan(
+                      //           text: 'PIDs: ',
+                      //           style: TextStyle(fontWeight: FontWeight.bold),
+                      //         ),
+                      //         TextSpan(text: '${performance.pids}'),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

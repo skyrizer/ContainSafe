@@ -23,6 +23,8 @@ import 'package:containsafe/pages/splashScreen.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/repository/auth_repo.dart';
+import 'bloc/authentication/forgot_password/forgotPassword_bloc.dart';
+import 'bloc/authentication/forgot_password/forgotPassword_state.dart';
 import 'bloc/authentication/logout/logout_bloc.dart';
 import 'bloc/authentication/logout/logout_state.dart';
 import 'bloc/authentication/register/register_bloc.dart';
@@ -233,6 +235,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SearchUserBloc>(
           create: (context) => SearchUserBloc(SearchUserState(), UserRepository()),
+        ),
+        BlocProvider<ForgotPwdBloc>(
+          create: (context) => ForgotPwdBloc(ForgotPwdState(), AuthRepository()),
         ),
       ],
       child: MaterialApp(

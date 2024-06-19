@@ -31,11 +31,11 @@ final Map<int, List<MenuItem>> roleBasedMenus = {
   ],
   devOpsRole: [
     MenuItem(icon: Icons.home, label: 'Home', pageIndex: 0),
-    MenuItem(icon: Icons.settings, label: 'Configuration', pageIndex: 2),
-    MenuItem(icon: Icons.settings, label: 'Permission', pageIndex: 3),
-    MenuItem(icon: Icons.settings, label: 'Role', pageIndex: 4),
-    MenuItem(icon: Icons.settings, label: 'Role Permission', pageIndex: 5),
-    MenuItem(icon: Icons.settings, label: 'Service', pageIndex: 6),
+    // MenuItem(icon: Icons.settings, label: 'Configuration', pageIndex: 2),
+    // MenuItem(icon: Icons.settings, label: 'Permission', pageIndex: 3),
+    // MenuItem(icon: Icons.settings, label: 'Role', pageIndex: 4),
+    // MenuItem(icon: Icons.settings, label: 'Role Permission', pageIndex: 5),
+    // MenuItem(icon: Icons.settings, label: 'Service', pageIndex: 6),
   ],
   managementRole: [
     MenuItem(icon: Icons.home, label: 'Home', pageIndex: 0),

@@ -5,7 +5,6 @@ import '../../bloc/config/add/addConfig_bloc.dart';
 import '../../bloc/config/add/addConfig_event.dart';
 import '../../bloc/config/add/addConfig_state.dart';
 import '../RoutePage.dart';
-import '../RoutePage2.dart';
 
 class AddConfigScreen extends StatefulWidget {
   const AddConfigScreen({Key? key}) : super(key: key);
@@ -23,6 +22,7 @@ class _AddConfigScreenState extends State<AddConfigScreen> {
   @override
   void initState() {
     _addConfigBloc = BlocProvider.of<AddConfigBloc>(context);
+    _addConfigBloc.add(StartRegisterNodeConfig());
     super.initState();
   }
 

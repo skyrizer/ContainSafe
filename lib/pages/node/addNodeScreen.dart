@@ -7,7 +7,6 @@ import '../../bloc/node/addNode/addNode_bloc.dart';
 import '../../bloc/node/addNode/addNode_state.dart';
 import '../../repository/webSocket_repo.dart';
 import '../RoutePage.dart';
-import '../RoutePage2.dart';
 
 class AddNodeScreen extends StatefulWidget {
   const AddNodeScreen({Key? key}) : super(key: key);

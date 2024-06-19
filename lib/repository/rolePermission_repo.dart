@@ -6,13 +6,14 @@ import '../model/nodeConfig/nodeConfig.dart';
 import '../model/rolePermission/rolePermission.dart';
 
 class RolePermissionRepository {
-
   Future<List<RolePermission>> getAllRolePermissions() async {
     try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
       print(token);
-      var url = Uri.parse(APIConstant.GetNodeConfigsURL);  ///
+      var url = Uri.parse(APIConstant.GetRolePermissionsURL);
+
+      ///
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
@@ -21,48 +22,32 @@ class RolePermissionRepository {
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        if (responseData.containsKey('rolePermissions') && responseData['rolePermissions'] != null) {
-          Map<String, dynamic>? rolePermissionsData = responseData['rolePermissions'] as Map<String, dynamic>?;
+        List<dynamic> rolePermissionsData = responseData['rolePermissions'];
 
-          if (rolePermissionsData != null) {
-            List<RolePermission> rolePermissions = [];
+        List<RolePermission> rolePermissions = [];
 
-            rolePermissionsData.forEach((key, value) {
-              if (value != null && value is List<dynamic>) {
-                List<dynamic> rPsData = value;
-                rPsData.forEach((rPData) {
-                  if (rPData != null) {
-                    RolePermission rolePermission = RolePermission.fromJson(rPData);
-                    rolePermissions.add(rolePermission);
-                  }
-                });
-              }
-            });
-
-            return rolePermissions;
+        rolePermissionsData.forEach((rPData) {
+          if (rPData != null) {
+            RolePermission rolePermission = RolePermission.fromJson(rPData);
+            rolePermissions.add(rolePermission);
           }
-        }
+        });
 
-        // Return an empty list if rolePermissionsData is null or not valid
-        return [];
+        return rolePermissions;
       }
-      else {
-        print("Failed to load role permissions. Status code: ${response.statusCode}");
-        return [];
-      }
+      return [];
     } catch (e) {
       print("Error in getting all role permissions: $e");
       return [];
     }
   }
 
-  Future<int> addRolePermission(int roleId, int permissionId) async{
+  Future<int> addRolePermission(int roleId, int permissionId) async {
     var pref = await SharedPreferences.getInstance();
-    try{
-
+    try {
       String? token = pref.getString("token");
 
-      var url = Uri.parse(APIConstant.AddNodeConfigsURL);  /////
+      var url = Uri.parse(APIConstant.AddNodeConfigsURL); /////
 
       var body = json.encode({
         "role_id": roleId,
@@ -71,20 +56,19 @@ class RolePermissionRepository {
 
       print(body.toString());
       var response = await http.post(url,
-          headers: {"Content-Type": "application/json","Authorization": "Bearer ${token}"},
-          body: body
-      );
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${token}"
+          },
+          body: body);
 
-      if (response.statusCode == 200){
+      if (response.statusCode == 200) {
         // String data =  response.body;
         // pref.setString("token", data);
         return 0;
-      }
-      else {
+      } else {
         return 3;
       }
-
-
     } catch (e) {
       print('error in add role permission');
       print(e.toString());
@@ -93,29 +77,27 @@ class RolePermissionRepository {
   }
 
   // delete node access
-  Future<bool> deleteRolePermission(int roleId, int permissionId) async{
-    try{
+  Future<bool> deleteRolePermission(int roleId, int permissionId) async {
+    try {
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${roleId.toString()}/${permissionId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteNodeAccessURL +
+          "/${roleId.toString()}/${permissionId.toString()}");
+
+      /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",
       };
       var response = await http.delete(url, headers: header);
-      if (response.statusCode == 200){
-
+      if (response.statusCode == 200) {
         return true;
-      }else{
+      } else {
         return false;
       }
-
-    } catch (e){
+    } catch (e) {
       print("error to delete role permission ${e.toString()}");
       return false;
     }
   }
-
-
-
 }

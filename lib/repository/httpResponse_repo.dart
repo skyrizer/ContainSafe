@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:containsafe/repository/APIConstant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/httpResponse/httpResponse.dart';

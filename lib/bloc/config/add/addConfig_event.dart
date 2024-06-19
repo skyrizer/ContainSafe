@@ -6,7 +6,7 @@ class AddConfigEvents extends Equatable{
   List<Object> get props => [];
 }
 
-class StartRegister extends AddConfigEvents {}
+class StartRegisterNodeConfig extends AddConfigEvents {}
 
 class AddConfigButtonPressed extends AddConfigEvents {
   final String name;

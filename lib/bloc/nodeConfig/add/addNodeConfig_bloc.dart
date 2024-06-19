@@ -21,7 +21,7 @@ class AddNodeConfigBloc extends Bloc<AddNodeConfigEvents, AddNodeConfigState>{
       if (isSuccess == 0){
         emit(AddNodeConfigSuccessState());
       } else if (isSuccess == 3){
-        emit(AddNodeConfigFailState(message: 'Fail to add new node'));
+        emit(AddNodeConfigFailState(message: 'The node already have the configuration'));
       }
     });
   }

@@ -4,10 +4,10 @@ import 'package:containsafe/model/node/node.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../bloc/services/getByNode/getNodeServices_bloc.dart';
 import '../../bloc/services/getByNode/getNodeServices_event.dart';
 import '../../bloc/services/getByNode/getNodeServices_state.dart';
-import '../service/AddServiceScreen.dart';
 import 'AddNodeServiceScreen.dart';
 
 class ViewNodeServiceScreen extends StatefulWidget {
@@ -21,18 +21,29 @@ class ViewNodeServiceScreen extends StatefulWidget {
 class _ViewNodeServiceScreenState extends State<ViewNodeServiceScreen> {
   late GetNodeServicesBloc _getServicesBloc;
   late AddBpBloc _addBpBloc;
+  int? roleId;
 
   @override
   void initState() {
     super.initState();
+    _getRoleId();
     _getServicesBloc = GetNodeServicesBloc()..add(LoadGetServicesData(widget.node.ipAddress));
     _addBpBloc = BlocProvider.of<AddBpBloc>(context);
+
   }
 
   @override
   void dispose() {
     _getServicesBloc.close();
     super.dispose();
+  }
+
+  Future<void> _getRoleId() async {
+    await Future.delayed(Duration(seconds: 2)); // Add a 2-second delay
+    var pref = await SharedPreferences.getInstance(); // Await the future
+    setState(() {
+      roleId = pref.getInt("roleId"); // Handle potential null value
+    });
   }
 
   @override
@@ -65,14 +76,14 @@ class _ViewNodeServiceScreenState extends State<ViewNodeServiceScreen> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: roleId == 3 // Check if roleId is 3
+            ? null // If roleId is 3, do not display FloatingActionButton
+            : FloatingActionButton(
           onPressed: () {
-            // Add your action here
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddNodeServiceScreen(node: widget.node)),
+              MaterialPageRoute(builder: (context) => AddNodeServiceScreen(node: widget.node,)),
             );
-
           },
           backgroundColor: HexColor("#3c1e08"),
           child: Icon(Icons.add),

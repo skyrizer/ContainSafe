@@ -1,14 +1,10 @@
-import 'package:containsafe/bloc/node/addNode/addNode_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../bloc/node/addNode/addNode_bloc.dart';
-import '../../bloc/node/addNode/addNode_state.dart';
 import '../../bloc/role/add/addRole_bloc.dart';
 import '../../bloc/role/add/addRole_event.dart';
 import '../../bloc/role/add/addRole_state.dart';
 import '../RoutePage.dart';
-import '../RoutePage2.dart';
 
 class AddRoleScreen extends StatefulWidget {
   const AddRoleScreen({Key? key}) : super(key: key);

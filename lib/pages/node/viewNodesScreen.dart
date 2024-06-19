@@ -28,7 +28,7 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
   late DeleteNodeBloc _deleteNodeBloc;
   List<Node> nodeInfoList = [];
   bool _isMounted = false;
-  late int? roleId;
+  int? roleId;
 
 
   @override
@@ -97,7 +97,9 @@ class _ViewNodesScreenState extends State<ViewNodesScreen> {
           automaticallyImplyLeading: false,
         ),
         body: _buildListNode(),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: roleId == 3 // Check if roleId is 3
+            ? null // If roleId is 3, do not display FloatingActionButton
+            : FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,

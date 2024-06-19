@@ -12,6 +12,7 @@ import '../../bloc/nodeConfig/add/addNodeConfig_event.dart';
 import '../../bloc/nodeConfig/add/addNodeConfig_state.dart';
 import '../../model/config/config.dart';
 import '../../model/node/node.dart';
+import '../../repository/nodeConfig_repo.dart';
 
 class AddNodeConfigScreen extends StatefulWidget {
   const AddNodeConfigScreen({Key? key}) : super(key: key);
@@ -24,7 +25,9 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
 
   final GetAllConfigBloc _getAllConfigBloc  = GetAllConfigBloc();
   final GetAllNodeBloc _getAllNodeBloc  = GetAllNodeBloc();
+  final NodeConfigRepository _nodeConfigRepository = NodeConfigRepository();
   late AddNodeConfigBloc _addNodeConfigBloc;
+
   Node? _selectedNode; // Selected node
   Config? _selectedConfig;
 
@@ -34,7 +37,8 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
 
   @override
   void initState() {
-    _addNodeConfigBloc = BlocProvider.of<AddNodeConfigBloc>(context);
+    //_addNodeConfigBloc = BlocProvider.of<AddNodeConfigBloc>(context);
+    _addNodeConfigBloc = AddNodeConfigBloc(AddNodeConfigInitState(), _nodeConfigRepository);
     _getAllConfigBloc .add(GetAllConfigList());
     _getAllNodeBloc .add(GetAllNodeList());
     super.initState();
@@ -55,7 +59,13 @@ class _AddNodeConfigScreenState extends State<AddNodeConfigScreen> {
         ),
         body: BlocBuilder<AddNodeConfigBloc, AddNodeConfigState>(
           builder: (context, state) {
-            return _buildContent(state);
+            if (state is AddNodeConfigLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is AddNodeConfigFailState) {
+              return Center(child: Text(state.message));
+            } else {
+              return _buildContent(state);
+            }
           },
         ),
       ),

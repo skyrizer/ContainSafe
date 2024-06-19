@@ -7,9 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:containsafe/bloc/authentication/login/login_state.dart';
 import 'package:containsafe/bloc/authentication/login/login_bloc.dart';
 import 'package:containsafe/bloc/authentication/login/login_event.dart';
-
-import 'RoutePage1.dart';
-import 'RoutePage2.dart';
+import 'RoutePage.dart';
 
 
 class Splash extends StatefulWidget {
@@ -41,11 +39,9 @@ class _SplashState extends State<Splash> {
 
     sendEmail();
     // Delay the execution of the FutureBuilder for 2000 milliseconds.
-    Future.delayed(Duration(milliseconds: 1000),(){
+    Future.delayed(Duration(milliseconds: 1000), () {
       redirect();
     });
-
-
   }
 
   Future<void> sendEmail() async {
@@ -72,33 +68,22 @@ class _SplashState extends State<Splash> {
     //   print('Received message: $message');
     // });
     return Scaffold(
-      body:
-      BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) async {
-
           final prefs = await SharedPreferences.getInstance();
           final roleId = prefs.getInt('roleId');
           print(roleId);
-          if (state is RefreshTokenSuccess){
-            if (roleId == 3) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const AdminRoutePage()),
-                    (Route<dynamic> route) => false,
-              );
-            } else {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const DevOpsRoutePage()),
-                    (Route<dynamic> route) => false,
-              );
-            }
-          } else if (state is RefreshTokenFail || state is LoginInitState){
+          if (state is RefreshTokenSuccess) {
             Navigator.pushAndRemoveUntil(
-                context, MaterialPageRoute(
-                builder: (context) => LoginScreen()),
-                    (Route<dynamic> route) => false
+              context,
+              MaterialPageRoute(builder: (context) => const RoutePage()),
+              (Route<dynamic> route) => false,
             );
+          } else if (state is RefreshTokenFail || state is LoginInitState) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false);
           }
         },
         child: Center(
@@ -110,17 +95,17 @@ class _SplashState extends State<Splash> {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               SizedBox(height: 10.0),
-              // Container(
-              //   child: Image.asset('assets/logo.png', width: 200.0),
-              //   alignment: Alignment.center,
-              // ),
+              Container(
+                child: Image.asset('assets/logo.png', width: 200.0),
+                alignment: Alignment.center,
+              ),
               SizedBox(height: 10.0),
-              Text('Stay safe with us',
+              Text(
+                'Stay safe with us',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               SizedBox(height: 5.0),
-              CircularProgressIndicator(color:  HexColor("#3c1e08")),
-
+              CircularProgressIndicator(color: HexColor("#3c1e08")),
             ],
           ),
         ),

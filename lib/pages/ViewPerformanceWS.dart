@@ -1,4 +1,3 @@
-import 'package:containsafe/repository/APIConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/container/performanceWS/performanceWS_bloc.dart';
@@ -51,7 +50,7 @@ class _ViewPerformaceWSState extends State<ViewPerformaceWSScreen> {
                         Text('Memory Usage: ${performance.memUsage}/${performance.memSize}'),
                         Text('Network: ${performance.netInput}/${performance.netOutput}'),
                         Text('Block: ${performance.blockInput}/${performance.blockOutput}'),
-                        Text('PIDs: ${performance.pids}'),
+                        //Text('PIDs: ${performance.pids}'),
                       ],
                     ),
                   );
