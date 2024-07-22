@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../bloc/services/getByNode/getNodeServices_bloc.dart';
 import '../../bloc/services/getByNode/getNodeServices_event.dart';
 import '../../bloc/services/getByNode/getNodeServices_state.dart';
+import '../../repository/webSocket_repo.dart';
 import 'AddNodeServiceScreen.dart';
 
 class ViewNodeServiceScreen extends StatefulWidget {
@@ -128,15 +129,41 @@ class _ViewNodeServiceScreenState extends State<ViewNodeServiceScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            isRunning ? 'Running' : 'Not Running',
-            style: TextStyle(
-              color: isRunning ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              Text(
+                isRunning ? 'Running' : 'Not Running',
+                style: TextStyle(
+                  color: isRunning ? Colors.green : Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (!isRunning) ...[ // Use spread operator to include both SizedBox and ElevatedButton
+                SizedBox(width: 10), // Space between status and button
+                ElevatedButton(
+                  onPressed: () {
+                    // Add your logic to start the service here
+                    // You may dispatch an event or call a method from your BLoC or provider
+                    print('Starting service: $serviceName');
+                    _sendServiceName(serviceName);
+                  },
+                  child: Text('Start'),
+                  style: ElevatedButton.styleFrom(
+                    primary: HexColor("#3c1e08"), // Background color
+                  ),
+                ),
+              ],
+            ],
           ),
         ],
       ),
     );
   }
+
+  void _sendServiceName(String service) async {
+    final webSocketRepository =
+    WebSocketRepository('ws://${widget.node.ipAddress}:8765');
+    webSocketRepository.sendServiceName(service);
+  }
+
 }

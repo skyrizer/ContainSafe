@@ -20,6 +20,11 @@ class WebSocketRepository {
     channel.sink.add(message);
   }
 
+  void sendServiceName(String service) {
+    final message = json.encode({"service_name": service});
+    channel.sink.add(message);
+  }
+
   Stream get messages => channel.stream;
 
   void close() {

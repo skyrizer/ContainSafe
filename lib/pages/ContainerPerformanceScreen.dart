@@ -151,40 +151,6 @@ class _ContainerPerformanceScreenState
     );
   }
 
-  // Widget _buildDropdown() {
-  //   return BlocBuilder<GetAllNodeBloc, GetAllNodeState>(
-  //     builder: (context, state) {
-  //       if (state is GetAllNodeLoaded) {
-  //         return Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-  //           child: DropdownButton<Node>(
-  //             hint: Text('Select Node'),
-  //             value: _selectedNode,
-  //             onChanged: (newValue) {
-  //               setState(() {
-  //                 _selectedNode = newValue;
-  //                 _performanceWSBloc.add(LoadPerformanceWSData(newValue!.ipAddress));
-  //               });
-  //             },
-  //             items: _getDropdownItems(state.nodeList),
-  //           ),
-  //         );
-  //       } else {
-  //         return SizedBox.shrink();
-  //       }
-  //     },
-  //   );
-  // }
-  //
-  // List<DropdownMenuItem<Node>> _getDropdownItems(List<Node> nodes) {
-  //   return nodes.map((node) {
-  //     return DropdownMenuItem<Node>(
-  //       value: node,
-  //       child: Text(node.hostname),
-  //     );
-  //   }).toList();
-  // }
-
   Widget _buildListPerformance(PerformanceWSState state) {
     if (state is PerformanceWSLoading) {
       return Center(

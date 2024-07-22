@@ -1,15 +1,10 @@
 import 'package:containsafe/bloc/backgroundProcess/getByService/getBpService_bloc.dart';
 import 'package:containsafe/bloc/backgroundProcess/getByService/getBpService_event.dart';
-import 'package:containsafe/bloc/nodeAccess/delete/deleteAccess_bloc.dart';
 import 'package:containsafe/pages/backgroundProcess/AddBackgroundProcess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/backgroundProcess/getByService/getBpService_state.dart';
-import '../../bloc/nodeAccess/delete/deleteAccess_event.dart';
-import '../../bloc/nodeAccess/getByNode/getAccessByNode_bloc.dart';
-import '../../bloc/nodeAccess/getByNode/getAccessByNode_event.dart';
-import '../../bloc/nodeAccess/getByNode/getAccessByNode_state.dart';
 
 class ViewBackgroundProcessesScreen extends StatefulWidget {
   final int serviceId;
@@ -30,7 +25,6 @@ class _ViewBackgroundProcessesState extends State<ViewBackgroundProcessesScreen>
     super.initState();
     _bpByServiceListBloc.add(
         GetBpByServiceList(serviceId: widget.serviceId)); // Dispatch the event here
-    //_deleteNodeAccessBloc = BlocProvider.of<DeleteNodeAccessBloc>(context);
   }
 
   @override
