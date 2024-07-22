@@ -21,7 +21,8 @@ class WebSocketRepository {
   }
 
   void sendServiceName(String service) {
-    final message = json.encode({"service_name": service});
+    final message = jsonEncode({"service_name": service});
+    print("Sending message: $message");
     channel.sink.add(message);
   }
 
