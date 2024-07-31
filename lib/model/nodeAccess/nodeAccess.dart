@@ -1,6 +1,5 @@
 
 
-import '../config/config.dart';
 import '../node/node.dart';
 import '../role/role.dart';
 import '../user/user.dart';

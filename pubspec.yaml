@@ -43,7 +43,7 @@ dependencies:
   onesignal_flutter: ^5.0.4
   equatable: ^2.0.3
   web_socket_channel: ^2.1.0
-
+  fl_chart: ^0.36.0
 
 dev_dependencies:
   flutter_test:

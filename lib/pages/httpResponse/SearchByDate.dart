@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:containsafe/model/httpResponse/httpResponse.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import '../../bloc/httpResponse/searchByDate/searchByDate_bloc.dart';
 import '../../bloc/httpResponse/searchByDate/searchByDate_event.dart';
 import '../../bloc/httpResponse/searchByDate/searchByDate_state.dart';
-import '../../bloc/httpResponse/searchByNode/searchByCode_bloc.dart';
-import '../../bloc/httpResponse/searchByNode/searchByCode_event.dart';
-import '../../bloc/httpResponse/searchByNode/searchByCode_state.dart';
 
 class SearchByDateView extends StatefulWidget {
   const SearchByDateView({super.key});
@@ -19,7 +17,6 @@ class SearchByDateView extends StatefulWidget {
 }
 
 class _SearchByDateViewState extends State<SearchByDateView> {
-
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
   List<HttpResponse> httpResponselist = [];
@@ -79,7 +76,7 @@ class _SearchByDateViewState extends State<SearchByDateView> {
       ),
       body: BlocBuilder<SearchByDateBloc, SearchByDateState>(
         builder: (context, state) {
-          if (state is SearchByCodeLoadingState) {
+          if (state is SearchByDateLoadingState) {
             return Center(
               child: CircularProgressIndicator(
                 color: HexColor("#3c1e08"),
@@ -87,7 +84,7 @@ class _SearchByDateViewState extends State<SearchByDateView> {
             );
           } else if (state is SearchByDateLoadedState) {
             httpResponselist = state.searchByDateList;
-            return _resultList();
+            return _buildChart();
           } else if (state is SearchByDateErrorState) {
             return Center(
               child: Text(
@@ -139,65 +136,68 @@ class _SearchByDateViewState extends State<SearchByDateView> {
     );
   }
 
-  Widget _resultList() {
+  Widget _buildChart() {
+    Map<int, int> statusCodeCounts = {};
+    for (var response in httpResponselist) {
+      statusCodeCounts[response.statusCode] = (statusCodeCounts[response.statusCode] ?? 0) + 1;
+    }
+
+    List<BarChartGroupData> barChartData = statusCodeCounts.entries.map((entry) {
+      return BarChartGroupData(
+        x: entry.key,
+        barRods: [
+          BarChartRodData(
+            y: entry.value.toDouble(), // Adjust 'y' to 'toY' for the latest API
+            width: 15,
+            //color: _getColorForStatusCode(entry.key), // Optional: Color coding based on status code
+          ),
+        ],
+      );
+    }).toList();
+
+    double maxY = statusCodeCounts.values.isEmpty ? 0 : statusCodeCounts.values.reduce((a, b) => a > b ? a : b).toDouble();
+
     return Padding(
-      padding: const EdgeInsets.all(17.0),
-      child: ListView.builder(
-        itemCount: httpResponselist.length,
-        itemBuilder: (context, index) {
-          HttpResponse response = httpResponselist[index];
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
+      padding: EdgeInsets.all(16.0), // Use EdgeInsets to provide padding around the chart
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1.5, // Adjust based on desired width-to-height ratio
+          child: BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.spaceAround,
+              maxY: maxY + 1000, // Ensure the Y-axis includes the highest value plus a buffer
+              barGroups: barChartData,
+              borderData: FlBorderData(show: false),
+              titlesData: FlTitlesData(
+                leftTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 40,
+                  margin: 10,
+                  interval: 1000, // Label intervals on the Y-axis
+                  // getTitlesWidget: (value, meta) {
+                  //   return Text(
+                  //     value.toInt().toString(),
+                  //     style: TextStyle(fontSize: 14, color: Colors.black),
+                  //   );
+                  // },
                 ),
-              ],
+                bottomTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 40,
+                  margin: 10,
+                  // getTitlesWidget: (value, meta) {
+                  //   return Text(
+                  //     value.toInt().toString(),
+                  //     style: TextStyle(fontSize: 14, color: Colors.black),
+                  //   );
+                  // },
+                ),
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Status Code: ${response.statusCode}',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'Method: ${response.method}',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'URL: ${response.url}',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'IP Address: ${response.ipAddress}',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-                // You can add more fields here as needed
-              ],
-            ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
+
 }

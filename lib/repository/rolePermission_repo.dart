@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:containsafe/repository/APIConstant.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/nodeConfig/nodeConfig.dart';
 import '../model/rolePermission/rolePermission.dart';
 
 class RolePermissionRepository {
+
   Future<List<RolePermission>> getAllRolePermissions() async {
     try {
       var pref = await SharedPreferences.getInstance();
