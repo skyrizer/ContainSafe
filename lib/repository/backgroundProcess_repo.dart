@@ -111,11 +111,11 @@ class BackgroundProcessRepository {
 
 
   // delete node access
-  Future<bool> DeleteBackgroundProcessURL(int bpId) async{
+  Future<bool> DeleteBackgroundProcess(int serviceId, int bpId) async{
     try{
       var pref = await SharedPreferences.getInstance();
       String? token = pref.getString("token");
-      var url = Uri.parse(APIConstant.DeleteNodeAccessURL + "/${bpId.toString()}");  /// url
+      var url = Uri.parse(APIConstant.DeleteBackgroundProcessURL + "/${serviceId.toString()}" + "/${bpId.toString()}");  /// url
       var header = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${token}",

@@ -104,6 +104,11 @@ class _AddBackgroundProcessScreenState extends State<AddBackgroundProcessScreen>
               serviceId: widget!.serviceId!,
               name: nameController.text.trim()
           ));
+
+          Navigator.pop(
+            context,
+          );
+
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.brown, // Change the background color here

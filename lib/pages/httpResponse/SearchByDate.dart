@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:containsafe/model/httpResponse/httpResponse.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 import '../../bloc/httpResponse/searchByDate/searchByDate_bloc.dart';
 import '../../bloc/httpResponse/searchByDate/searchByDate_event.dart';
@@ -84,7 +83,7 @@ class _SearchByDateViewState extends State<SearchByDateView> {
             );
           } else if (state is SearchByDateLoadedState) {
             httpResponselist = state.searchByDateList;
-            return _buildChart();
+            return _buildInteractiveList();
           } else if (state is SearchByDateErrorState) {
             return Center(
               child: Text(
@@ -136,68 +135,74 @@ class _SearchByDateViewState extends State<SearchByDateView> {
     );
   }
 
-  Widget _buildChart() {
+  Widget _buildInteractiveList() {
     Map<int, int> statusCodeCounts = {};
     for (var response in httpResponselist) {
       statusCodeCounts[response.statusCode] = (statusCodeCounts[response.statusCode] ?? 0) + 1;
     }
 
-    List<BarChartGroupData> barChartData = statusCodeCounts.entries.map((entry) {
-      return BarChartGroupData(
-        x: entry.key,
-        barRods: [
-          BarChartRodData(
-            y: entry.value.toDouble(), // Adjust 'y' to 'toY' for the latest API
-            width: 15,
-            //color: _getColorForStatusCode(entry.key), // Optional: Color coding based on status code
+    // Group status codes by category
+    Map<String, List<MapEntry<int, int>>> groupedStatusCodes = {
+      "2xx Success": statusCodeCounts.entries.where((entry) => entry.key >= 200 && entry.key < 300).toList(),
+      "3xx Redirection": statusCodeCounts.entries.where((entry) => entry.key >= 300 && entry.key < 400).toList(),
+      "4xx Client Errors": statusCodeCounts.entries.where((entry) => entry.key >= 400 && entry.key < 500).toList(),
+      "5xx Server Errors": statusCodeCounts.entries.where((entry) => entry.key >= 500 && entry.key < 600).toList(),
+    };
+
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: groupedStatusCodes.entries.map((group) {
+        return ExpansionTile(
+          title: Text(
+            group.key,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: _getColorForGroup(group.key)),
           ),
-        ],
-      );
-    }).toList();
-
-    double maxY = statusCodeCounts.values.isEmpty ? 0 : statusCodeCounts.values.reduce((a, b) => a > b ? a : b).toDouble();
-
-    return Padding(
-      padding: EdgeInsets.all(16.0), // Use EdgeInsets to provide padding around the chart
-      child: Center(
-        child: AspectRatio(
-          aspectRatio: 1.5, // Adjust based on desired width-to-height ratio
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              maxY: maxY + 1000, // Ensure the Y-axis includes the highest value plus a buffer
-              barGroups: barChartData,
-              borderData: FlBorderData(show: false),
-              titlesData: FlTitlesData(
-                leftTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 40,
-                  margin: 10,
-                  interval: 1000, // Label intervals on the Y-axis
-                  // getTitlesWidget: (value, meta) {
-                  //   return Text(
-                  //     value.toInt().toString(),
-                  //     style: TextStyle(fontSize: 14, color: Colors.black),
-                  //   );
-                  // },
-                ),
-                bottomTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 40,
-                  margin: 10,
-                  // getTitlesWidget: (value, meta) {
-                  //   return Text(
-                  //     value.toInt().toString(),
-                  //     style: TextStyle(fontSize: 14, color: Colors.black),
-                  //   );
-                  // },
+          children: group.value.map((entry) {
+            return ListTile(
+              title: Text('Status Code: ${entry.key}'),
+              trailing: CircleAvatar(
+                backgroundColor: _getColorForStatusCode(entry.key),
+                child: Text(
+                  entry.value.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: entry.value.toString().length > 3 ? 10 : 14, // Adjust font size based on the number of digits
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
+            );
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 
+  Color _getColorForStatusCode(int statusCode) {
+    if (statusCode >= 200 && statusCode < 300) {
+      return Colors.green;
+    } else if (statusCode >= 300 && statusCode < 400) {
+      return Colors.blue;
+    } else if (statusCode >= 400 && statusCode < 500) {
+      return Colors.orange;
+    } else if (statusCode >= 500 && statusCode < 600) {
+      return Colors.red;
+    } else {
+      return Colors.grey;
+    }
+  }
+
+  Color _getColorForGroup(String group) {
+    switch (group) {
+      case "2xx Success":
+        return Colors.green;
+      case "3xx Redirection":
+        return Colors.blue;
+      case "4xx Client Errors":
+        return Colors.orange;
+      case "5xx Server Errors":
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 }

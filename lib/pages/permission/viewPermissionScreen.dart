@@ -1,10 +1,12 @@
 
+import 'package:containsafe/pages/permission/updatePermissionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../bloc/permission/get/getPermission_bloc.dart';
 import '../../bloc/permission/get/getPermission_event.dart';
 import '../../bloc/permission/get/getPermission_state.dart';
+import 'addPermissionScreen.dart';
 
 class ViewPermissionsScreen extends StatefulWidget {
   const ViewPermissionsScreen({Key? key}) : super(key: key);
@@ -52,10 +54,10 @@ class _ViewPermissionsScreenState extends State<ViewPermissionsScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // Navigate to the page where you can add a new node
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => AddNodeScreen()),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddPermissionScreen()),
+            );
           },
           backgroundColor: HexColor("#3c1e08"),
           child: Icon(Icons.add),
@@ -122,10 +124,10 @@ class _ViewPermissionsScreenState extends State<ViewPermissionsScreen> {
                           onSelected: (value) {
                             if (value == 2) {
                               // Handle other action here
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => ViewNodeConfigsScreen(nodeId: nodes.id)),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UpdatePermissionScreen(permission: permissions)),
+                              );
                             }
                           },
                           itemBuilder: (context) => [
@@ -135,7 +137,7 @@ class _ViewPermissionsScreenState extends State<ViewPermissionsScreen> {
                                 children: [
                                   Icon(Icons.settings, color: Colors.brown),
                                   SizedBox(width: 8),
-                                  Text('Setting'),
+                                  Text('Edit'),
                                 ],
                               ),
                             ),

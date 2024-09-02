@@ -23,16 +23,23 @@ class GetNodeServicesBloc extends Bloc<GetNodeServicesEvent, GetNodeServicesStat
       onData: (data) {
         try {
           final Map<String, dynamic> jsonData = json.decode(data);
-          final List<dynamic> serviceStatusList = jsonData['service_status'];
 
-          if (serviceStatusList.isNotEmpty) {
-            final List<ServiceStatus> statusList = serviceStatusList
-                .map((status) => ServiceStatus.fromJson(status))
-                .toList();
-            return GetServicesLoaded(statusList);
-          } else {
-            return GetServicesEmpty();
+          // Check if the data is of type 'service_status'
+          if (jsonData.containsKey('service_status')) {
+            final List<dynamic> serviceStatusList = jsonData['service_status'];
+
+            if (serviceStatusList.isNotEmpty) {
+              final List<ServiceStatus> statusList = serviceStatusList
+                  .map((status) => ServiceStatus.fromJson(status))
+                  .toList();
+              return GetServicesLoaded(statusList);
+            } else {
+              return GetServicesEmpty();
+            }
           }
+
+          // If it's not a 'service_status' type, ignore it
+          return state;
         } catch (error) {
           return GetServicesError(error.toString());
         }

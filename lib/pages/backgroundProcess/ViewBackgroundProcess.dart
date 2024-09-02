@@ -4,6 +4,8 @@ import 'package:containsafe/pages/backgroundProcess/AddBackgroundProcess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import '../../bloc/backgroundProcess/delete/deleteBp_bloc.dart';
+import '../../bloc/backgroundProcess/delete/deleteBp_event.dart';
 import '../../bloc/backgroundProcess/getByService/getBpService_state.dart';
 
 class ViewBackgroundProcessesScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class ViewBackgroundProcessesScreen extends StatefulWidget {
 
 class _ViewBackgroundProcessesState extends State<ViewBackgroundProcessesScreen> {
   final GetBpByServiceBloc _bpByServiceListBloc = GetBpByServiceBloc();
-  //late DeleteNodeAccessBloc _deleteNodeAccessBloc;
+  late DeleteBpBloc _deleteBpBloc;
 
   @override
   void initState() {
@@ -120,16 +122,14 @@ class _ViewBackgroundProcessesState extends State<ViewBackgroundProcessesScreen>
                           color: Colors.black,
                           onPressed: () {
 
-                            // _deleteNodeAccessBloc.add(DeleteAccessButtonPressed(
-                            //
-                            //     nodeId: nodeAccesses.node.id!,
-                            //     userId: nodeAccesses.user.id,
-                            //     roleId: nodeAccesses.role.id!));
-                            //
-                            // setState(() {
-                            //   BlocProvider.of<GetAccessByNodeBloc>(context).add(
-                            //       GetAccessByNodeList(nodeId: widget.nodeId));
-                            // });
+                            _deleteBpBloc.add(DeleteBpButtonPressed(
+                                serviceId: widget.serviceId!,
+                                bpId: bps.id!,
+                            ));
+
+                            setState(() {
+                              Navigator.pop(context);
+                            });
 
                           },
                           icon: Icon(Icons.delete, color: Colors.brown),

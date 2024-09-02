@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:containsafe/repository/APIConstant.dart';
+import 'package:containsafe/repository/webSocket_repo.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,6 +36,11 @@ class AuthRepository{
         pref.setInt("roleId", roleId);
         pref.setInt("userId", userId);
         pref.setString("email", email);
+
+        String? ipAddress = pref.getString("ipAddress");
+        final webSocketRepository = WebSocketRepository('ws://$ipAddress:8765');
+        webSocketRepository.sendEmailUser(email!);
+
         return 1;
       }
 

@@ -23,14 +23,19 @@ class PerformanceWSBloc extends Bloc<PerformanceWSEvent, PerformanceWSState> {
       _channel.stream,
       onData: (data) {
         try {
-          final performanceData = json.decode(data)['performance'] as List;
-          if (performanceData != []) {
-            final performanceList = performanceData
-                .map((item) => PerformanceWS.fromJson(item))
-                .toList();
-            return PerformanceWSLoaded(performanceList);
+          final decodedData = json.decode(data);
+          if (decodedData.containsKey('performance')) {
+            final performanceData = decodedData['performance'] as List;
+            if (performanceData.isNotEmpty) {
+              final performanceList = performanceData
+                  .map((item) => PerformanceWS.fromJson(item))
+                  .toList();
+              return PerformanceWSLoaded(performanceList);
+            }
+            return PerformanceWSEmpty();
           }
-          return PerformanceWSEmpty();
+          // Ignore data if it doesn't contain performance stats
+          return state;
         } catch (error) {
           return PerformanceWSError(error.toString());
         }

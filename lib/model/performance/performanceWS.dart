@@ -9,6 +9,7 @@ class PerformanceWS {
   final String blockInput;
   final String blockOutput;
   final String pids;
+  final DateTime timestamp;
 
   PerformanceWS({
     required this.containerId,
@@ -21,6 +22,8 @@ class PerformanceWS {
     required this.blockInput,
     required this.blockOutput,
     required this.pids,
+    required this.timestamp,
+
   });
 
   factory PerformanceWS.fromJson(Map<String, dynamic> json) {
@@ -35,6 +38,7 @@ class PerformanceWS {
       blockInput: json['BLOCK INPUT'],
       blockOutput: json['BLOCK OUTPUT'],
       pids: json['PIDS'],
+      timestamp: DateTime.parse(json['TIMESTAMP']),
     );
   }
 }

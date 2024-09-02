@@ -7,14 +7,14 @@ import '../../bloc/permission/add/addPermission_state.dart';
 import '../../bloc/role/add/addRole_state.dart';
 import '../RoutePage.dart';
 
-class AddRoleScreen extends StatefulWidget {
-  const AddRoleScreen({Key? key}) : super(key: key);
+class AddPermissionScreen extends StatefulWidget {
+  const AddPermissionScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddRoleScreen> createState() => _AddRoleScreenState();
+  State<AddPermissionScreen> createState() => _AddPermissionScreenState();
 }
 
-class _AddRoleScreenState extends State<AddRoleScreen> {
+class _AddPermissionScreenState extends State<AddPermissionScreen> {
   late AddPermissionBloc _addPermissionBloc;
 
   TextEditingController nameController = TextEditingController();

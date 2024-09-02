@@ -1,7 +1,7 @@
 class APIConstant {
   // wafir 10.131.77.251
-  static const String ipaddress = "http://192.168.0.121:8000/";
-  // static const String ipaddress = "http://10.131.75.244:8000/";
+  static const String ipaddress = "http://192.168.0.122:8000/";
+  // static const String ipaddress = "http://10.131.78.46:8000/";
 
   static const String URL = "${ipaddress}api/";
 
@@ -11,7 +11,7 @@ class APIConstant {
   static String get LogoutURL => "${APIConstant.URL}logout";
 
   static String get ForgotPasswordURL =>
-      "${APIConstant.URL}auth/forgot-password";
+      "${APIConstant.ipaddress}password/email";
 
   // performance
   static String get PerformanceURL => "${APIConstant.URL}allPerformance";

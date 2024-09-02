@@ -6,13 +6,13 @@ import '../bloc/container/performanceWS/performanceWS_event.dart';
 import '../bloc/container/performanceWS/performanceWS_state.dart';
 import '../bloc/node/getAll/getAllNode_bloc.dart';
 import '../bloc/node/getAll/getAllNode_event.dart';
-import '../bloc/node/getAll/getAllNode_state.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_bloc.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_event.dart';
 import '../bloc/nodeConfig/getByNode/getConfigByNode_state.dart';
 import '../model/node/node.dart';
 import '../model/nodeConfig/nodeConfig.dart';
 import '../repository/webSocket_repo.dart';
+import 'PerformanceGraphScreen.dart';
 import 'container/updateContainerScreen.dart';
 
 class ContainerPerformanceScreen extends StatefulWidget {
@@ -212,11 +212,32 @@ class _ContainerPerformanceScreenState
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => UpdateContainerScreen(
+                              //         containerId: performance.containerId),
+                              //   ),
+                              //);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => BlocProvider.value(
+                              //       value: _performanceWSBloc,
+                              //       child: PerformanceGraphScreen(),
+                              //     ),
+                              //   ),
+                              // );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UpdateContainerScreen(
-                                      containerId: performance.containerId),
+                                  builder: (context) => BlocProvider.value(
+                                    value: _performanceWSBloc, // Pass the correct Bloc instance
+                                    child: PerformanceGraphScreen(
+                                      performanceWSBloc: _performanceWSBloc, // Pass the Bloc instance
+                                      containerName: performance.containerName, // Pass the container name
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -286,20 +307,6 @@ class _ContainerPerformanceScreenState
                           ),
                         ),
                       ),
-                      // SizedBox(height: 4.0),
-                      // Container(
-                      //   child: Text.rich(
-                      //     TextSpan(
-                      //       children: [
-                      //         TextSpan(
-                      //           text: 'PIDs: ',
-                      //           style: TextStyle(fontWeight: FontWeight.bold),
-                      //         ),
-                      //         TextSpan(text: '${performance.pids}'),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

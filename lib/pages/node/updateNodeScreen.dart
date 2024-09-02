@@ -66,7 +66,7 @@ class UpdateNodeState extends State<UpdateNodeScreen> {
         listener: (context, state){
           if (state is EditNodeUpdated){
             Navigator.pop(context, true);
-            final snackBar = SnackBarDesign.customSnackBar('Config has been updated');
+            final snackBar = SnackBarDesign.customSnackBar('Node has been updated');
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         },
